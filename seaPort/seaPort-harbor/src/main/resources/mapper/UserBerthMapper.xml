@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.UserBerthMapper">
+    <resultMap type="com.iwip.harbor.domain.UserBerth" id="UserBerthResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="berthCode" column="berth_code"/>
+    </resultMap>
+    <sql id="selectCommon">
+        SELECT ub.id, ub.user_id, ub.user_name, ub.nick_name, ub.berth_code FROM user_berth AS ub
+    </sql>
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO user_berth(user_id, user_name, nick_name, berth_code)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userId}, #{item.userName}, #{item.nickName}, #{item.berthCode})
+        </foreach>
+    </insert>
+    <delete id="delByBerthCode">
+        DELETE FROM user_berth WHERE berth_code = #{berthCode}
+    </delete>
+    <select id="selectUserBerth" resultMap="UserBerthResult">
+        <include refid="selectCommon"/>
+        <where>
+            <if test="id != null">
+                AND ub.id = #{id}
+            </if>
+            <if test="userId != null">
+                AND ub.user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND ub.user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                AND ub.nick_name like concat('%', #{nickName}, '%')
+            </if>
+            <if test="berthCode != null and berthCode != ''">
+                AND ub.berth_code = #{berthCode}
+            </if>
+        </where>
+    </select>
+    <select id="getBerthAndUser" resultMap="UserBerthResult">
+        SELECT db.berth_code, ub.user_name, ub.nick_name, ub.user_id
+        FROM dock_berth AS db
+            LEFT JOIN user_berth AS ub ON db.berth_code = ub.berth_code
+            left join sys_dept as d on db.dept_id = d.dept_id
+        <where>
+            ${params.dataScope}
+        </where>
+    </select>
+</mapper>

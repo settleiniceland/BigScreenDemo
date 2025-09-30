@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockPierMapper">
+    
+    <resultMap type="com.iwip.harbor.domain.DockPier" id="DockPierResult">
+        <result property="pierId"    column="pier_id"    />
+        <result property="pierName"    column="pier_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="pierGeoJson"    column="pier_geo_json"    />
+        <result property="pierType"    column="pier_type"    />
+        <result property="pierCode"    column="pier_code"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+    </resultMap>
+
+
+    <resultMap type="com.iwip.harbor.domain.DockPier" id="DockPierChildResult">
+        <id property="pierId"    column="pier_id"    />
+        <result property="pierName"    column="pier_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="pierGeoJson"    column="pier_geo_json"    />
+        <result property="pierType"    column="pier_type"    />
+        <result property="pierCode"    column="pier_code"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+        <result property="pierRemark"    column="pier_remark"    />
+        <collection  property="children" ofType="com.iwip.harbor.domain.DockBerth"   javaType="java.util.List"  resultMap="DockBerthResult" />
+    </resultMap>
+
+
+    <resultMap type="com.iwip.harbor.domain.DockBerth" id="DockBerthResult">
+        <result property="berthId"    column="berth_id"    />
+        <result property="berthHpId"    column="berth_hp_id"    />
+        <result property="berthName"    column="berth_name"    />
+        <result property="berthStatus"    column="berth_status"    />
+        <result property="berthCode"    column="berth_code"    />
+        <result property="berthSort"    column="berth_sort"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="berthGeoJson"    column="berth_geo_json"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+    </resultMap>
+
+
+
+    <resultMap type="com.iwip.harbor.domain.screen.ScreenPierVo" id="DockPierScreenResult">
+        <id property="pierId"    column="pier_id"    />
+        <result property="pierName"    column="pier_name"    />
+        <result property="pierGeoJson"    column="pier_geo_json"    />
+        <result property="pierCode"    column="pier_code"    />
+        <collection  property="berthChildrenList" ofType="com.iwip.harbor.domain.screen.ScreenBerthVo"   javaType="java.util.List"  resultMap="DockBerthScreenResult" />
+    </resultMap>
+    <resultMap type="com.iwip.harbor.domain.screen.ScreenBerthVo" id="DockBerthScreenResult">
+        <result property="berthId"    column="berth_id"    />
+        <result property="berthName"    column="berth_name"    />
+        <result property="berthStatus"    column="berth_status"    />
+        <result property="berthCode"    column="berth_code"    />
+        <result property="berthGeoJson"    column="berth_geo_json"    />
+        <result property="remark"    column="remark"    />
+
+    </resultMap>
+
+
+
+    <sql id="selectDockPierVo">
+        select pier_id, pier_name,pier_type,pier_code, dept_id , pier_geo_json, del_flag, user_id, create_by, create_time, update_by, update_time, remark, remark01, remark02, remark03 from dock_pier
+    </sql>
+
+    <select id="selectDockPierList" parameterType="com.iwip.harbor.domain.DockPier" resultMap="DockPierChildResult">
+        SELECT
+        pier.pier_id,
+        pier.pier_name,
+        pier.pier_geo_json,
+        pier.pier_type,
+        pier.pier_code,
+        pier.remark pier_remark,
+        berth.berth_id,
+        berth.berth_hp_id,
+        berth.berth_name,
+        berth.berth_code,
+        berth.berth_status,
+        berth.berth_sort,
+        berth.berth_geo_json,
+        berth.remark
+        FROM
+        dock_pier pier
+        LEFT JOIN dock_berth berth ON pier.pier_id = berth.berth_hp_id AND berth.del_flag = '0'
+        left join sys_dept as d on pier.dept_id = d.dept_id
+        <where>
+            AND pier.del_flag = '0'
+            <if test="berthStatus != null  and berthStatus != ''"> and berth.berth_status = #{berthStatus}</if>
+            <if test="pierType != null  and pierType != ''"> and pier.pier_type = #{pierType}</if>
+            <if test="name != null  and name != ''">
+                AND
+                (
+                 berth.berth_name like concat('%', #{name}, '%')
+                or
+                 pier.pier_name like concat('%', #{name}, '%')
+                )
+            </if>
+            ${params.dataScope}
+        </where>
+        ORDER BY pier.pier_id ASC , berth.berth_id ASC
+    </select>
+
+    <select id="selectScreenPierLeftBerthList" parameterType="com.iwip.harbor.domain.DockBerth"  resultMap="DockPierScreenResult">
+        SELECT
+        pier.pier_id,
+        pier.pier_name,
+        pier.pier_geo_json,
+        pier.pier_code,
+        berth.berth_id,
+        berth.berth_name,
+        berth.berth_status,
+        berth.berth_code,
+        berth.berth_geo_json,
+        berth.remark
+        FROM
+        dock_pier pier
+        LEFT JOIN dock_berth berth ON pier.pier_id = berth.berth_hp_id AND berth.del_flag = '0'
+        <where>
+          AND pier.del_flag = '0'
+            <if test="berthId != null  and berthId != ''"> and berth.berth_id = #{berthId}</if>
+        </where>
+        ORDER BY pier.pier_id ASC , berth.berth_id ASC
+    </select>
+
+    <select id="selectList" parameterType="com.iwip.harbor.domain.DockPier" resultMap="DockPierResult">
+        SELECT
+            pier.pier_id,
+            pier.pier_name,
+            pier.pier_geo_json,
+            pier.pier_type,
+            pier.pier_code
+        FROM dock_pier pier
+        left join sys_dept as d on pier.dept_id = d.dept_id
+        where
+            pier.del_flag = '0'
+            ${params.dataScope}
+        ORDER BY pier.pier_id ASC
+    </select>
+
+
+    <select id="selectScreenPierList" parameterType="com.iwip.harbor.domain.DockPier" resultMap="DockPierResult">
+        <include refid="selectDockPierVo"/>
+        <where>
+            AND del_flag = '0'
+        </where>
+        ORDER BY pier_id ASC
+    </select>
+    
+    <select id="selectDockPierByDpId" parameterType="Long" resultMap="DockPierResult">
+        <include refid="selectDockPierVo"/>
+        where pier_id = #{pierId}
+    </select>
+
+    <select id="selectDockPierByDpName" parameterType="String" resultMap="DockPierResult">
+        <include refid="selectDockPierVo"/>
+        where pier_name = #{pier_name}
+    </select>
+
+    <select id="selectDockPierByDpCode" parameterType="String" resultMap="DockPierResult">
+        <include refid="selectDockPierVo"/>
+        where pier_code = #{pierCode}
+    </select>
+
+    <insert id="insertDockPier" parameterType="com.iwip.harbor.domain.DockPier" useGeneratedKeys="true" keyProperty="pierId">
+        insert into dock_pier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pierName != null">pier_name,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="pierGeoJson != null">pier_geo_json,</if>
+            <if test="pierType != null">pier_type,</if>
+            <if test="pierCode != null">pier_code,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pierName != null">#{pierName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="pierGeoJson != null">#{pierGeoJson},</if>
+            <if test="pierType != null">#{pierType},</if>
+            <if test="pierCode != null">#{pierCode},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDockPier" parameterType="com.iwip.harbor.domain.DockPier">
+        update dock_pier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pierName != null">pier_name = #{pierName},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="pierGeoJson != null">pier_geo_json = #{pierGeoJson},</if>
+            <if test="pierType != null">pier_type = #{pierType},</if>
+            <if test="pierCode != null">pier_code = #{pierCode},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            <if test="remark02 != null">remark02 = #{remark02},</if>
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+        </trim>
+        where pier_id = #{pierId}
+    </update>
+
+    <update id="removeDockPierByDpId" parameterType="com.iwip.harbor.domain.DockPier">
+        update dock_pier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where pier_id = #{pierId}
+    </update>
+
+    <delete id="deleteDockPierByDpId" parameterType="Long">
+        delete from dock_pier where pier_id = #{pierId}
+    </delete>
+
+    <delete id="deleteDockPierByDpIds" parameterType="String">
+        delete from dock_pier where pier_id in 
+        <foreach item="pierId" collection="array" open="(" separator="," close=")">
+            #{pierId}
+        </foreach>
+    </delete>
+
+    <!-- 👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇新大屏方法👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇   -->
+    <select id="newScreen_SelectListByDeptIds" resultMap="DockPierResult" parameterType="java.util.List">
+        <include refid="selectDockPierVo"/>
+        WHERE del_flag = 0 AND dept_id IN
+        <foreach collection="list" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockOutputRangeMapper">
+    
+    <resultMap type="com.iwip.harbor.domain.DockOutputRange" id="DockOutputRangeResult">
+        <result property="id"    column="id"    />
+        <result property="pierId"    column="pier_id"    />
+        <result property="startPercent"    column="start_percent"    />
+        <result property="endPercent"    column="end_percent"    />
+        <result property="unloadRate"    column="unload_rate"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDockOutputRangeVo">
+        select id, pier_id, start_percent, end_percent, unload_rate, create_time, update_time from dock_output_range
+    </sql>
+
+    <select id="selectDockOutputRangeList" parameterType="com.iwip.harbor.domain.DockOutputRange" resultMap="DockOutputRangeResult">
+        <include refid="selectDockOutputRangeVo"/>
+        <where>  
+            <if test="pierId != null "> and pier_id = #{pierId}</if>
+            <if test="startPercent != null "> and start_percent = #{startPercent}</if>
+            <if test="endPercent != null "> and end_percent = #{endPercent}</if>
+            <if test="unloadRate != null "> and unload_rate = #{unloadRate}</if>
+        </where>
+    </select>
+    
+    <select id="selectDockOutputRangeById" parameterType="Long" resultMap="DockOutputRangeResult">
+        <include refid="selectDockOutputRangeVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="selectDockOutputRangeByPierId" parameterType="Long" resultMap="DockOutputRangeResult">
+        <include refid="selectDockOutputRangeVo"/>
+        where pier_id = #{pierId}
+    </select>
+
+
+
+    <select id="selectRangeLeftBerthByPierId" parameterType="Long" resultMap="DockOutputRangeResult">
+        SELECT ra.id,
+               ra.pier_id,
+               ra.start_percent,
+               ra.end_percent,
+               ra.unload_rate
+        FROM `dock_output_range` ra
+                 LEFT JOIN dock_berth berth ON ra.pier_id = berth.berth_hp_id
+        WHERE berth.del_flag = '0'
+          AND berth.berth_id = #{hbId}
+    </select>
+
+    <insert id="insertDockOutputRange" parameterType="com.iwip.harbor.domain.DockOutputRange" useGeneratedKeys="true" keyProperty="id">
+        insert into dock_output_range
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pierId != null">pier_id,</if>
+            <if test="startPercent != null">start_percent,</if>
+            <if test="endPercent != null">end_percent,</if>
+            <if test="unloadRate != null">unload_rate,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pierId != null">#{pierId},</if>
+            <if test="startPercent != null">#{startPercent},</if>
+            <if test="endPercent != null">#{endPercent},</if>
+            <if test="unloadRate != null">#{unloadRate},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDockOutputRange" parameterType="com.iwip.harbor.domain.DockOutputRange">
+        update dock_output_range
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pierId != null">pier_id = #{pierId},</if>
+            <if test="startPercent != null">start_percent = #{startPercent},</if>
+            <if test="endPercent != null">end_percent = #{endPercent},</if>
+            <if test="unloadRate != null">unload_rate = #{unloadRate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDockOutputRangeById" parameterType="Long">
+        delete from dock_output_range where id = #{id}
+    </delete>
+
+    <delete id="deleteDockOutputRangeByIds" parameterType="String">
+        delete from dock_output_range where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

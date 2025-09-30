@@ -1,0 +1,7 @@
+{
+  "i18n-ally.localesPaths": [
+    "locales"
+  ],
+  "i18n-ally.defaultLocale": "zh",
+  "i18n-ally.regex.key": "transformI18n\\((['\"`])(.+?)\\1\\)"
+}

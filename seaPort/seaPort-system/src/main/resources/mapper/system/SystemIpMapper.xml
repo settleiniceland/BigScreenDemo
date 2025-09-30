@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.system.mapper.SystemIpMapper">
+    
+    <resultMap type="com.iwip.system.domain.SystemIp" id="SystemIpResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="name"    column="name"    />
+        <result property="address"    column="address"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+    </resultMap>
+
+    <sql id="selectSystemIpVo">
+        select id, user_id, name, address, remark, remark01, remark02, remark03 from system_ip
+    </sql>
+
+    <select id="selectSystemIpList" parameterType="com.iwip.system.domain.SystemIp" resultMap="SystemIpResult">
+        <include refid="selectSystemIpVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 = #{remark02}</if>
+            <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
+        </where>
+    </select>
+    
+    <select id="selectSystemIpById" parameterType="Long" resultMap="SystemIpResult">
+        <include refid="selectSystemIpVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectSystemIpByUserId" parameterType="Long" resultMap="SystemIpResult">
+        <include refid="selectSystemIpVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertSystemIp" parameterType="com.iwip.system.domain.SystemIp">
+        insert into system_ip
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="name != null">name,</if>
+            <if test="address != null">address,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="address != null">#{address},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSystemIp" parameterType="com.iwip.system.domain.SystemIp">
+        update system_ip
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            <if test="remark02 != null">remark02 = #{remark02},</if>
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSystemIpById" parameterType="Long">
+        delete from system_ip where id = #{id}
+    </delete>
+
+    <delete id="deleteSystemIpByIds" parameterType="String">
+        delete from system_ip where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

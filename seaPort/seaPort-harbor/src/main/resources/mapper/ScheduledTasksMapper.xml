@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.ScheduledTasksMapper">
+    
+    <resultMap type="com.iwip.harbor.domain.ScheduledTasks" id="ScheduledTasksResult">
+        <result property="id"    column="id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="berthName"    column="berth_name"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectScheduledTasksVo">
+        select id, plan_id,berth_name, `status` from scheduled_tasks
+    </sql>
+
+    <select id="selectScheduledTasksList" parameterType="com.iwip.harbor.domain.ScheduledTasks" resultMap="ScheduledTasksResult">
+        <include refid="selectScheduledTasksVo"/>
+        <where>  
+            <if test="planId != null "> and plan_id = #{planId}</if>
+            <if test="berthName != null "> and berth_name = #{berthName}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectScheduledTasksById" parameterType="Long" resultMap="ScheduledTasksResult">
+        <include refid="selectScheduledTasksVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectScheduledTasksByDuId" parameterType="Long" resultMap="ScheduledTasksResult">
+        <include refid="selectScheduledTasksVo"/>
+        where plan_id = #{planId}
+    </select>
+
+
+
+    <select id="selectScheduledTasksByDuIdAndName"  resultMap="ScheduledTasksResult">
+        <include refid="selectScheduledTasksVo"/>
+        where plan_id = #{planId} and berth_name = #{berthName}
+    </select>
+
+    <select id="getRunningTasks"  resultMap="ScheduledTasksResult">
+        SELECT plan_id,berth_name FROM scheduled_tasks
+        where `status` = 'RUNNING'
+    </select>
+
+    <insert id="insertScheduledTasks" parameterType="com.iwip.harbor.domain.ScheduledTasks">
+        insert into scheduled_tasks
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="planId != null">plan_id,</if>
+            <if test="berthName != null">berth_name,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="planId != null">#{planId},</if>
+            <if test="berthName != null">#{berthName},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateScheduledTasks" parameterType="com.iwip.harbor.domain.ScheduledTasks">
+        update scheduled_tasks
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where plan_id = #{planId}
+    </update>
+
+    <delete id="deleteScheduledTasksById" parameterType="Long">
+        delete from scheduled_tasks where id = #{id}
+    </delete>
+
+    <delete id="deleteScheduledTasksByIds" parameterType="String">
+        delete from scheduled_tasks where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

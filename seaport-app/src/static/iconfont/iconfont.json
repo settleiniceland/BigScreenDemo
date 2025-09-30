@@ -1,0 +1,16 @@
+{
+  "id": "4818028",
+  "name": "项目管理APP",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20375842",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    }
+  ]
+}

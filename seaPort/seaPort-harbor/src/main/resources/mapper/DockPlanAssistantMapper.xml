@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockPlanAssistantMapper">
+    <resultMap id="DockPlanAssistantResult" type="com.iwip.harbor.domain.DockPlanAssistant">
+        <result property="id" column="id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="packageNum" column="package_num"/>
+        <result property="tonnage" column="tonnage"/>
+        <result property="unloadWeight" column="unload_weight"/>
+        <result property="usageUnit" column="usage_unit"/>
+        <result property="materialName" column="material_name"/>
+        <result property="loadSequence" column="load_sequence"/>
+        <result property="isFinish" column="is_finish"/>
+        <result property="remark01" column="remark01"/>
+        <result property="remark02" column="remark02"/>
+        <result property="remark03" column="remark03"/>
+    </resultMap>
+    <sql id="selectDockPlanAssistantVo">
+        SELECT id,plan_id,package_num,tonnage,unload_weight,usage_unit,material_name,load_sequence,is_finish,remark01,remark02,remark03
+        FROM dock_plan_assistant
+    </sql>
+    <select id="selectDockPlanAssistant" resultMap="DockPlanAssistantResult">
+        <include refid="selectDockPlanAssistantVo"/>
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="planId != null"> and plan_id = #{planId}</if>
+            <if test="loadSequence != null">and load_sequence = #{loadSequence}</if>
+        </where>
+        ORDER BY load_sequence
+    </select>
+    <select id="selectByBatchPlanIds" resultMap="DockPlanAssistantResult" parameterType="java.util.List">
+        <include refid="selectDockPlanAssistantVo"/>
+        WHERE plan_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+    <insert id="insertBatchDockPlanAssistant" parameterType="java.util.List">
+        INSERT INTO dock_plan_assistant(plan_id,package_num,tonnage,unload_weight,usage_unit,material_name,load_sequence)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.planId},#{item.packageNum},#{item.tonnage},#{item.unloadWeight},#{item.usageUnit},#{item.materialName},#{item.loadSequence})
+        </foreach>
+    </insert>
+    <delete id="delByPlanId">
+        DELETE FROM dock_plan_assistant WHERE plan_id = #{planId}
+    </delete>
+    <update id="updateById" parameterType="com.iwip.harbor.domain.DockPlanAssistant">
+        UPDATE dock_plan_assistant SET is_finish = #{isFinish} WHERE id = #{id}
+    </update>
+    <update id="submitUnloadWorkForPlan" parameterType="com.iwip.harbor.domain.DockPlan">
+        UPDATE dock_plan SET unload_weight = #{unloadWeight} WHERE id = #{id}
+    </update>
+    <update id="submitUnloadWorkForPlanAssistant" parameterType="com.iwip.harbor.domain.DockPlanAssistant">
+        UPDATE dock_plan_assistant SET unload_weight = #{unloadWeight} WHERE plan_id = #{planId} AND load_sequence = #{loadSequence}
+    </update>
+    <update id="updateUnloadWeightById">
+        update dock_plan_assistant SET unload_weight = #{param2} WHERE id = #{param1}
+    </update>
+</mapper>

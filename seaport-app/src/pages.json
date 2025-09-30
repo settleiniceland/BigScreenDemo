@@ -1,0 +1,166 @@
+{
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/shipPlan/index",
+			"style": {
+				"navigationBarTitleText": "计划单管理"
+			}
+		},
+		{
+			"path": "pages/shipPlan/WindowPeriodLogsList/index",
+			"style": {
+				"navigationBarTitleText": "空窗期日志管理"
+			}
+		},
+		{
+			"path": "pages/unloadWork/SlowDownWorkLog/index",
+			"style": {
+				"navigationBarTitleText": "慢作业日志管理"
+			}
+		},
+		{
+			"path": "pages/blank/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/system/system",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/system/changeUserInfo",
+			"style": {
+				"navigationBarTitleText": "%system.changeInfo%"
+			}
+		},
+		{
+			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"animationDuration": 200,
+					"animationType": "fade-in",
+					"background": "transparent",
+					"backgroundColorTop": "transparent",
+					"webviewBGTransparent": true,
+					"popGesture": "none",
+					"mask": "none",
+					"scrollIndicator": "none",
+					"titleNView": false
+				},
+				"disableScroll": true
+			}
+		},
+		{
+			"path": "pages/shipPlan/PlanDetail/index",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/unloadWork/index",
+			"style": {
+				"navigationBarTitleText": "卸货单管理"
+			}
+		},
+		{
+			"path": "pages/unloadWork/WorkLog/index",
+			"style": {
+				"navigationBarTitleText": "工作日志"
+			}
+		},
+		{
+			"path" : "pages/home/BerthStatus/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "泊位状态"
+			}
+		},
+		{
+			"path" : "pages/home/ShipProgress/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "船舶进度"
+			}
+		},
+		{
+			"path" : "pages/home/ShipPlanStatus/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "计划单分布状态"
+			}
+		},
+		{
+			"path" : "pages/home/WorkSummary/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "港口作业汇总"
+			}
+		},
+		{
+			"path" : "pages/shipPlan/EditUnloadWeight/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "作业日志管理"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "海港管理",
+		"navigationBarBackgroundColor": "#e3ebf9",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"bounce": "none",
+			"titleNView": {
+				"backgroundImage": "linear-gradient(to bottom, #e3ebf9, #ffffff)"
+			}
+		}
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^wd-(.*)": "wot-design-uni/components/wd-$1/wd-$1.vue"
+		}
+	},
+	"tabBar": {
+		"color": "#7a7e83",
+		"selectedColor": "#007aff",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"index": 0,
+				"pagePath": "pages/home/index",
+				"text": "首页"
+			},
+			{
+				"index": 1,
+				"pagePath": "pages/shipPlan/index",
+				"text": "计划单"
+			},
+			{
+				"index": 2,
+				"pagePath": "pages/system/system",
+				"text": "设置"
+			}
+		]
+	}
+}

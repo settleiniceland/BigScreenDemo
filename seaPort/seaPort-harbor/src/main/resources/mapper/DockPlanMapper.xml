@@ -1,0 +1,1132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockPlanMapper">
+
+    <resultMap type="com.iwip.harbor.domain.DockPlan" id="DockPlanResult">
+        <result property="id"    column="id"    />
+        <result property="shipRade"    column="ship_rade"    />
+        <result property="shipName"    column="ship_name"    />
+        <result property="imo"    column="imo"    />
+        <result property="shipLength"    column="ship_length"    />
+        <result property="usageUnit"    column="usage_unit"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="tonnage"    column="tonnage"    />
+        <result property="planTonnage"    column="plan_tonnage"    />
+        <result property="remainingWeight"    column="remaining_weight"    />
+        <result property="updateWeightTime"    column="update_weight_time"    />
+        <result property="hbId"    column="hb_id"    />
+        <result property="hbName"    column="hb_name"    />
+        <result property="packageNum"    column="package_num"    />
+        <result property="status"    column="status"    />
+        <result property="unloadStatus"    column="unload_status"    />
+        <result property="reason"    column="reason"    />
+        <result property="lastPort"    column="last_port"    />
+        <result property="nextPort"    column="next_port"    />
+        <result property="shipAgency"    column="ship_agency"    />
+        <result property="mineNumber"    column="mine_number"    />
+        <result property="draft"    column="draft"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="suplierName"    column="suplier_name"    />
+        <result property="batchNumber"    column="batch_number"    />
+        <result property="unloadWeight"    column="unload_weight"    />
+        <result property="weight"    column="weight"    />
+        <result property="cardCount"    column="card_count"    />
+        <result property="dockingTime"    column="docking_time"    />
+        <result property="operationTime"    column="operation_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="leaveTime"    column="leave_time"    />
+        <result property="arrivalTime"    column="arrival_time"    />
+        <result property="planTime"    column="plan_time"    />
+        <result property="outBerthTime"    column="out_berth_time"    />
+        <result property="moveBerthTime"    column="move_berth_time"    />
+        <result property="inspectionCompany"    column="inspection_company"    />
+        <result property="loadingPort"    column="loading_port"    />
+        <result property="effectiveTime"    column="effective_time"    />
+        <result property="effectiveRate"    column="effective_rate"    />
+        <result property="avgDischargeRate"    column="avg_discharge_rate"    />
+        <result property="demurrageFee"    column="demurrage_fee"    />
+        <result property="contractRate"    column="contract_rate"    />
+        <result property="contractFee"    column="contract_fee"    />
+        <result property="plcRealTime"    column="plc_real_time"    />
+        <result property="plcSumWeight"    column="plc_sum_weight"    />
+        <result property="planType"    column="plan_type"    />
+        <result property="handledBy"    column="handled_by"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+        <result property="sourceType"    column="source_type"    />
+        <result property="sourceId"    column="source_id"    />
+        <result property="isArchived"    column="is_archived"    />
+        <result property="archivedMonth"    column="archived_month"    />
+        <result property="screenStatus"    column="screen_status"    />
+        <result property="planDockingTime"    column="plan_docking_time"    />
+
+        <!--   码头表类型映射     -->
+        <result property="pierType"    column="pier_type"    />
+
+
+    </resultMap>
+
+    <resultMap type="com.iwip.harbor.domain.vo.DockPlanDockingVo" id="DockPlanDockingVoResult">
+        <result property="id"    column="id"    />
+        <result property="shipName"    column="ship_name"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="hbId"    column="hb_id"    />
+        <result property="hbName"    column="hb_name"    />
+        <result property="dockingTime"    column="docking_time"    />
+        <result property="outBerthTime"    column="out_berth_time"    />
+        <result property="moveBerthTime"    column="move_berth_time"    />
+        <result property="isArchived"    column="is_archived"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+
+    <sql id="selectDockPlanVo">
+        select id,plan_docking_time,screen_status,plc_real_time,plc_sum_weight, ship_rade,archived_month,is_archived, ship_name, imo, ship_length, usage_unit, material_name, tonnage, plan_tonnage, remaining_weight, update_weight_time, hb_id, hb_name, package_num, status, unload_status, reason, last_port, next_port, ship_agency, mine_number, draft, order_no, contract_no, suplier_name, batch_number, unload_weight, weight, card_count, docking_time, operation_time, end_time, leave_time, arrival_time, plan_time, out_berth_time, move_berth_time, inspection_company, loading_port, effective_time, effective_rate, avg_discharge_rate, demurrage_fee, contract_rate, contract_fee, plan_type, handled_by, del_flag, user_id, create_by, create_time, dept_id, update_by, update_time, remark, remark01, remark02, remark03, source_type, source_id from dock_plan
+    </sql>
+
+
+    <select id="selectDockPlanList" parameterType="com.iwip.harbor.domain.DockPlan" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="shipRade != null  and shipRade != ''"> and ship_rade = #{shipRade}</if>
+            <if test="isArchived != null  and isArchived != ''"> and is_archived = #{isArchived}</if>
+            <if test="screenStatus != null  and screenStatus != ''"> and screen_status = #{screenStatus}</if>
+            <if test="shipName != null  and shipName != ''"> and ship_name like concat('%', #{shipName}, '%')</if>
+            <if test="imo != null  and imo != ''"> and imo = #{imo}</if>
+            <if test="shipLength != null "> and ship_length = #{shipLength}</if>
+            <if test="usageUnit != null  and usageUnit != ''"> and usage_unit = #{usageUnit}</if>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="tonnage != null  and tonnage != ''"> and tonnage = #{tonnage}</if>
+            <if test="planTonnage != null  and planTonnage != ''"> and plan_tonnage = #{planTonnage}</if>
+            <if test="remainingWeight != null  and remainingWeight != ''"> and remaining_weight = #{remainingWeight}</if>
+            <if test="updateWeightTime != null "> and update_weight_time = #{updateWeightTime}</if>
+            <if test="hbId != null "> and hb_id = #{hbId}</if>
+            <if test="hbName != null  and hbName != ''"> and hb_name like concat('%', #{hbName}, '%')</if>
+            <if test="packageNum != null "> and package_num = #{packageNum}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="unloadStatus != null  and unloadStatus != ''"> and unload_status = #{unloadStatus}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="lastPort != null  and lastPort != ''"> and last_port = #{lastPort}</if>
+            <if test="nextPort != null  and nextPort != ''"> and next_port = #{nextPort}</if>
+            <if test="shipAgency != null  and shipAgency != ''"> and ship_agency = #{shipAgency}</if>
+            <if test="mineNumber != null  and mineNumber != ''"> and mine_number = #{mineNumber}</if>
+            <if test="draft != null  and draft != ''"> and draft = #{draft}</if>
+            <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo}</if>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
+            <if test="suplierName != null  and suplierName != ''"> and suplier_name like concat('%', #{suplierName}, '%')</if>
+            <if test="batchNumber != null  and batchNumber != ''"> and batch_number = #{batchNumber}</if>
+            <if test="unloadWeight != null  and unloadWeight != ''"> and unload_weight = #{unloadWeight}</if>
+            <if test="weight != null  and weight != ''"> and weight = #{weight}</if>
+            <if test="cardCount != null  and cardCount != ''"> and card_count = #{cardCount}</if>
+            <if test="dockingTime != null "> and docking_time = #{dockingTime}</if>
+            <if test="operationTime != null "> and operation_time = #{operationTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="leaveTime != null "> and leave_time = #{leaveTime}</if>
+            <if test="arrivalTime != null "> and arrival_time = #{arrivalTime}</if>
+            <if test="planTime != null "> and plan_time = #{planTime}</if>
+            <if test="outBerthTime != null "> and out_berth_time = #{outBerthTime}</if>
+            <if test="moveBerthTime != null "> and move_berth_time = #{moveBerthTime}</if>
+            <if test="inspectionCompany != null  and inspectionCompany != ''"> and inspection_company = #{inspectionCompany}</if>
+            <if test="loadingPort != null  and loadingPort != ''"> and loading_port = #{loadingPort}</if>
+            <if test="effectiveTime != null  and effectiveTime != ''"> and effective_time = #{effectiveTime}</if>
+            <if test="effectiveRate != null "> and effective_rate = #{effectiveRate}</if>
+            <if test="avgDischargeRate != null  and avgDischargeRate != ''"> and avg_discharge_rate = #{avgDischargeRate}</if>
+            <if test="demurrageFee != null "> and demurrage_fee = #{demurrageFee}</if>
+            <if test="contractRate != null "> and contract_rate = #{contractRate}</if>
+            <if test="contractFee != null "> and contract_fee = #{contractFee}</if>
+            <if test="planType != null  and planType != ''"> and plan_type = #{planType}</if>
+            <if test="handledBy != null  and handledBy != ''"> and handled_by = #{handledBy}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 = #{remark02}</if>
+            <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
+            <if test="sourceType != null  and sourceType != ''"> and source_type = #{sourceType}</if>
+            <if test="sourceId != null "> and source_id = #{sourceId}</if>
+            <if test="archivedMonth != null">and archived_month =  #{archivedMonth}</if>
+        </where>
+        ORDER BY end_time DESC
+    </select>
+
+
+    <select id="selectEffectiveRateList"  resultMap="DockPlanResult">
+        <!-- <include refid="selectDockPlanVo"/>-->
+        SELECT dp.id, dp.plan_docking_time, dp.screen_status, dp.plc_real_time, dp.plc_sum_weight,
+            dp.ship_rade, dp.archived_month, dp.is_archived, dp.ship_name, dp.imo, dp.ship_length,
+            dp.usage_unit, dp.material_name, dp.tonnage, dp.plan_tonnage, dp.remaining_weight,
+            dp.update_weight_time, dp.hb_id, dp.hb_name, dp.package_num, dp.status, dp.unload_status,
+            dp.reason, dp.last_port, dp.next_port, dp.ship_agency, dp.mine_number, dp.draft, dp.order_no,
+            dp.contract_no, dp.suplier_name, dp.batch_number, dp.unload_weight, dp.weight, dp.card_count,
+            dp.docking_time, dp.operation_time, dp.end_time, dp.leave_time, dp.arrival_time, 
+            dp.plan_time, dp.out_berth_time, dp.move_berth_time, dp.inspection_company, dp.loading_port,
+            dp.effective_time, dp.effective_rate, dp.avg_discharge_rate, dp.demurrage_fee,
+            dp.contract_rate, dp.contract_fee, dp.plan_type, dp.handled_by, dp.del_flag,
+            dp.user_id, dp.create_by, dp.create_time, dp.dept_id, dp.update_by,
+            dp.update_time, dp.remark, dp.remark01, dp.remark02, dp.remark03,
+            dp.source_type, dp.source_id
+        FROM dock_plan AS dp LEFT JOIN sys_dept AS d ON dp.dept_id = d.dept_id
+        <where>
+            AND dp.del_flag = '0' AND dp.status = 4
+            <!-- AND DATE_FORMAT(dp.operation_time,'%Y-%m') IN ('2025-01','2025-02') -->
+            AND dp.effective_rate IS NULL
+            ${params.dataScope}
+        </where>
+        ORDER BY dp.end_time DESC
+    </select>
+
+
+    <select id="selectDockPlanLeftPierList" parameterType="com.iwip.harbor.domain.DockPlan" resultMap="DockPlanResult">
+        SELECT *,
+            ROW_NUMBER() OVER (PARTITION BY t.hb_name,t.status ORDER BY t.arrival_time) AS rn FROM (
+            SELECT
+                dp.id,dp.ship_rade,dp.ship_length,dp.unload_status,dp.unload_weight,dp.usage_unit,
+                dp.material_name,dp.plan_type,dp.package_num,dp.ship_name,dp.status,dp.tonnage,
+                dp.plan_tonnage,dp.screen_status,dp.card_count,dp.last_port,dp.next_port,dp.ship_agency,
+                dp.draft,dp.remark,dp.demurrage_fee,dp.hb_id,dp.hb_name,dp.docking_time,
+                dp.plan_docking_time,dp.operation_time,dp.end_time,dp.leave_time,dp.arrival_time,
+                dp.out_berth_time,dp.move_berth_time,dp.create_time,
+                dp.mine_number,dp.weight,dp.effective_time,dp.contract_rate,dp.contract_fee,
+                dp.effective_rate,dp.remaining_weight,dp.avg_discharge_rate,dp.imo,
+                dpier.pier_type,dp.remark01,dp.remark02,dp.remark03
+            FROM dock_plan dp
+            LEFT JOIN dock_berth db ON dp.hb_id = db.berth_id AND db.del_flag = '0'
+            LEFT JOIN dock_pier dpier ON db.berth_hp_id = dpier.pier_id AND dpier.del_flag = '0'
+            left join sys_dept as d on dpier.dept_id = d.dept_id
+            <where>
+                AND dp.del_flag = '0'
+                <if test="ids != null and ids.size() >0">and dp.id in
+                    <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+                </if>
+                <if test="isArchived != null  and isArchived != ''"> and dp.is_archived = #{isArchived}</if>
+                <if test="archivedMonth != null  and archivedMonth != ''"> and dp.archived_month = #{archivedMonth}</if>
+                <if test="pierType != null  and pierType != ''"> and dpier.pier_type = #{pierType}</if>
+                <if test="pierId != null  and pierId != ''"> and dpier.pier_id = #{pierId}</if>
+                <if test="unloadStatus != null "> and dp.unload_status = #{unloadStatus}</if>
+                <if test="shipRade != null  and shipRade != ''"> and dp.ship_rade = #{shipRade}</if>
+                <if test="shipName != null  and shipName != ''"> and dp.ship_name like concat('%', #{shipName}, '%')</if>
+                <if test="mineNumber != null  and mineNumber != ''"> and dp.mine_number like concat('%', #{mineNumber}, '%')</if>
+                <if test="imo != null  and imo != ''"> and dp.imo = #{imo}</if>
+                <if test="shipLength != null "> and dp.ship_length = #{shipLength}</if>
+                <if test="usageUnit != null  and usageUnit != ''"> and dp.usage_unit = #{usageUnit}</if>
+                <if test="materialName != null  and materialName != ''"> and dp.material_name like concat('%', #{materialName}, '%')</if>
+                <if test="tonnage != null  and tonnage != ''"> and dp.tonnage = #{tonnage}</if>
+                <if test="hbId != null "> and dp.hb_id = #{hbId}</if>
+                <if test="hbIds != null and hbIds.size() >0">and dp.hb_id in
+                    <foreach collection="hbIds" item="hbId" open="(" separator="," close=")">#{hbId}</foreach>
+                </if>
+                <if test="hbName != null  and hbName != ''"> and dp.hb_name like concat('%', #{hbName}, '%')</if>
+                <if test="status != null  and status != ''"> and dp.status = #{status}</if>
+                <if test="lastPort != null  and lastPort != ''"> and dp.last_port = #{lastPort}</if>
+                <if test="nextPort != null  and nextPort != ''"> and dp.next_port = #{nextPort}</if>
+                <if test="shipAgency != null  and shipAgency != ''"> and dp.ship_agency = #{shipAgency}</if>
+                <if test="draft != null  and draft != ''"> and dp.draft = #{draft}</if>
+                <if test="orderNo != null  and orderNo != ''"> and dp.order_no = #{orderNo}</if>
+                <if test="contractNo != null  and contractNo != ''"> and dp.contract_no = #{contractNo}</if>
+                <if test="suplierName != null  and suplierName != ''"> and dp.suplier_name like concat('%', #{suplierName}, '%')</if>
+                <if test="batchNumber != null  and batchNumber != ''"> and dp.batch_number = #{batchNumber}</if>
+                <if test="unloadWeight != null  and unloadWeight != ''"> and dp.unload_weight = #{unloadWeight}</if>
+                <if test="weight != null  and weight != ''"> and dp.weight = #{weight}</if>
+                <if test="cardCount != null  and cardCount != ''"> and dp.card_count = #{cardCount}</if>
+                <if test="dockingTime != null "> and dp.docking_time = #{dockingTime}</if>
+                <if test="operationTime != null "> and dp.operation_time = #{operationTime}</if>
+                <if test="endTime != null "> and dp.end_time = #{endTime}</if>
+                <if test="leaveTime != null "> and dp.leave_time = #{leaveTime}</if>
+                <if test="arrivalTime != null "> and dp.arrival_time = #{arrivalTime}</if>
+                <if test="planType != null "> and dp.plan_type = #{planType}</if>
+                <if test="planTime != null "> and dp.plan_time = #{planTime}</if>
+                <if test="outBerthTime != null "> and dp.out_berth_time = #{outBerthTime}</if>
+                <if test="inspectionCompany != null  and inspectionCompany != ''"> and dp.inspection_company = #{inspectionCompany}</if>
+                <if test="loadingPort != null  and loadingPort != ''"> and dp.loading_port = #{loadingPort}</if>
+                <if test="avgDischargeRate != null "> and dp.avg_discharge_rate = #{avgDischargeRate}</if>
+                <if test="demurrageFee != null "> and dp.demurrage_fee = #{demurrageFee}</if>
+                <if test="handledBy != null  and handledBy != ''"> and dp.handled_by = #{handledBy}</if>
+                <if test="userId != null "> and dp.user_id = #{userId}</if>
+                <if test="deptId != null  and deptId != ''"> and dp.dept_id = #{deptId}</if>
+                <if test="remark02 != null  and remark02 != ''"> and dp.remark02 = #{remark02}</if>
+                <if test="remark01 != null  and remark01 != ''"> and dp.remark01 = #{remark01}</if>
+                <if test="remark03 != null  and remark03 != ''"> and dp.remark03 = #{remark03}</if>
+                <if test="year != null  and year != ''">and YEAR(dp.end_time) = YEAR(CURDATE())</if>
+                <if test="endStartTime != null">and dp.end_time &gt;= #{endStartTime}</if>
+                <if test="endEndTime != null">and dp.end_time &lt;= #{endEndTime}</if>
+                ${params.dataScope}
+            </where>
+        ) t ORDER BY FIELD(t.status, '4', '5', '3', '10', '8', '2', '1', '0', '6', '7', '9'),rn
+                        ,IFNULL(REGEXP_SUBSTR(t.hb_name, '^[A-Z]+'), 'ZZZ'),
+                            CAST(IFNULL(REGEXP_SUBSTR(t.hb_name, '[0-9]+'), 9999) AS UNSIGNED)
+<!--         ORDER BY FIELD(dp.status, '4', '5', '3', '10', '8', '2', '1', '0', '6', '7', '9'),dp.arrival_time-->
+    </select>
+
+
+    <select id="screenPierPlanList" parameterType="String" resultType="com.iwip.harbor.domain.screen.ScreenWorkPlan">
+<!--        SELECT-->
+<!--        dp.id planId,-->
+<!--        dp.hb_name berthName,-->
+<!--        dp.material_name materialName,-->
+<!--        dp.avg_discharge_rate avgDischargeRate,-->
+<!--        dp.update_weight_time updateWeightTime,-->
+<!--        dp.operation_time operationTime,-->
+<!--        dp.mine_number mineNumber,-->
+<!--        dp.unload_weight unloadWeight,-->
+<!--        dp.tonnage tonnage,-->
+<!--        dpier.pier_type pierType-->
+<!--        FROM-->
+<!--        dock_plan dp-->
+<!--        LEFT JOIN dock_berth db ON dp.hb_id = db.berth_id-->
+<!--        AND db.del_flag = '0'-->
+<!--        LEFT JOIN dock_pier dpier ON db.berth_hp_id = dpier.pier_id-->
+<!--        AND dpier.del_flag = '0'-->
+<!--        <where>-->
+<!--            AND dp.del_flag = '0'-->
+<!--            AND dp.is_archived = '0'-->
+<!--            AND dp.status IN ('4', '3', '5')-->
+<!--            and dp.operation_time is not null-->
+<!--            <if test="pierType != null  and pierType != ''"> and dpier.pier_type = #{pierType}</if>-->
+<!--        </where>-->
+<!--        ORDER BY-->
+<!--&#45;&#45;             db.berth_name,dp.arrival_time-->
+<!--        db.berth_name,-->
+<!--        dp.operation_time,-->
+<!--         CAST(REGEXP_SUBSTR(db.berth_name, '^[0-9]+') AS UNSIGNED),-->
+<!--         REGEXP_SUBSTR(db.berth_name, '[A-Za-z]+'),-->
+<!--         CAST(REGEXP_SUBSTR(db.berth_name, '[0-9]+$') AS UNSIGNED)-->
+        SELECT *
+        FROM (
+            SELECT
+                dp.id planId,
+                dp.hb_name berthName,
+                dp.material_name materialName,
+                dp.avg_discharge_rate avgDischargeRate,
+                dp.update_weight_time updateWeightTime,
+                dp.operation_time operationTime,
+                dp.mine_number mineNumber,
+                dp.unload_weight unloadWeight,
+                dp.tonnage tonnage,
+                dpier.pier_type pierType,
+                ROW_NUMBER() OVER (PARTITION BY db.berth_name ORDER BY dp.operation_time) AS rn
+            FROM dock_plan dp
+            LEFT JOIN dock_berth db ON dp.hb_id = db.berth_id AND db.del_flag = '0'
+            LEFT JOIN dock_pier dpier ON db.berth_hp_id = dpier.pier_id AND dpier.del_flag = '0'
+            <where>
+                AND dp.del_flag = '0'
+                AND dp.is_archived = '0'
+                AND dp.status IN ('4', '3', '5')
+                AND dp.operation_time IS NOT NULL
+                <if test="pierType != null and pierType != ''">
+                    AND dpier.pier_type = #{pierType}
+                </if>
+            </where>
+        ) t
+        ORDER BY t.rn,IFNULL(REGEXP_SUBSTR(t.berthName, '^[A-Z]+'), 'ZZZ'),
+            CAST(IFNULL(REGEXP_SUBSTR(t.berthName, '[0-9]+'), 9999) AS UNSIGNED)
+    </select>
+
+    <select id="screenGeoJsonPlanList"  resultType="com.iwip.harbor.domain.screen.ScreenGeoJsonVo">
+        SELECT
+        ship_name shipName,
+        imo imo,
+        material_name materialName,
+        operation_time operationTime,
+        hb_id berthId,
+        status status,
+        tonnage tonnage,
+        docking_time dockingTime,
+        arrival_time arrivalTime
+        FROM
+        dock_plan
+        <where>
+            AND del_flag = '0'
+            AND `status` in ('1','2','6')
+            AND screen_status = '0'
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectDockPlanById" parameterType="Long" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        where id = #{id} AND del_flag = '0'
+    </select>
+
+    <select id="selectScreenDockByBerthId" parameterType="Long" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        where
+        del_flag = '0'
+        AND hb_id = #{hbId}
+        AND `status` in ('0','1','2','6','10')
+        ORDER BY create_time
+    </select>
+
+
+    <select id="selectDockPlanByParams" parameterType="com.iwip.harbor.domain.DockPlan" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="shipName != null  and shipName != ''">and ship_name = #{shipName}</if>
+            <if test="materialName != null and materialName != ''">and material_name = #{materialName}</if>
+            <if test="hbName != null and hbName != ''">and hb_name = #{hbName}</if>
+            <if test="mineNumber != null and mineNumber != ''">and mine_number = #{mineNumber}</if>
+        </where>
+    </select>
+
+    <select id="selectDockPlanByStatus" parameterType="com.iwip.harbor.domain.DockPlan"  resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        <where>
+            AND del_flag = '0'
+            AND `status` in('3','4','5')
+            <if test="id != null  and id != ''">and id != #{id}</if>
+            <if test="hbId != null and hbId != ''">and hb_id = #{hbId}</if>
+        </where>
+    </select>
+
+    <select id="screenPlanBerthList" parameterType="com.iwip.harbor.domain.DockPlan" resultType="com.iwip.harbor.domain.screen.ScreenPlanBerthVo">
+        SELECT
+            berth.berth_id berthId,
+            berth.berth_name berthName,
+            berth.berth_status berthStatus,
+            plan.id planId,
+            plan.material_name materialName,
+            plan.tonnage tonnage,
+            plan.`status` status,
+            plan.docking_time dockingTime,
+            plan.operation_time operationTime
+        FROM
+            dock_berth berth
+                LEFT JOIN dock_plan plan ON berth.berth_id = plan.hb_id  AND plan.del_flag = '0' AND plan.status in ('2','3','4','5')
+        <where>
+            AND berth.del_flag = '0'
+            AND berth.berth_status != '2'
+            AND plan.is_archived = '0'
+            AND plan.screen_status = '0'
+        </where>
+        ORDER BY berth.berth_status DESC
+    </select>
+
+
+    <select id="screenWaitBerthList"  resultType="com.iwip.harbor.domain.screen.ScreenWaitBerthVo">
+        SELECT
+            plan.id planId,
+            plan.ship_name shipName,
+            plan.tonnage tonnage,
+            plan.ship_length shipLength,
+            plan.material_name materialName,
+            plan.hb_id berthId,
+            plan.hb_name berthName,
+            plan.arrival_time arrivalTime,
+            plan.plan_docking_time planDockingTime
+        FROM
+            dock_plan plan
+        <where>
+            AND plan.del_flag = '0'
+            AND plan.`status` = '2'
+            AND plan.is_archived = '0'
+            AND plan.screen_status = '0'
+        </where>
+        ORDER BY plan.arrival_time ASC
+
+    </select>
+
+    <select id="screenPlanStatusList" parameterType="com.iwip.harbor.domain.DockPlan" resultType="com.iwip.harbor.domain.screen.ScreenPlanStatusVo">
+        SELECT
+            s.STATUS STATUS,
+            COALESCE (dp.count, 0) AS count
+        FROM
+            (SELECT 0 AS STATUS UNION ALL
+             SELECT 1 UNION ALL
+             SELECT 2 UNION ALL
+             SELECT 3 UNION ALL
+             SELECT 4 UNION ALL
+             SELECT 5 UNION ALL
+             SELECT 6 UNION ALL
+             SELECT 7 UNION ALL
+             SELECT 8 UNION ALL
+             SELECT 9 UNION ALL
+             SELECT 10) s
+                LEFT JOIN (
+                SELECT
+                    odp.`status` AS STATUS,
+                    COUNT(*) AS count
+                FROM
+                    dock_plan AS odp
+                left join sys_dept as d on odp.dept_id = d.dept_id
+                WHERE
+                    odp.del_flag = '0'
+                  AND odp.is_archived = 0  -- 过滤未归档的数据
+                  AND odp.screen_status = '0'
+                  AND DATE(odp.create_time) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) -- 近30天数据
+                    ${params.dataScope}
+                GROUP BY
+                odp.`status`
+            ) dp ON s.STATUS = dp.STATUS
+        ORDER BY
+            s.STATUS;
+    </select>
+
+    <select id="screenPlanTimeList" parameterType="com.iwip.harbor.domain.DockPlan" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="createTime != null">
+                and DATE(create_time) = DATE(#{createTime})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPlanByHbId" parameterType="Long" resultType="com.iwip.harbor.domain.screen.ScreenPlanVo">
+        SELECT id          planId,
+               status      status,
+               ship_name   shipName,
+               mine_number mineNumber,
+               remaining_weight unloadedWeight,
+               tonnage     tonnage
+        FROM dock_plan
+        where del_flag = '0'
+          AND is_archived = '0'
+          AND status in ('3','4','5')
+          AND hb_id = #{berthId}
+        ORDER BY arrival_time ASC
+    </select>
+
+
+    <select id="selectPlanScreenWorkList" parameterType="com.iwip.harbor.domain.DockPlan"
+            resultType="com.iwip.harbor.domain.screen.ScreenPlanVo">
+        SELECT id planId,
+        hb_id berthId,
+        hb_name berthName,
+        package_num packageNum,
+        status status,
+        ship_name shipName,
+        mine_number mineNumber,
+        material_name materialName,
+        unload_weight unloadedWeight,
+        tonnage grossWeight,
+        avg_discharge_rate avgDischargeRate,
+        update_weight_time updateWeightTime,
+        docking_time dockingTime,
+        plan_docking_time planDockingTime,
+        arrival_time arrivalTime,
+        operation_time operationTime,
+        plc_real_time plcRealTime,
+        plc_sum_weight plcSumWeight,
+        end_time endTime
+        FROM dock_plan
+        <where>
+            AND del_flag = '0'
+            AND is_archived = '0'
+            AND status in ('3','4', '5','10')
+            <if test="hbId != null and hbId != ''">and hb_id = #{hbId}</if>
+        </where>
+    </select>
+
+    <select id="selectDockMaterialList" resultType="com.iwip.harbor.domain.vo.DockMaterialVo">
+        SELECT
+            dp.material_name AS materialName,
+            dp.status AS status,
+            COUNT(1) AS `count`
+        FROM
+            dock_plan AS dp
+        left join sys_dept as d on dp.dept_id = d.dept_id
+        WHERE
+            dp.del_flag = '0'
+          AND dp.is_archived = 0
+          AND dp.screen_status = '0'
+          AND DATE(dp.create_time) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            ${params.dataScope}
+        GROUP BY
+            dp.status,
+            dp.material_name
+        ORDER BY
+            dp.status,`count`
+    </select>
+
+
+    <select id="shipArrivalStatistics" resultType="com.iwip.harbor.domain.vo.DockMaterialVo">
+        SELECT
+          material_name materialName,
+          count( 1 ) `count`
+        FROM
+          `dock_plan`
+        WHERE
+          arrival_time &gt;= #{startTime}
+          AND arrival_time &lt;= #{endTime}
+          AND del_flag = '0'
+          AND is_archived = '0'
+          AND screen_status = '0'
+        GROUP BY material_name
+        ORDER BY `count`
+    </select>
+
+<!--    <select id="selectAppPierPlanList" parameterType="com.iwip.harbor.domain.param.AppPierPlanParam" resultType="com.iwip.harbor.domain.vo.AppPierPlanVo">-->
+<!--        WITH latest_duw AS (-->
+<!--          SELECT *-->
+<!--          FROM (-->
+<!--            SELECT *,-->
+<!--                ROW_NUMBER() OVER (PARTITION BY plan_id ORDER BY create_time DESC) AS rn-->
+<!--            FROM dock_unload_work-->
+<!--            WHERE del_flag = '0'-->
+<!--            ) t-->
+<!--            WHERE t.rn = 1-->
+<!--        ),-->
+<!--        latest_dud AS (-->
+<!--          SELECT *-->
+<!--            FROM (-->
+<!--              SELECT *,-->
+<!--                  ROW_NUMBER() OVER (PARTITION BY du_id ORDER BY create_time DESC) AS rn-->
+<!--              FROM dock_unload_detail-->
+<!--              WHERE del_flag = '0'-->
+<!--            ) t-->
+<!--            WHERE t.rn = 1-->
+<!--        )-->
+<!--        SELECT-->
+<!--            dp.id planId,-->
+<!--            duw.du_id,-->
+<!--            dud.dud_id,-->
+<!--            duw.work_type workType,-->
+<!--            dud.reason reason,-->
+<!--            dp.hb_name berthName,-->
+<!--            dp.status status,-->
+<!--            dp.ship_name shipName,-->
+<!--            dp.material_name materialName,-->
+<!--            dp.avg_discharge_rate avgDischargeRate,-->
+<!--            dp.update_weight_time updateWeightTime,-->
+<!--            dp.operation_time operationTime,-->
+<!--            dp.mine_number mineNumber,-->
+<!--            dp.unload_weight unloadWeight,-->
+<!--            dp.remaining_weight remainingWeight,-->
+<!--            dp.tonnage tonnage,-->
+<!--            dpier.pier_type pierType-->
+<!--        FROM-->
+<!--            dock_plan dp-->
+<!--            LEFT JOIN dock_berth db ON dp.hb_id = db.berth_id AND db.del_flag = '0'-->
+<!--            LEFT JOIN dock_pier dpier ON db.berth_hp_id = dpier.pier_id AND dpier.del_flag = '0'-->
+<!--            LEFT JOIN latest_duw duw ON dp.id = duw.plan_id-->
+<!--            LEFT JOIN latest_dud dud ON duw.du_id = dud.du_id-->
+<!--        <where>-->
+<!--            AND dp.del_flag = '0'-->
+<!--            AND dp.is_archived = '0'-->
+<!--            AND dp.screen_status = '0'-->
+<!--            AND dp.status IN ('4', '3', '5')-->
+<!--            <if test="param.pierType != null  and  param.pierType != ''"> and dpier.pier_type = #{param.pierType}</if>-->
+<!--            <if test="param.berthNameList != null  and  param.berthNameList.size() != 0">-->
+<!--                and dp.hb_name in-->
+<!--                <foreach collection="param.berthNameList" item="berthName" open="(" separator="," close=")">-->
+<!--                    #{berthName}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--            <if test="param.materialNameList != null and param.materialNameList.size() != 0">-->
+<!--                and dp.material_name in-->
+<!--                <foreach collection="param.materialNameList" item="materialName" open="(" separator="," close=")">-->
+<!--                    #{materialName}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        ORDER BY-->
+<!--        db.berth_name,-->
+<!--#         CAST(REGEXP_SUBSTR(db.berth_name, '^[0-9]+') AS UNSIGNED),-->
+<!--#         REGEXP_SUBSTR(db.berth_name, '[A-Za-z]+'),-->
+<!--#         CAST(REGEXP_SUBSTR(db.berth_name, '[0-9]+$') AS UNSIGNED),-->
+<!--        dp.operation_time-->
+<!--    </select>-->
+
+    <select id="selectAppPierPlanList" parameterType="com.iwip.harbor.domain.param.AppPierPlanParam" resultType="com.iwip.harbor.domain.vo.AppPierPlanVo">
+    SELECT * FROM (
+        SELECT
+            dp.id planId,
+            duw.du_id,
+            dud.dud_id,
+            duw.work_type workType,
+            dud.reason reason,
+            dp.hb_name berthName,
+            dp.status status,
+            dp.ship_name shipName,
+            dp.material_name materialName,
+            dp.avg_discharge_rate avgDischargeRate,
+            dp.update_weight_time updateWeightTime,
+            dp.operation_time operationTime,
+            dp.mine_number mineNumber,
+            dp.unload_weight unloadWeight,
+            dp.remaining_weight remainingWeight,
+            dp.tonnage tonnage,
+            dpier.pier_type pierType,
+            ROW_NUMBER() OVER (PARTITION BY dp.hb_name ORDER BY dp.operation_time) AS rn
+        FROM dock_plan dp
+        LEFT JOIN dock_berth db ON dp.hb_id = db.berth_id AND db.del_flag = '0'
+        LEFT JOIN dock_pier dpier ON db.berth_hp_id = dpier.pier_id AND dpier.del_flag = '0'
+        LEFT JOIN (
+            SELECT du1.* FROM dock_unload_work du1
+            INNER JOIN (SELECT plan_id, MAX(create_time) AS max_create_time FROM dock_unload_work WHERE del_flag = '0' GROUP BY plan_id)
+                du2 ON du1.plan_id = du2.plan_id AND du1.create_time = du2.max_create_time WHERE du1.del_flag = '0'
+            ) duw ON dp.id = duw.plan_id
+        LEFT JOIN (
+            SELECT dd1.* FROM dock_unload_detail dd1
+            INNER JOIN (SELECT du_id, MAX(create_time) AS max_create_time FROM dock_unload_detail WHERE del_flag = '0' GROUP BY du_id)
+                dd2 ON dd1.du_id = dd2.du_id AND dd1.create_time = dd2.max_create_time
+            WHERE dd1.del_flag = '0'
+        ) dud ON duw.du_id = dud.du_id
+        left join sys_dept as d on dp.dept_id = d.dept_id
+        <where>
+            AND dp.del_flag = '0'
+            AND dp.is_archived = '0'
+            AND dp.screen_status = '0'
+            AND dp.status IN ('4', '3', '5')
+            <if test="param.pierType != null  and  param.pierType != ''"> and dpier.pier_type = #{param.pierType}</if>
+            <if test="param.berthNameList != null  and  param.berthNameList.size() != 0">
+                and dp.hb_name in
+                <foreach collection="param.berthNameList" item="berthName" open="(" separator="," close=")">
+                    #{berthName}
+                </foreach>
+            </if>
+            <if test="param.materialNameList != null and param.materialNameList.size() != 0">
+                and dp.material_name in
+                <foreach collection="param.materialNameList" item="materialName" open="(" separator="," close=")">
+                    #{materialName}
+                </foreach>
+            </if>
+            ${param.params.dataScope}
+        </where>
+    ) t
+        <!--ORDER BY-->
+        <!--db.berth_name,-->
+        <!--dp.operation_time-->
+    ORDER BY t.rn,IFNULL(REGEXP_SUBSTR(t.berthName, '^[A-Z]+'), 'ZZZ'),
+        CAST(IFNULL(REGEXP_SUBSTR(t.berthName, '[0-9]+'), 9999) AS UNSIGNED)
+    </select>
+
+    <select id="selectDockPlanWithTaskByIds" resultType="java.lang.Long">
+        SELECT
+            dp.id
+        FROM
+            dock_plan dp
+        WHERE
+            STATUS >= 5
+          AND dp.id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectListByDockingTimeAndOutBerthTime" resultMap="DockPlanDockingVoResult">
+        SELECT
+            id ,
+            ship_name,
+            material_name,
+            hb_id,
+            hb_name,
+            `status`,
+            is_archived,
+            docking_time,
+            out_berth_time,
+            move_berth_time
+        FROM
+            dock_plan
+        WHERE
+            del_flag = '0' AND `status` = 7
+        <if test="dockingStartTime != null">
+            AND docking_time &gt;= #{dockingStartTime}
+        </if>
+        <if test="dockingEndTime != null">
+            AND docking_time &lt;= #{dockingEndTime}
+        </if>
+        <if test="outBerthStartTime != null">
+            AND out_berth_time &gt;= #{outBerthStartTime}
+        </if>
+        <if test="outBerthEndTime != null">
+            AND out_berth_time &lt;= #{outBerthEndTime}
+        </if>
+        ORDER BY
+            docking_time,hb_id
+    </select>
+
+
+    <insert id="insertDockPlan" parameterType="com.iwip.harbor.domain.DockPlan" useGeneratedKeys="true" keyProperty="id">
+        insert into dock_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shipRade != null">ship_rade,</if>
+            <if test="shipName != null">ship_name,</if>
+            <if test="imo != null">imo,</if>
+            <if test="shipLength != null">ship_length,</if>
+            <if test="usageUnit != null">usage_unit,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="tonnage != null">tonnage,</if>
+            <if test="planTonnage != null">plan_tonnage,</if>
+            <if test="hbId != null">hb_id,</if>
+            <if test="hbName != null">hb_name,</if>
+            <if test="status != null">status,</if>
+            <if test="lastPort != null">last_port,</if>
+            <if test="nextPort != null">next_port,</if>
+            <if test="shipAgency != null">ship_agency,</if>
+            <if test="draft != null">draft,</if>
+            <if test="orderNo != null">order_no,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="suplierName != null">suplier_name,</if>
+            <if test="batchNumber != null">batch_number,</if>
+            <if test="unloadWeight != null">unload_weight,</if>
+            <if test="weight != null">weight,</if>
+            <if test="cardCount != null">card_count,</if>
+            <if test="dockingTime != null">docking_time,</if>
+            <if test="operationTime != null">operation_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="leaveTime != null">leave_time,</if>
+            <if test="arrivalTime != null">arrival_time,</if>
+            <if test="planTime != null">plan_time,</if>
+            <if test="outBerthTime != null">out_berth_time,</if>
+            <if test="inspectionCompany != null">inspection_company,</if>
+            <if test="loadingPort != null">loading_port,</if>
+            <if test="avgDischargeRate != null">avg_discharge_rate,</if>
+            <if test="demurrageFee != null">demurrage_fee,</if>
+            <if test="handledBy != null">handled_by,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+            <if test="sourceType != null">source_type,</if>
+            <if test="packageNum != null">package_num,</if>
+            <if test="mineNumber != null">mine_number,</if>
+            <if test="effectiveTime != null">effective_time,</if>
+            <if test="effectiveRate != null">effective_rate,</if>
+            <if test="moveBerthTime != null">move_berth_time,</if>
+            <if test="sourceId != null">source_id,</if>
+            <if test="contractRate != null">contract_rate,</if>
+            <if test="contractFee != null">contract_fee,</if>
+            <if test="plcRealTime != null">plc_real_time,</if>
+            <if test="plcSumWeight != null">plc_sum_weight,</if>
+            <if test="planType != null">plan_type,</if>
+            <if test="remainingWeight != null">remaining_weight,</if>
+            <if test="updateWeightTime != null">update_weight_time,</if>
+            <if test="unloadStatus != null">unload_status,</if>
+            <if test="isArchived != null">is_archived,</if>
+            <if test="archivedMonth != null">archived_month,</if>
+            <if test="screenStatus != null">screen_status,</if>
+            <if test="planDockingTime != null">plan_docking_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shipRade != null">#{shipRade},</if>
+            <if test="shipName != null">#{shipName},</if>
+            <if test="imo != null">#{imo},</if>
+            <if test="shipLength != null">#{shipLength},</if>
+            <if test="usageUnit != null">#{usageUnit},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="tonnage != null">#{tonnage},</if>
+            <if test="planTonnage != null">#{planTonnage},</if>
+            <if test="hbId != null">#{hbId},</if>
+            <if test="hbName != null">#{hbName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="lastPort != null">#{lastPort},</if>
+            <if test="nextPort != null">#{nextPort},</if>
+            <if test="shipAgency != null">#{shipAgency},</if>
+            <if test="draft != null">#{draft},</if>
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="suplierName != null">#{suplierName},</if>
+            <if test="batchNumber != null">#{batchNumber},</if>
+            <if test="unloadWeight != null">#{unloadWeight},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="cardCount != null">#{cardCount},</if>
+            <if test="dockingTime != null">#{dockingTime},</if>
+            <if test="operationTime != null">#{operationTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="leaveTime != null">#{leaveTime},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="planTime != null">#{planTime},</if>
+            <if test="outBerthTime != null">#{outBerthTime},</if>
+            <if test="inspectionCompany != null">#{inspectionCompany},</if>
+            <if test="loadingPort != null">#{loadingPort},</if>
+            <if test="avgDischargeRate != null">#{avgDischargeRate},</if>
+            <if test="demurrageFee != null">#{demurrageFee},</if>
+            <if test="handledBy != null">#{handledBy},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+            <if test="sourceType != null">#{sourceType},</if>
+            <if test="packageNum != null">#{packageNum},</if>
+            <if test="mineNumber != null">#{mineNumber},</if>
+            <if test="effectiveTime != null">#{effectiveTime},</if>
+            <if test="effectiveRate != null">#{effectiveRate},</if>
+            <if test="moveBerthTime != null">#{moveBerthTime},</if>
+            <if test="sourceId != null">#{sourceId},</if>
+            <if test="contractRate != null">#{contractRate},</if>
+            <if test="contractFee != null">#{contractFee},</if>
+            <if test="plcRealTime != null">#{plcRealTime},</if>
+            <if test="plcSumWeight != null">#{plcSumWeight},</if>
+            <if test="planType != null">#{planType},</if>
+            <if test="remainingWeight != null">#{remainingWeight},</if>
+            <if test="updateWeightTime != null">#{updateWeightTime},</if>
+            <if test="unloadStatus != null">#{unloadStatus},</if>
+            <if test="isArchived != null">#{isArchived},</if>
+            <if test="archivedMonth != null">#{archivedMonth},</if>
+            <if test="screenStatus != null">#{screenStatus},</if>
+            <if test="planDockingTime != null">#{planDockingTime},</if>
+
+
+        </trim>
+    </insert>
+
+    <update id="updateDockPlan" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shipRade != null">ship_rade = #{shipRade},</if>
+            <if test="shipName != null">ship_name = #{shipName},</if>
+            imo = #{imo},
+            <if test="shipLength != null">ship_length = #{shipLength},</if>
+            <if test="usageUnit != null">usage_unit = #{usageUnit},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            tonnage = #{tonnage},
+            plan_tonnage = #{planTonnage},
+            remaining_weight = #{remainingWeight},
+            <if test="updateWeightTime != null">update_weight_time = #{updateWeightTime},</if>
+            <if test="hbId != null">hb_id = #{hbId},</if>
+            <if test="hbName != null">hb_name = #{hbName},</if>
+            package_num = #{packageNum},
+            <if test="status != null">status = #{status},</if>
+            <if test="unloadStatus != null">unload_status = #{unloadStatus},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            last_port = #{lastPort},
+            next_port = #{nextPort},
+            ship_agency = #{shipAgency},
+            mine_number = #{mineNumber},
+            draft = #{draft},
+            order_no = #{orderNo},
+            contract_no = #{contractNo},
+            suplier_name = #{suplierName},
+            batch_number = #{batchNumber},
+            <if test="unloadWeight != null">unload_weight = #{unloadWeight},</if>
+            weight = #{weight},
+            card_count = #{cardCount},
+            docking_time = #{dockingTime},
+            operation_time = #{operationTime},
+            end_time = #{endTime},
+            leave_time = #{leaveTime},
+            arrival_time = #{arrivalTime},
+            plan_time = #{planTime},
+            out_berth_time = #{outBerthTime},
+            move_berth_time = #{moveBerthTime},
+            inspection_company = #{inspectionCompany},
+            loading_port = #{loadingPort},
+            <if test="effectiveTime != null">effective_time = #{effectiveTime},</if>
+            effective_rate = #{effectiveRate},
+            avg_discharge_rate = #{avgDischargeRate},
+            <if test="demurrageFee != null">demurrage_fee = #{demurrageFee},</if>
+            contract_rate = #{contractRate},
+            contract_fee = #{contractFee},
+            <if test="planType != null">plan_type = #{planType},</if>
+            handled_by = #{handledBy},
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            remark02 = #{remark02},
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+            <if test="sourceType != null">source_type = #{sourceType},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="isArchived != null">is_archived = #{isArchived},</if>
+            <if test="plcRealTime != null">plc_real_time = #{plcRealTime},</if>
+            <if test="plcSumWeight != null">plc_sum_weight = #{plcSumWeight},</if>
+            <if test="screenStatus != null">screen_status = #{screenStatus},</if>
+            <if test="planDockingTime != null">plan_docking_time = #{planDockingTime},</if>
+            archived_month = #{archivedMonth},
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <update id="updatePlanBerth" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hbId != null">hb_id = #{hbId},</if>
+            <if test="hbName != null">hb_name = #{hbName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="dockingTime != null">docking_time = #{dockingTime},</if>
+            <if test="planDockingTime != null">plan_docking_time = #{planDockingTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <update id="updateUnloadWeigh" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="unloadWeight != null">unload_weight = #{unloadWeight},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+
+    <update id="updatePlanByPLC" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="plcRealTime != null">plc_real_time = #{plcRealTime},</if>
+            <if test="plcSumWeight != null">plc_sum_weight = #{plcSumWeight},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateDockPlanRate" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="effectiveTime != null">effective_time = #{effectiveTime},</if>
+            <if test="effectiveRate != null">effective_rate = #{effectiveRate},</if>
+            <if test="unloadStatus != null">unload_status = #{unloadStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+    <update id="removeDockPlanByDbId" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateStatus" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="planDockingTime != null">plan_docking_time = #{planDockingTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateScreenStatus" parameterType="com.iwip.harbor.domain.DockPlan">
+        update dock_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="screenStatus != null">screen_status = #{screenStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updatePlanUnloadWeightById">
+        update dock_plan SET unload_weight = #{param2} WHERE id = #{param1}
+    </update>
+
+    <select id="selectListByDockingTime" resultType="com.iwip.harbor.domain.excel.DockBerthUsaDetailExcel">
+        SELECT
+        ship_name shipName,
+        hb_name hbName,
+        hb_name hbName,
+        docking_time dockingTime,
+        out_berth_time outBerthTime,
+        operation_time operationTime,
+        end_time endTime
+        FROM
+        dock_plan
+        WHERE
+        del_flag = '0' AND `status` = 7
+        <if test="yearMonth != null" >
+            AND DATE_FORMAT( docking_time, '%Y-%m' ) = #{yearMonth}
+        </if>
+        ORDER BY
+        hb_name,
+#         CAST( REGEXP_SUBSTR ( hb_name, '^[0-9]+' ) AS UNSIGNED ),
+#         REGEXP_SUBSTR ( hb_name, '[A-Za-z]+' ),
+#         CAST( REGEXP_SUBSTR ( hb_name, '[0-9]+$' ) AS UNSIGNED ),
+        docking_time ASC ,out_berth_time ASC
+    </select>
+    <select id="selectPlanListForTask" parameterType="com.iwip.harbor.domain.DockPlan" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        <where>
+            AND del_flag = '0'
+            AND status = #{status}
+            AND hb_name = #{hbName}
+            AND operation_time IS NOT NULL
+            AND is_archived = #{isArchived}
+            AND material_name IN
+            <foreach collection="params.dmParam" item="obj" index="index" open="(" separator="," close=")">
+                #{obj.materialName}
+            </foreach>
+        </where>
+    </select>
+
+    <delete id="deleteDockPlanById" parameterType="Long">
+        delete from dock_plan where id = #{id}
+    </delete>
+
+    <delete id="deleteDockPlanByIds" parameterType="String">
+        delete from dock_plan where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!-- 👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇新大屏方法👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇   -->
+    <select id="newScreen_SelectPlanList1" resultMap="DockPlanResult">
+        SELECT id,ship_name,hb_name,material_name,arrival_time,out_berth_time FROM dock_plan
+        WHERE del_flag = 0 AND (
+            (arrival_time BETWEEN #{todayStart} AND #{todayEnd}) OR
+            (arrival_time BETWEEN #{tomorrowStart} AND #{tomorrowEnd}) OR
+            (out_berth_time BETWEEN #{todayStart} AND #{todayEnd}) OR
+            (out_berth_time BETWEEN #{tomorrowStart} AND #{tomorrowEnd})
+        ) AND dept_id IN
+        <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+    <select id="newScreen_SelectPlanList2" resultMap="DockPlanResult" parameterType="java.util.List">
+        SELECT id,ship_name,material_name,hb_name,plan_tonnage,arrival_time,plan_docking_time FROM dock_plan
+        WHERE del_flag = 0 AND arrival_time IS NOT NULL
+          AND plan_docking_time IS NOT NULL
+          AND docking_time IS NULL
+          AND dept_id IN
+        <foreach collection="list" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+    <select id="newScreen_SelectPlanList3" resultMap="DockPlanResult" parameterType="java.util.List">
+        <include refid="selectDockPlanVo"/>
+        WHERE del_flag = 0 AND status = '4' AND dept_id IN
+        <foreach collection="list" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+        ORDER BY hb_name
+    </select>
+    <select id="newScreen_SelectPlanListForMap" resultMap="DockPlanResult" parameterType="java.util.List">
+        SELECT id,hb_name,ship_name,material_name,arrival_time FROM dock_plan
+        WHERE del_flag = 0 AND (status = '0' OR status = '1' OR status = '2' OR status = '3') AND arrival_time IS NOT NULL AND is_archived = '0' AND dept_id IN
+        <foreach collection="list" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+    <select id="newNewScreen_SelectPlanListForPup" resultMap="DockPlanResult">
+        SELECT id,status,hb_name,ship_name,usage_unit,material_name,arrival_time,end_time,unload_weight,tonnage FROM dock_plan
+        WHERE del_flag = 0 AND status IN ("0","1","2","3","4","5","6") AND arrival_time IS NOT NULL AND is_archived = '0' AND hb_name = #{berchCode} AND dept_id IN
+        <foreach collection="list" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+        ORDER BY status
+    </select>
+</mapper>

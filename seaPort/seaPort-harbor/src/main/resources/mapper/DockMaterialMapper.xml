@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockMaterialMapper">
+    
+    <resultMap type="com.iwip.harbor.domain.DockMaterial" id="DockMaterialResult">
+        <result property="id"    column="id"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialStatus"    column="material_status"    />
+        <result property="sort"    column="sort"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectDockMaterialVo">
+        select id, material_name,sort, material_status, del_flag, remark, remark01, remark02, remark03, create_by, create_time from dock_material
+    </sql>
+
+    <select id="selectDockMaterialList" parameterType="com.iwip.harbor.domain.DockMaterial" resultMap="DockMaterialResult">
+        <include refid="selectDockMaterialVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="materialStatus != null  and materialStatus != ''"> and material_status = #{materialStatus}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 = #{remark02}</if>
+            <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
+        </where>
+        ORDER BY sort
+    </select>
+
+    <select id="enableList" parameterType="com.iwip.harbor.domain.DockMaterial" resultMap="DockMaterialResult">
+        <include refid="selectDockMaterialVo"/>
+        <where>
+            AND del_flag = '0' and material_status = '0'
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="materialStatus != null  and materialStatus != ''"> and material_status = #{materialStatus}</if>
+            <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 = #{remark02}</if>
+            <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
+        </where>
+        ORDER BY sort
+    </select>
+    
+    <select id="selectDockMaterialById" parameterType="Long" resultMap="DockMaterialResult">
+        <include refid="selectDockMaterialVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectDockMaterialByName" parameterType="String" resultMap="DockMaterialResult">
+        <include refid="selectDockMaterialVo"/>
+        where material_name = #{materialName} and del_flag = '0'
+    </select>
+
+    <insert id="insertDockMaterial" parameterType="com.iwip.harbor.domain.DockMaterial">
+        insert into dock_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="materialStatus != null">material_status,</if>
+            <if test="sort != null">sort,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialStatus != null">#{materialStatus},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDockMaterial" parameterType="com.iwip.harbor.domain.DockMaterial">
+        update dock_material
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="materialStatus != null">material_status = #{materialStatus},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            <if test="remark02 != null">remark02 = #{remark02},</if>
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDockMaterialById" parameterType="Long">
+        delete from dock_material where id = #{id}
+    </delete>
+
+    <delete id="deleteDockMaterialByIds" parameterType="String">
+        delete from dock_material where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

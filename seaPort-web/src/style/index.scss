@@ -1,0 +1,106 @@
+@use "theme";
+@use "transition";
+@use "element-plus";
+@use "sidebar";
+@use "dark";
+
+/* 自定义全局 CssVar */
+:root {
+  /* 左侧菜单展开、收起动画时长 */
+  --pure-transition-duration: 0.3s;
+
+  /* 常用border-color 需要时可取用 */
+  --pure-border-color: rgb(5 5 5 / 6%);
+
+  /* switch关闭状态下的color 需要时可取用 */
+  --pure-switch-off-color: #a6a6a6;
+
+  /** 主题色 */
+  --pure-theme-sub-menu-active-text: initial;
+  --pure-theme-menu-bg: none;
+  --pure-theme-menu-hover: none;
+  --pure-theme-sub-menu-bg: transparent;
+  --pure-theme-menu-text: initial;
+  --pure-theme-sidebar-logo: none;
+  --pure-theme-menu-title-hover: initial;
+  --pure-theme-menu-active-before: transparent;
+}
+
+/* 灰色模式 */
+.html-grey {
+  filter: grayscale(100%);
+}
+
+/* 色弱模式 */
+.html-weakness {
+  filter: invert(80%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main {
+  padding: 20px;
+  width: 100%;
+}
+.main h1 {
+  font-size: 36px;
+  color: #333;
+  text-align: left;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+}
+
+.list-group-striped > .list-group-item {
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.list-group {
+  padding-left: 0px;
+  list-style: none;
+}
+
+.list-group-item {
+  border-bottom: 1px solid #e7eaec;
+  border-top: 1px solid #e7eaec;
+  margin-bottom: -1px;
+  padding: 11px 0px;
+  font-size: 13px;
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.el-card__header {
+  padding: 14px 15px 7px !important;
+  min-height: 40px;
+}
+
+.el-card__body {
+  padding: 15px 20px 20px 20px;
+}
+
+.card-box {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-bottom: 10px;
+}
+
+// .leaflet-popup-content {
+//   margin: 0 !important;
+// }
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  // background: rgba(0, 95, 153, 0.6) !important;
+  background: rgba(#005f99, 0.6) !important;
+  backdrop-filter: blur(1px);
+}

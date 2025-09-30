@@ -1,0 +1,227 @@
+/**************************************以下是废弃的方法************************************/
+//    public synchronized void startPLCTask(Long userId) {
+//
+//        scheduledTask = scheduler.scheduleAtFixedRate(() -> {
+//            Map<String, Object> screenMap = selectPLCTask();
+//            String message = new JSONObject(screenMap).toString();
+//
+//            if (session.isOpen()) {
+//                try {
+//                    sendMessage(userId, message);
+//                } catch (Exception e) {
+//                    log.error("WebSocket 发送消息失败，userId={}，错误={}", userId, e.getMessage(), e);
+//                    sendErrorMessage(userId, "WebSocket 发送消息失败: " + e.getMessage());
+//                    stopPLCTask(); // 发送失败，停止任务
+//                }
+//            } else {
+//                log.warn("用户 {} 的 WebSocket 连接已关闭，停止任务", userId);
+//                stopPLCTask(); // 连接关闭，停止任务
+//            }
+//        }, 0, 10, TimeUnit.SECONDS);
+//    }
+
+//    public synchronized void stopPLCTask() {
+//        if (scheduledTask != null && !scheduledTask.isCancelled()) {
+//            scheduledTask.cancel(true); // 取消定时任务
+//            scheduledTask = null;
+//            log.info("已停止用户 {} 的 PLC 任务", id);
+//        }
+//    }
+
+//    private Map<String, Object> selectPLCTask() {
+//        Map<String, Object> screenMap = new HashMap<>();
+//
+//        List<ScreenPierVo> screenPierVoList = dockBerthService.screenPierBerthPlanList(); // 大屏区域
+//        screenMap.put("screenPierVoList", screenPierVoList); // 大屏区域
+//        screenMap.put("type", "2"); // 大屏区域
+//        return screenMap;
+//    }
+    //onMessage方法中的
+//        try {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            objectMapper.registerModule(new JavaTimeModule());
+//            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//            ScreenJsonVo screenJsonVo = objectMapper.readValue(message, ScreenJsonVo.class);
+//            if (Objects.equals("1", screenJsonVo.getType())){
+//                log.info("【开始执行修改大屏卸货单暂停方法】 id={},msg={}", id, message);
+//            // 暂停
+//            stopUnloadWork(screenJsonVo);
+//            }
+//            else if (Objects.equals("2", screenJsonVo.getType())){
+//                log.info("【开始执行修改大屏卸货单恢复方法】 id={},msg={}", id, message);
+//            // 恢复
+//            recoverUnloadWork(screenJsonVo);
+//            }
+//            else if (Objects.equals("3", screenJsonVo.getType())){
+//                log.info("【开始执行修改大屏卸货单结束方法】 id={},msg={}", id, message);
+//            // 结束
+//            overUnloadWork(screenJsonVo);
+//            }
+//            else if (Objects.equals("4", screenJsonVo.getType())) {
+//                updateBerthPlan(screenJsonVo);
+//            }
+//            else if ((Objects.equals("5",screenJsonVo.getType()))){
+//                log.info("【开始执行1#、4#、8#读取PLC方法】 id={},msg={}", id, message);
+//                if (StringUtils.containsAny(screenJsonVo.getHbName(),"1#","4#","8#")){
+////                    startPLCTask(screenJsonVo.getHbName());
+//                }
+//            }
+//            // 靠泊中
+//            else if ((Objects.equals("6",screenJsonVo.getType()))){
+//                updateBerthPlanStatusToDocking(screenJsonVo);
+//                Map<String, Object> screenMap = selectPLCTask();
+//                sendMessage(Long.parseLong(userId), new JSONObject(screenMap).toString());
+//            }
+//        } catch (Exception e) {
+//            log.error("WebSocket message processing failed: {}", e.getMessage());
+//            long l = Long.parseLong(userId);
+//            sendErrorMessage(l, "Processing error: " + e.getMessage());
+//        }
+    /**
+     * 结束
+     * @param screenJsonVo
+     */
+//    public void overUnloadWork(ScreenJsonVo screenJsonVo) {
+//        DockUnloadVo unloadVo = new DockUnloadVo();
+//        unloadVo.setDuId(screenJsonVo.getDuId());
+//
+//        LocalDateTime endTime = screenJsonVo.getStartTime().toInstant()
+//                .atZone(ZoneId.systemDefault()) // 使用系统默认时区
+//                .toLocalDateTime();
+//        unloadVo.setEndTime(endTime);  // 结束时间
+//        unloadVo.setIsOver(screenJsonVo.getIsOver());
+//        unloadVo.setUnloadNum(screenJsonVo.getUnloadNum());
+//        unloadVo.setTotalUnloadWeight(screenJsonVo.getTotalUnloadWeight());
+//        unloadVo.setWorkEquipment(screenJsonVo.getWorkEquipment());
+//        unloadVo.setOperateBy(screenJsonVo.getOperateBy());
+//        unloadVo.setRemark(screenJsonVo.getRemark());
+//
+//        int stop = dockUnloadWorkService.jobOver(unloadVo);
+//    }
+
+    /**
+     * 恢复
+     * @param screenJsonVo
+     */
+//    public void recoverUnloadWork(ScreenJsonVo screenJsonVo) {
+//        DockUnloadVo unloadVo = new DockUnloadVo();
+//        unloadVo.setDuId(screenJsonVo.getDuId());
+//
+//        LocalDateTime endTime = screenJsonVo.getEndTime().toInstant()
+//                .atZone(ZoneId.systemDefault()) // 使用系统默认时区
+//                .toLocalDateTime();
+//        unloadVo.setEndTime(endTime);  // 结束时间
+//        unloadVo.setOperateBy(screenJsonVo.getOperateBy());
+//        unloadVo.setRemark(screenJsonVo.getRemark());
+//        int stop = dockUnloadWorkService.recover(unloadVo);
+//    }
+
+    /**
+     * 暂停
+     * @param screenJsonVo
+     */
+//    public void stopUnloadWork(ScreenJsonVo screenJsonVo) {
+//        DockUnloadVo unloadVo = new DockUnloadVo();
+//        unloadVo.setDuId(screenJsonVo.getDuId());
+//        LocalDateTime startTime = screenJsonVo.getStartTime().toInstant()
+//                .atZone(ZoneId.systemDefault()) // 使用系统默认时区
+//                .toLocalDateTime();
+//        unloadVo.setStartTime(startTime);
+//        unloadVo.setPauseReason(screenJsonVo.getPauseReason());
+//        unloadVo.setOperateBy(screenJsonVo.getOperateBy());
+//        unloadVo.setRemark(screenJsonVo.getRemark());
+//        int stop = dockUnloadWorkService.stop(unloadVo);
+//    }
+    //    private void updateBerthPlan(ScreenJsonVo screenJsonVo) {
+//        DockPlan dockPlan = new DockPlan();
+//        dockPlan.setId(screenJsonVo.getPlanId());
+//
+//        if (screenJsonVo.getDockingTime() != null){
+//            LocalDateTime dockingTime = screenJsonVo.getDockingTime().toInstant()
+//                    .atZone(ZoneId.systemDefault()) // 使用系统默认时区
+//                    .toLocalDateTime();
+//            dockPlan.setDockingTime(dockingTime);
+//        } else if (screenJsonVo.getPlanDockingTime() != null){
+//            String timeStr = screenJsonVo.getPlanDockingTime();
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//            // 直接使用 LocalDateTime 进行解析，避免时区转换
+//            LocalDateTime planDockingTime = LocalDateTime.parse(timeStr, formatter);
+//
+//            dockPlan.setPlanDockingTime(planDockingTime);  // 计划靠泊时间
+//        }
+//        else {
+//            dockPlan.setHbId(screenJsonVo.getHbId());
+//            dockPlan.setHbName(screenJsonVo.getHbName());
+//        }
+//        int i = dockPlanService.updatePlanBerth(dockPlan);
+//
+//    }
+//
+//
+//    private void updateBerthPlanStatusToDocking(ScreenJsonVo screenJsonVo) {
+//        DockPlan dockPlan = new DockPlan();
+//        dockPlan.setId(screenJsonVo.getPlanId());
+//        SysUser sysUser = null;
+//        try {
+//            sysUser = sysUserMapper.selectUserById(screenJsonVo.getUserId());
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//        dockPlan.setStatus("10");
+//        dockPlan.setUpdateBy(Objects.isNull(sysUser) ? null : sysUser.getNickName());
+//        dockPlan.setUpdateTime(LocalDateTime.now());
+//        int i = dockPlanService.updateStatusToDocking(dockPlan);
+//    }
+    /**
+     * 发送消息到所有客户端
+     *
+     * */
+//    public void sendAllMessage(String msg) throws Exception {
+//        log.info("online client count={}", concurrentHashMap.size());
+//        Set<Map.Entry<Long, WebSocketProcess>> entries = concurrentHashMap.entrySet();
+//        for (Map.Entry<Long, WebSocketProcess> entry : entries) {
+//            Long cid = entry.getKey();
+//            WebSocketProcess webSocketProcess = entry.getValue();
+//            boolean sessionOpen = webSocketProcess.session.isOpen();
+//            if (sessionOpen) {
+//                webSocketProcess.session.getBasicRemote().sendText(msg);
+//            } else {
+//                log.info("cid={} is closed,ignore send text", cid);
+//            }
+//        }
+//    }
+
+
+//    private Map<String, Object> selectGeoJsonDate(){
+//        Map<String, Object> screenMap = new HashMap<>();
+//        // 查询数据
+//        List<ScreenGeoJsonVo> geoJsonVoList = dockPlanService.selectGeoJsonList();// 船讯网坐标
+//        screenMap.put("geoJsonVoList", geoJsonVoList); // 驳船类型
+//        screenMap.put("type", "1"); // 计划单状态信息
+//        return screenMap;
+//    }
+
+
+//    @Async
+//    public void startGeoJsonTask(Long userId) {
+//        Map<String, Object> screenMap = selectGeoJsonDate();
+//        String message = new JSONObject(screenMap).toString();
+//        WebSocketProcess client = concurrentHashMap.get(userId);
+//
+//        if (client != null) {
+//            try {
+//                if (client.session.isOpen()) {
+//                    client.sendMessage(userId, message);
+//                } else {
+//                    sendErrorMessage(userId, "WebSocket 连接已关闭，无法接收数据");
+//                    concurrentHashMap.remove(userId); // 连接关闭后移除
+//                }
+//            } catch (Exception e) {
+//                sendErrorMessage(userId, "WebSocket 发送消息失败: " + e.getMessage());
+//                concurrentHashMap.remove(userId); // 发送失败也移除
+//                log.error("WebSocket 消息发送失败，userId={}，错误={}", userId, e.getMessage(), e);
+//            }
+//        } else {
+//            log.warn("未找到用户 {} 的 WebSocket 连接", userId);
+//        }
+//    }

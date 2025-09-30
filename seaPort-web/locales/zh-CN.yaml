@@ -1,0 +1,513 @@
+buttons:
+  pureAccountSettings: 账户设置
+  pureLoginOut: 退出系统
+  pureLogin: 登录
+  pureOpenSystemSet: 打开系统配置
+  pureReload: 重新加载
+  pureCloseCurrentTab: 关闭当前标签页
+  pureCloseLeftTabs: 关闭左侧标签页
+  pureCloseRightTabs: 关闭右侧标签页
+  pureCloseOtherTabs: 关闭其他标签页
+  pureCloseAllTabs: 关闭全部标签页
+  pureContentFullScreen: 内容区全屏
+  pureContentExitFullScreen: 内容区退出全屏
+  pureClickCollapse: 点击折叠
+  pureClickExpand: 点击展开
+  pureConfirm: 确认
+  pureSwitch: 切换
+  pureClose: 关闭
+  pureBackTop: 回到顶部
+  pureOpenText: 开
+  pureCloseText: 关
+search:
+  pureTotal: 共
+  pureHistory: 搜索历史
+  pureCollect: 收藏
+  pureDragSort: （可拖拽排序）
+  pureEmpty: 暂无搜索结果
+  purePlaceholder: 搜索菜单（支持拼音搜索）
+panel:
+  pureSystemSet: 系统配置
+  pureCloseSystemSet: 关闭配置
+  pureClearCacheAndToLogin: 清空缓存并返回登录页
+  pureClearCache: 清空缓存
+  pureOverallStyle: 整体风格
+  pureOverallStyleLight: 浅色
+  pureOverallStyleLightTip: 清新启航，点亮舒适的工作界面
+  pureOverallStyleDark: 深色
+  pureOverallStyleDarkTip: 月光序曲，沉醉于夜的静谧雅致
+  pureOverallStyleSystem: 自动
+  pureOverallStyleSystemTip: 同步时光，界面随晨昏自然呼应
+  pureThemeColor: 主题色
+  pureLayoutModel: 导航模式
+  pureVerticalTip: 左侧菜单，亲切熟悉
+  pureHorizontalTip: 顶部菜单，简洁概览
+  pureMixTip: 混合菜单，灵活多变
+  pureStretch: 页宽
+  pureStretchFixed: 固定
+  pureStretchFixedTip: 紧凑页面，轻松找到所需信息
+  pureStretchCustom: 自定义
+  pureStretchCustomTip: 最小1280、最大1600
+  pureTagsStyle: 页签风格
+  pureTagsStyleSmart: 灵动
+  pureTagsStyleSmartTip: 灵动标签，添趣生辉
+  pureTagsStyleCard: 卡片
+  pureTagsStyleCardTip: 卡片标签，高效浏览
+  pureTagsStyleChrome: 谷歌
+  pureTagsStyleChromeTip: 谷歌风格，经典美观
+  pureInterfaceDisplay: 界面显示
+  pureGreyModel: 灰色模式
+  pureWeakModel: 色弱模式
+  pureHiddenTags: 隐藏标签页
+  pureHiddenFooter: 隐藏页脚
+  pureMultiTagsCache: 页签持久化
+menus:
+  pureHome: 首页
+  pureLogin: 登录
+  pureEmpty: 无Layout页
+  pureTable: 表格
+  pureSysManagement: 系统管理
+  pureUser: 用户管理
+  pureRole: 角色管理
+  pureSystemMenu: 菜单管理
+  pureDept: 部门管理
+  pureSysMonitor: 系统监控
+  pureOnlineUser: 在线用户
+  pureLoginLog: 登录日志
+  pureOperationLog: 操作日志
+  pureSystemLog: 系统日志
+  pureCodeMirror: 代码编辑器
+  pureMarkdown: Markdown
+  pureEditor: 编辑器
+  pureAbnormal: 异常页面
+  pureFourZeroFour: "404"
+  pureFourZeroOne: "403"
+  pureFive: "500"
+  pureComponents: 组件
+  pureDialog: 函数式弹框
+  pureDrawer: 函数式抽屉
+  pureMessage: 消息提示
+  pureVideo: 视频
+  pureSegmented: 分段控制器
+  pureWaterfall: 瀑布流无限滚动
+  pureMap: 地图
+  pureDraggable: 拖拽
+  pureSplitPane: 切割面板
+  pureText: 文本省略
+  pureSlider: 滑块
+  pureElButton: 按钮
+  pureCheckButton: 可选按钮
+  pureButton: 按钮动效
+  pureCropping: 图片裁剪
+  pureAnimatecss: animate.css选择器
+  pureCountTo: 数字动画
+  pureSelector: 范围选择器
+  pureFlowChart: 流程图
+  pureSeamless: 无缝滚动
+  pureContextmenu: 右键菜单
+  pureTypeit: 打字机
+  pureJsonEditor: JSON编辑器
+  pureColorPicker: 颜色选择器
+  pureDatePicker: 日期选择器
+  pureDateTimePicker: 日期时间选择器
+  pureTimePicker: 时间选择器
+  pureTag: 标签
+  pureStatistic: 统计组件
+  pureCollapse: 折叠面板
+  pureGanttastic: 甘特图
+  pureProgress: 进度条
+  pureUpload: 文件上传
+  pureCheckCard: 多选卡片
+  pureMenus: 多级菜单
+  pureMenu1: 菜单1
+  pureMenu1-1: 菜单1-1
+  pureMenu1-2: 菜单1-2
+  pureMenu1-2-1: 菜单1-2-1
+  pureMenu1-2-2: 菜单1-2-2
+  pureMenu1-3: 菜单1-3
+  pureMenu2: 菜单二
+  purePermission: 权限管理
+  purePermissionPage: 页面权限
+  purePermissionButton: 按钮权限
+  purePermissionButtonRouter: 路由返回按钮权限
+  purePermissionButtonLogin: 登录接口返回按钮权限
+  pureTabs: 标签页操作
+  pureGuide: 引导页
+  pureAble: 功能
+  pureMenuTree: 菜单树结构
+  pureVideoFrame: 视频帧截取-wasm版
+  pureWavesurfer: 音频可视化
+  pureRipple: 波纹(Ripple)
+  pureMqtt: MQTT客户端(mqtt)
+  pureOptimize: 防抖、截流、复制、长按指令
+  pureVerify: 图形验证码
+  pureWatermark: 水印
+  purePrint: 打印
+  pureDownload: 下载
+  pureExternalPage: 外部页面
+  pureExternalDoc: 文档外链
+  pureEmbeddedDoc: 文档内嵌
+  pureExternalLink: vue-pure-admin
+  pureUtilsLink: pure-admin-utils
+  pureColorHuntDoc: 调色板
+  pureUiGradients: 渐变色
+  pureEpDoc: element-plus
+  pureTailwindcssDoc: tailwindcss
+  pureVueDoc: vue3
+  pureViteDoc: vite
+  purePiniaDoc: pinia
+  pureRouterDoc: vue-router
+  pureAbout: 关于
+  pureResult: 结果页面
+  pureSuccess: 成功页面
+  pureFail: 失败页面
+  pureIconSelect: 图标选择器
+  pureTimeline: 时间线
+  pureLineTree: 树形连接线
+  pureList: 列表页面
+  pureCardList: 卡片列表页
+  pureDebounce: 防抖节流
+  pureFormDesign: 表单设计器
+  pureBarcode: 条形码
+  pureQrcode: 二维码
+  pureCascader: 区域级联选择器
+  pureSwiper: Swiper插件
+  pureVirtualList: 虚拟列表
+  purePdf: PDF预览
+  pureExcel: 导出Excel
+  pureInfiniteScroll: 表格无限滚动
+  pureSensitive: 敏感词过滤
+  purePinyin: 汉语拼音
+  pureDanmaku: 弹幕
+  pureSchemaForm: 表单
+  pureTableBase: 基础用法
+  pureTableHigh: 高级用法
+  pureTableEdit: 可编辑用法
+  pureVxeTable: 虚拟滚动
+  pureBoard: 艺术画板
+  pureMindMap: 思维导图
+  pureMenuOverflow: 目录超出显示 Tooltip 文字提示
+  pureChildMenuOverflow: 菜单超出显示 Tooltip 文字提示
+status:
+  pureLoad: 加载中...
+  pureMessage: 消息
+  pureNotify: 通知
+  pureTodo: 待办
+  pureNoMessage: 暂无消息
+  pureNoNotify: 暂无通知
+  pureNoTodo: 暂无待办
+login:
+  pureUsername: 账号
+  purePassword: 密码
+  pureVerifyCode: 验证码
+  pureRemember: 天内免登录
+  pureRememberInfo: 勾选并登录后，规定天数内无需输入用户名和密码会自动登入系统
+  pureSure: 确认密码
+  pureForget: 忘记密码?
+  pureLogin: 登录
+  pureThirdLogin: 第三方登录
+  purePhoneLogin: 手机登录
+  pureQRCodeLogin: 二维码登录
+  pureRegister: 注册
+  pureWeChatLogin: 微信登录
+  pureAlipayLogin: 支付宝登录
+  pureQQLogin: QQ登录
+  pureWeiBoLogin: 微博登录
+  purePhone: 手机号码
+  pureSmsVerifyCode: 短信验证码
+  pureBack: 返回
+  pureTest: 模拟测试
+  pureTip: 扫码后点击"确认"，即可完成登录
+  pureDefinite: 确定
+  pureLoginSuccess: 登录成功
+  pureLoginFail: 登录失败
+  pureRegisterSuccess: 注册成功
+  pureTickPrivacy: 请勾选隐私政策
+  pureReadAccept: 我已仔细阅读并接受
+  purePrivacyPolicy: 《隐私政策》
+  pureGetVerifyCode: 获取验证码
+  pureInfo: 秒后重新获取
+  pureUsernameReg: 请输入账号
+  purePassWordReg: 请输入密码
+  pureVerifyCodeReg: 请输入验证码
+  pureVerifyCodeCorrectReg: 请输入正确的验证码
+  pureVerifyCodeSixReg: 请输入6位数字验证码
+  purePhoneReg: 请输入手机号码
+  purePhoneCorrectReg: 请输入正确的手机号码格式
+  purePassWordRuleReg: 密码格式应为8-18位数字、字母、符号的任意两种组合
+  purePassWordSureReg: 请输入确认密码
+  purePassWordDifferentReg: 两次密码不一致!
+  purePassWordUpdateReg: 修改密码成功
+imip:
+  button:
+    obj1: 修改
+    obj2: 删除
+    obj3: 新增
+    obj4: 归档
+    obj5: 导出
+    obj6: 确认删除该卸货单？
+    obj7: 导入
+    obj8: 全部
+    obj9: 大码头计划单
+    obj10: 驳船计划单
+    obj11: 此操作完成后,选中的计划单将会移入历史归档页面,请谨慎操作
+    obj12: 计划单列表
+    obj13: 计划单卸率模版
+    obj14: 计划单已作业量列表
+    obj15: 确认删除多个计划单？
+    obj16: 确认删除该计划单？
+    obj17: 更多
+    obj18: 移泊
+    obj19: 新增卸货单
+    obj20: 卸货单列表
+    obj21: 靠泊中
+    obj22: 大屏统计
+    obj23: 确定将计划单变为靠泊中吗？
+    obj24: 操作成功
+    obj25: 计划单导入
+    obj26: 计划单计算卸率导入
+    obj27: 计划单已卸货量导入
+    obj28: 将文件拖到此处，或者
+    obj29: 点击上传
+    obj30: 仅允许导入xls、xlsx格式文件
+    obj31: 下载模板
+    obj32: 是否更新已经存在的计划单
+    obj33: 取消
+    obj34: 提交
+    obj35: 上传失败
+    obj36: 请先选择文件
+    obj37: 导入结果
+    obj38: 重置
+    obj39: 取消归档成功
+  page1:
+    obj1: 船名
+    obj2: 状态
+    obj3: 物资名称
+    obj4: 泊位
+    obj5: 类型
+    obj6: 码头
+    obj7: 结束时间
+    obj8: 装卸货状态
+    obj9: 矿号
+    obj10: 国际海事组织
+    obj11: 船长(m)
+    obj12: 使用单位
+    obj13: 已作业量(吨/件)
+    obj14: 实际(吨/件)
+    obj15: 卡数
+    obj16: 总吨
+    obj17: 离上港时间
+    obj18: 到港时间
+    obj19: 计划靠泊时间
+    obj20: 靠泊时间
+    obj21: 作业时间
+    obj22: 计划吨数
+    obj23: 离泊时间
+    obj24: 离港时间
+    obj25: 抛出时间
+    obj26: 有效时间
+    obj27: 有效卸率
+    obj28: 平均卸率
+    obj29: 滞期费($/天)
+    obj30: 合同卸率/天
+    obj31: 合同费率/天
+    obj32: 上一港
+    obj33: 下一港
+    obj34: 船代理公司
+    obj35: 水尺
+    obj36: 创建时间
+    obj37: 备注
+    obj38: 操作
+    obj39: 船数
+    obj40: 吞吐量
+    obj41: 速遣费
+    obj42: 内/外贸船
+    obj43: 实际件数
+    loadingType: 装货类型
+    obj44: 收费($)
+  page2:
+    obj1: 请输入内/外贸船
+    obj2: 请输入船名
+    obj3: 请输入船长度(米)
+    obj4: 请输入使用单位
+    obj5: 请输入货物名称
+    obj6: 请输入泊位名称
+    obj7: 基本信息
+    obj8: 时间信息
+    obj9: 船运信息
+    obj10: 合同信息
+    obj11: 总件数
+    obj12: 装货港
+    obj13: 请购单号
+    obj14: 合同号
+    obj15: 合同执行人员
+    obj16: 供应商名称
+    obj17: 批次
+    obj18: 检测公司
+    obj19: 计划单管理
+    obj20: 计划单归档管理
+    obj21: 此操作完成后,选中的计划单将会恢复操作,移入计划单页面,请谨慎操作
+    obj22: 取消归档
+    obj23: 查看
+    obj24: 卸货单
+    obj25: 月份
+    obj26: 请选择计划单类型
+    obj27: 卸货作业单管理
+    obj28: 导出卸货单
+    obj29: 导出卸货单日志
+    obj30: 此操作完成后,卸货单将不可操作,请谨慎操作
+    obj31: 完成卸货单
+    obj32: 此操作完成后,卸货单将将恢复可操作状态,请谨慎操作
+    obj33: 恢复卸货单
+    obj34: 确认删除多个卸货单？
+    obj35: 计划单状态
+    obj36: 班次日期
+    obj37: 班次
+    obj38: 白班
+    obj39: 夜班
+  page3:
+    obj1: 作业状态
+    obj2: 请先填写班次，负责人，班次日期等必要信息
+    obj3: 负责人
+    obj4: 作业机具
+    obj5: 卸货吨量
+    obj6: 卸货件数
+    obj7: 开始时间
+    obj8: 停止时间
+    obj9: 暂停次数
+    obj10: 暂停间隔
+    obj11: 删除卸货单成功
+    obj12: 完成卸货单成功
+    obj13: 恢复卸货单成功
+    obj14: 请选择班次时间
+    obj15: 请输入班次
+    obj16: 请选择开始时间
+    obj17: 请输入负责人
+    obj18: 班次时间
+    obj19: 恢复作业
+    obj20: 暂停作业
+    obj21: 结束作业
+    obj22: 合计
+    obj23: 泊位使用率
+    obj24: 选择月份，可以查看对应月份的各泊位使用效率柱状图
+    obj25: 选择月份
+    obj26: 导出泊位明细
+    obj27: 使用率
+    obj28: 泊位耗时明细
+    obj29: 名称
+    obj30: 泊位状态
+    obj31: 码头类型
+    obj32: 搜索
+    obj33: 码头管理
+    obj34: 新增码头
+    obj35: 新增泊位
+    obj36: 是否确定删除数据
+    obj37: 名称编码
+    obj38: 码头名称
+    obj39: 码头编码
+  page4:
+    obj1: 泊位名称
+    obj2: 可补充其他，比如维护原因
+    obj3: 泊位编码
+    obj4: 请输入泊位名称编码,如5A#
+    obj5: 请选择泊位状态
+    obj6: 可补充其他，比如维护原因
+    obj7: 请输入码头名称
+    obj8: 请输入码头名称编码
+    obj9: 请选择码头类型
+    obj10: 请选择泊位类型
+    obj11: 请在备注栏填写维护原因
+    obj12: 请绘制区域
+    obj13: 区域未绘制
+    obj14: 绘制区域超出码头范围，请重新绘制
+    obj15: 一个泊位只能有一个蓝色区域
+    obj16: 一个码头只能有一个蓝色区域，请先删除现有的蓝色区域，再添加新的区域
+    obj17: 清除泊位区域
+    obj18: 清除蓝色区域
+    obj19: 码头下存在泊位，无法删除蓝色区域
+    obj20: 全屏
+    obj21: 退出全屏
+    obj22: 启用
+    obj23: 禁用
+    obj24: 添加物资名称
+    obj25: 物资名称管理
+    obj26: 暂无数据
+    obj27: 是否删除这条物资
+    obj28: 保存
+    obj29: 排序
+    obj30: 此字段必填
+    obj31: 请先填写
+    obj32: 时间必须大于上一个时间
+    obj33: 成功
+    obj34: 失败
+    obj35: 空闲
+    obj36: 占用中
+    obj37: 维护
+    obj38: 暂停
+  menu:
+    obj1: 海港信息管理
+    obj2: 数据大屏
+    obj3: 计划单管理
+    obj4: 船舶计划管理
+    obj5: 归档计划管理
+    obj6: 海港统计信息
+    obj7: 泊位使用率
+    obj8: 区域划分
+    obj9: 物资名称管理
+    obj10: 编辑计划单
+    obj11: 查看计划单
+    obj12: 卸货作业单管理
+  items:
+    item1: 大码头
+    item2: 驳船码头
+    item3: 启动
+    item4: 禁用
+    item5: 作业类型
+    item6: 作业类型必须填写
+    item7: 实际(吨/件)必须填写
+    item8: 总吨量(计划)
+    item9: 员工绑定泊位
+    item10: 绑定人员
+    item11: 泊位信息
+    item12: 泊位编号
+    item13: 选中人员
+    item14: 清空人员
+    item15: 工号
+    item16: 姓名
+    item17: 分配用户
+    item18: 计划(吨/件)必须填写
+    item19: 物料信息
+  others:
+    other1: (新增/修改)计划单
+    other2: 🚢基本信息
+    other3: 船长度(米)
+    other4: 计划吨数(总吨)
+    other5: 装卸船类型
+    other6: ⚓时间信息
+    other7: 到港日期
+    other8: 开始作业时间
+    other9: 作业结束时间
+    other10: 📦物料信息
+    other11: 装卸船顺序
+    other12: 物料名称
+    other13: 添加
+    other14: 去除
+operationForm:
+  planCount: 共{count}条计划单
+  archiveMonth: 归档月份：
+  archiveMonthPlaceholder: 请输入归档月份
+  moveBerthTime: 抛出时间：
+  moveBerthTimePlaceholder: 请选择时间
+  berth: 泊位：
+  berthPlaceholder: 请选择泊位
+  dockingTime: 靠泊时间：
+  dockingTimePlaceholder: 请选择时间
+  operationTime: 作业时间：
+  operationTimePlaceholder: 请选择时间
+  moveBerthTimeRule: 请输入抛出/移泊时间
+  dockingTimeRule: 请输入靠泊时间
+  archiveMonthRule: 请输入归档月份
+  screenStatusLabel: 是否在大屏统计显示：
+  screenStatusShow: 显示
+  screenStatusHide: 隐藏
+  screenStatusRule: 请选择显示状态

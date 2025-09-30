@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockTaskConfigMapper">
+    <resultMap id="DockTaskConfigResult" type="com.iwip.harbor.domain.DockTaskConfig">
+        <result property="id" column="id"/>
+        <result property="taskName" column="task_name"/>
+        <result property="hbName" column="hb_name"/>
+        <result property="targetUrl" column="target_url"/>
+        <result property="frequencyMs" column="frequency_ms"/>
+        <result property="enabled" column="enabled"/>
+        <result property="remark" column="remark"/>
+        <result property="remark1" column="remark1"/>
+        <result property="remark2" column="remark2"/>
+        <result property="remark3" column="remark3"/>
+    </resultMap>
+    <sql id="selectCommon">
+        SELECT id,task_name,hb_name,target_url,frequency_ms,enabled,remark,remark1,remark2,remark3 FROM dock_task_config
+    </sql>
+    <select id="selectDockTaskConfigList" resultMap="DockTaskConfigResult">
+        <include refid="selectCommon"/>
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="taskName != null and taskName != ''">AND task_name = #{taskName}</if>
+            <if test="hbName != null and hbName != ''">AND hb_name = #{hbName}</if>
+            <if test="enabled != null">AND enabled = #{enabled}</if>
+        </where>
+    </select>
+    <insert id="insertDockTaskConfig" parameterType="com.iwip.harbor.domain.DockTaskConfig">
+        INSERT INTO dock_task_config(task_name,hb_name,target_url,frequency_ms,enabled,remark)
+        VALUES(#{taskName},#{hbName},#{targetUrl},#{frequencyMs},#{enabled},#{remark})
+    </insert>
+    <update id="updateDockTaskConfig" parameterType="com.iwip.harbor.domain.DockTaskConfig">
+        UPDATE dock_task_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskName != null and taskName != ''">task_name = #{taskName},</if>
+            <if test="hbName != null and hbName != ''">hb_name = #{hbName},</if>
+            <if test="targetUrl != null and targetUrl != ''">target_url = #{targetUrl},</if>
+            <if test="frequencyMs != null">frequency_ms = #{frequencyMs},</if>
+            <if test="enabled != null">enabled = #{enabled},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteDockTaskConfig">
+        DELETE FROM dock_task_config WHERE id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockUnloadDetailMapper">
+
+    <resultMap type="com.iwip.harbor.domain.DockUnloadDetail" id="DockUnloadDetailResult">
+        <result property="dudId"    column="dud_id"    />
+        <result property="duId"    column="du_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="pauseInterval"    column="pause_interval"    />
+        <result property="recordStatus"    column="record_status"    />
+        <result property="reason"    column="reason"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+    </resultMap>
+
+    <sql id="selectDockUnloadDetailVo">
+        select dud_id,record_status, du_id, start_time, end_time,pause_interval, reason, dept_id, del_flag, user_id, create_by, create_time, update_by, update_time,remark, remark01, remark02, remark03 from dock_unload_detail
+    </sql>
+
+    <select id="selectDockUnloadDetailList" parameterType="com.iwip.harbor.domain.DockUnloadDetail" resultMap="DockUnloadDetailResult">
+        <include refid="selectDockUnloadDetailVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="duId != null "> and du_id = #{duId}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="pauseInterval != null  and pauseInterval != ''"> and pause_interval = #{pause_interval}</if>
+            <if test="reason != null  and reason != ''"> and reason = #{reason}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 = #{remark02}</if>
+            <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
+        </where>
+    </select>
+
+    <select id="selectDockUnloadDetailByDudId" parameterType="Long" resultMap="DockUnloadDetailResult">
+        <include refid="selectDockUnloadDetailVo"/>
+        where dud_id = #{dudId}
+    </select>
+
+    <select id="selectUnloadDetailByRecordByDuId" parameterType="Long" resultMap="DockUnloadDetailResult">
+        <include refid="selectDockUnloadDetailVo"/>
+        where du_id = #{duId} and record_status = '1'
+    </select>
+
+
+    <select id="selectDockUnloadDetailByDuId" parameterType="Long" resultMap="DockUnloadDetailResult">
+        <include refid="selectDockUnloadDetailVo"/>
+        where du_id = #{duId}
+        order by du_id
+    </select>
+
+    <select id="selectDetailDescByDuId" parameterType="Long" resultMap="DockUnloadDetailResult">
+        <include refid="selectDockUnloadDetailVo"/>
+        where du_id = #{duId} ORDER BY create_time DESC limit 1;
+    </select>
+
+    <select id="selectDetailDescList" parameterType="Long" resultMap="DockUnloadDetailResult">
+        <include refid="selectDockUnloadDetailVo"/>
+        where du_id = #{duId} ORDER BY create_time DESC;
+    </select>
+    <select id="selectByDuIds" resultMap="DockUnloadDetailResult" parameterType="java.util.List">
+        <include refid="selectDockUnloadDetailVo"/>
+        WHERE del_flag = '0' AND du_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+
+    <insert id="insertDockUnloadDetail" parameterType="com.iwip.harbor.domain.DockUnloadDetail" useGeneratedKeys="true" keyProperty="dudId">
+        insert into dock_unload_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="duId != null">du_id,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="pauseInterval != null">pause_interval,</if>
+            <if test="recordStatus != null">record_status,</if>
+            <if test="reason != null">reason,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="duId != null">#{duId},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="pauseInterval != null">#{pauseInterval},</if>
+            <if test="recordStatus != null">#{recordStatus},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDockUnloadDetail" parameterType="com.iwip.harbor.domain.DockUnloadDetail">
+        update dock_unload_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="duId != null">du_id = #{duId},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="pauseInterval != null">pause_interval = #{pauseInterval},</if>
+            <if test="recordStatus != null">record_status = #{recordStatus},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            <if test="remark02 != null">remark02 = #{remark02},</if>
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+        </trim>
+        where dud_id = #{dudId}
+    </update>
+
+    <delete id="deleteDockUnloadDetailByDudId" parameterType="Long">
+        delete from dock_unload_detail where dud_id = #{dudId}
+    </delete>
+
+    <delete id="deleteDockUnloadDetailByDudIds" parameterType="String">
+        delete from dock_unload_detail where dud_id in
+        <foreach item="dudId" collection="array" open="(" separator="," close=")">
+            #{dudId}
+        </foreach>
+    </delete>
+</mapper>

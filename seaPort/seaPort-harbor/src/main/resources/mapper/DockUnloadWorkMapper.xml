@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockUnloadWorkMapper">
+
+    <resultMap type="com.iwip.harbor.domain.DockUnloadWork" id="DockUnloadWorkResult">
+        <result property="duId"    column="du_id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="classTime"    column="class_time"    />
+        <result property="classes"    column="classes"    />
+        <result property="workType"    column="work_type"    />
+        <result property="effectiveTime"    column="effective_time"    />
+        <result property="effectiveRate"    column="effective_rate"    />
+        <result property="pauseInterval"    column="pause_interval"    />
+        <result property="avgDischargeRate"    column="avg_discharge_rate"    />
+        <result property="totalUnloadWeight"    column="total_unload_weight"    />
+        <result property="workEquipment"    column="work_equipment"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="pausedAtEnd"    column="paused_at_end"    />
+        <result property="leader"    column="leader"    />
+        <result property="unloadNum"    column="unload_num"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+        <result property="pauseReason"    column="pause_reason"    />
+        <result property="packageNum"    column="package_num"    />
+    </resultMap>
+
+    <sql id="selectDockUnloadWorkVo">
+        select du_id,work_equipment, plan_id,pause_reason, class_time, classes, work_type, effective_time, effective_rate, pause_interval, avg_discharge_rate, total_unload_weight, start_time, end_time, paused_at_end, leader, unload_num, dept_id, del_flag, user_id, create_by, create_time, update_by, update_time, remark, remark01, remark02, remark03 from dock_unload_work
+    </sql>
+
+    <select id="selectDockUnloadWorkList" parameterType="com.iwip.harbor.domain.DockUnloadWork" resultMap="DockUnloadWorkResult">
+        <!--<include refid="selectDockUnloadWorkVo"/>-->
+        SELECT duw.du_id, duw.work_equipment, duw.plan_id, duw.pause_reason,
+        duw.class_time, duw.classes, duw.work_type, duw.effective_time,
+        duw.effective_rate, duw.pause_interval, duw.avg_discharge_rate,
+        duw.total_unload_weight, duw.start_time, duw.end_time, duw.paused_at_end,
+        duw.leader, duw.unload_num, duw.dept_id, duw.del_flag, duw.user_id, duw.create_by,
+        duw.create_time, duw.update_by, duw.update_time, duw.remark, duw.remark01,
+        duw.remark02, duw.remark03,p.package_num
+        FROM dock_unload_work AS duw
+        LEFT JOIN sys_dept AS d ON duw.dept_id = d.dept_id
+        left join dock_plan as p on p.id = duw.plan_id
+        <where>
+            AND duw.del_flag = '0'
+            <if test="ids != null and ids.size() > 0">
+                AND duw.du_id IN
+                <foreach collection="ids" item="duId" open="(" separator="," close=")">
+                    #{duId}
+                </foreach>
+            </if>
+            <if test="planId != null">AND duw.plan_id = #{planId}</if>
+            <if test="classes != null and classes != ''">AND duw.classes = #{classes}</if>
+            <if test="effectiveTime != null and effectiveTime != ''">AND duw.effective_time = #{effectiveTime}</if>
+            <if test="startTime != null and startTime != ''">AND duw.start_time = #{startTime}</if>
+            <if test="endTime != null and endTime != ''">AND duw.end_time = #{endTime}</if>
+            <if test="deptId != null and deptId != ''">AND duw.dept_id = #{deptId}</if>
+            <if test="workType != null">AND duw.work_type = #{workType}</if>
+            <if test="userId != null">AND duw.user_id = #{userId}</if>
+            <if test="classTime != null">
+                AND DATE_FORMAT(duw.class_time, '%Y-%m-%d') = DATE_FORMAT(#{classTime}, '%Y-%m-%d')
+            </if>
+            <if test="remark01 != null and remark01 != ''">AND duw.remark01 = #{remark01}</if>
+            <if test="remark02 != null and remark02 != ''">AND duw.remark02 = #{remark02}</if>
+            <if test="remark03 != null and remark03 != ''">AND duw.remark03 = #{remark03}</if>
+            <if test="createdStartTime != null">
+                AND DATE_FORMAT(duw.create_time, '%Y-%m-%d %H:%i:%s') &gt;= DATE_FORMAT(#{createdStartTime}, '%Y-%m-%d
+                %H:%i:%s')
+            </if>
+            <if test="createdEndTime != null">
+                AND DATE_FORMAT(duw.create_time, '%Y-%m-%d %H:%i:%s') &lt;= DATE_FORMAT(#{createdEndTime}, '%Y-%m-%d
+                %H:%i:%s')
+            </if>
+            ${params.dataScope}
+        </where>
+        ORDER BY duw.start_time
+    </select>
+
+    <select id="screenUnloadList" resultType="com.iwip.harbor.domain.screen.ScreenUnloadVo">
+        SELECT w.du_id duId,
+               w.plan_id planId,
+               w.class_time classTime,
+               w.classes classes,
+               w.work_type workType,
+               w.effective_time effectiveTime,
+               w.leader leader,
+               p.ship_name shipName,
+               p.tonnage tonnage,
+               p.hb_name hbName,
+               p.hb_id hbId
+        FROM dock_unload_work w
+                 LEFT JOIN dock_plan p ON w.plan_id = p.id
+        WHERE w.del_flag = '0'
+          AND p.del_flag = '0'
+          AND w.work_type IN ('0', '1')
+        ORDER BY w.du_id DESC
+    </select>
+
+    <select id="selectDockUnloadWorkDesc" parameterType="Long" resultMap="DockUnloadWorkResult">
+        <include refid="selectDockUnloadWorkVo"/>
+        <where>
+            AND del_flag = '0'
+            AND plan_id = #{planId}
+        </where>
+        ORDER BY du_id DESC LIMIT 1
+    </select>
+
+    <select id="selectDockUnloadWorkByDuId" parameterType="Long" resultMap="DockUnloadWorkResult">
+        <include refid="selectDockUnloadWorkVo"/>
+        where du_id = #{duId}
+    </select>
+
+    <select id="selectUnloadWorkListByPlanId" parameterType="Long" resultMap="DockUnloadWorkResult">
+        <include refid="selectDockUnloadWorkVo"/>
+        where del_flag = '0' AND plan_id = #{planId}
+    </select>
+
+    <select id="selectUnloadWorkByTimeAndClass"  resultMap="DockUnloadWorkResult">
+        <include refid="selectDockUnloadWorkVo"/>
+        where del_flag = '0' AND plan_id = #{planId} AND class_time = #{classTime} AND classes = #{classes}
+        order by create_time
+    </select>
+    <select id="getCountByPlanId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM dock_unload_work WHERE del_flag = '0' AND plan_id = #{planId}
+    </select>
+    <select id="selectByPlanIds" resultMap="DockUnloadWorkResult" parameterType="java.util.List">
+        <include refid="selectDockUnloadWorkVo"/>
+        WHERE del_flag = '0' AND plan_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+
+
+    <insert id="insertDockUnloadWork" parameterType="com.iwip.harbor.domain.DockUnloadWork" useGeneratedKeys="true" keyProperty="duId">
+        insert into dock_unload_work
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="planId != null">plan_id,</if>
+            <if test="classTime != null">class_time,</if>
+            <if test="classes != null">classes,</if>
+            <if test="workType != null">work_type,</if>
+            <if test="effectiveTime != null">effective_time,</if>
+            <if test="effectiveRate != null">effective_rate,</if>
+            <if test="pauseInterval != null">pause_interval,</if>
+            <if test="avgDischargeRate != null">avg_discharge_rate,</if>
+            <if test="totalUnloadWeight != null">total_unload_weight,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="pausedAtEnd != null">paused_at_end,</if>
+            <if test="leader != null">leader,</if>
+            <if test="unloadNum != null">unload_num,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+            <if test="pauseReason != null">pause_reason,</if>
+            <if test="workEquipment != null">work_equipment,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="planId != null">#{planId},</if>
+            <if test="classTime != null">#{classTime},</if>
+            <if test="classes != null">#{classes},</if>
+            <if test="workType != null">#{workType},</if>
+            <if test="effectiveTime != null">#{effectiveTime},</if>
+            <if test="effectiveRate != null">#{effectiveRate},</if>
+            <if test="pauseInterval != null">#{pauseInterval},</if>
+            <if test="avgDischargeRate != null">#{avgDischargeRate},</if>
+            <if test="totalUnloadWeight != null">#{totalUnloadWeight},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="pausedAtEnd != null">#{pausedAtEnd},</if>
+            <if test="leader != null">#{leader},</if>
+            <if test="unloadNum != null">#{unloadNum},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+            <if test="pauseReason != null">#{pauseReason},</if>
+            <if test="workEquipment != null">#{workEquipment},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDockUnloadWork" parameterType="com.iwip.harbor.domain.DockUnloadWork">
+        update dock_unload_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planId != null">plan_id = #{planId},</if>
+            <if test="classTime != null">class_time = #{classTime},</if>
+            <if test="classes != null">classes = #{classes},</if>
+            <if test="workType != null">work_type = #{workType},</if>
+            <if test="effectiveTime != null">effective_time = #{effectiveTime},</if>
+            <if test="effectiveRate != null">effective_rate = #{effectiveRate},</if>
+            <if test="pauseInterval != null">pause_interval = #{pauseInterval},</if>
+            <if test="avgDischargeRate != null">avg_discharge_rate = #{avgDischargeRate},</if>
+            total_unload_weight = #{totalUnloadWeight},
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="pausedAtEnd != null">paused_at_end = #{pausedAtEnd},</if>
+            <if test="leader != null">leader = #{leader},</if>
+            unload_num = #{unloadNum},
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            <if test="remark02 != null">remark02 = #{remark02},</if>
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+            <if test="pauseReason != null">pause_reason = #{pauseReason},</if>
+            <if test="workEquipment != null">work_equipment = #{workEquipment},</if>
+        </trim>
+        where du_id = #{duId}
+    </update>
+
+    <update id="removeDockPierByDpId" parameterType="com.iwip.harbor.domain.DockUnloadWork">
+        update dock_unload_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where du_id = #{duId}
+    </update>
+
+    <delete id="deleteDockUnloadWorkByDuId" parameterType="Long">
+        delete from dock_unload_work where du_id = #{duId}
+    </delete>
+
+    <delete id="deleteDockUnloadWorkByDuIds" parameterType="String">
+        delete from dock_unload_work where du_id in
+        <foreach item="duId" collection="array" open="(" separator="," close=")">
+            #{duId}
+        </foreach>
+    </delete>
+</mapper>

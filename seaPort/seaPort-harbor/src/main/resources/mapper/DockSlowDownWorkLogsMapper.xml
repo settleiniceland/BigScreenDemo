@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockSlowDownWorkLogsMapper">
+    <resultMap id="sdwLogsResult" type="com.iwip.harbor.domain.DockSlowDownWorkLogs">
+        <result property="id" column="id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="unloadWorkId" column="unload_work_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="remark" column="remark"/>
+        <result property="remark01" column="remark01"/>
+        <result property="remark02" column="remark02"/>
+        <result property="remark03" column="remark03"/>
+    </resultMap>
+    <sql id="selectCommon">
+        SELECT id,plan_id,unload_work_id,start_time,end_time,remark,remark01,remark02,remark03 FROM dock_slow_down_work_logs
+    </sql>
+    <select id="selectSDWL" parameterType="com.iwip.harbor.domain.DockSlowDownWorkLogs" resultMap="sdwLogsResult">
+        <include refid="selectCommon"/>
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="planId != null">AND plan_id = #{planId}</if>
+            <if test="unloadWorkId != null">AND unload_work_id = #{unloadWorkId}</if>
+        </where>
+        ORDER BY start_time asc
+    </select>
+    <select id="selectByPlanIds" resultMap="sdwLogsResult" parameterType="java.util.List">
+        <include refid="selectCommon"/>
+        WHERE plan_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+    <insert id="insertSDWL" parameterType="com.iwip.harbor.domain.DockSlowDownWorkLogs">
+        INSERT INTO dock_slow_down_work_logs(plan_id,unload_work_id,start_time,end_time,remark)
+        VALUES (#{planId},#{unloadWorkId},#{startTime},#{endTime},#{remark})
+    </insert>
+    <update id="updateSDWL" parameterType="com.iwip.harbor.domain.DockSlowDownWorkLogs">
+        UPDATE dock_slow_down_work_logs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">`end_time` = #{endTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteSDWL">
+        DELETE FROM dock_slow_down_work_logs WHERE id = #{id}
+    </delete>
+</mapper>

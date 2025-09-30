@@ -1,0 +1,510 @@
+buttons:
+  pureAccountSettings: Pengaturan Akun
+  pureLoginOut: Keluar Sistem
+  pureLogin: Masuk
+  pureOpenSystemSet: Buka Konfigurasi Sistem
+  pureReload: Muat Ulang
+  pureCloseCurrentTab: Tutup Tab Saat Ini
+  pureCloseLeftTabs: Tutup Tab Kiri
+  pureCloseRightTabs: Tutup Tab Kanan
+  pureCloseOtherTabs: Tutup Tab Lainnya
+  pureCloseAllTabs: Tutup Semua Tab
+  pureContentFullScreen: Layar Penuh Konten
+  pureContentExitFullScreen: Keluar Layar Penuh Konten
+  pureClickCollapse: Klik untuk Ciutkan
+  pureClickExpand: Klik untuk Perluas
+  pureConfirm: Konfirmasi
+  pureSwitch: Ganti
+  pureClose: Tutup
+  pureBackTop: Kembali ke Atas
+  pureOpenText: Buka
+  pureCloseText: Tutup
+search:
+  pureTotal: Total
+  pureHistory: Riwayat Pencarian
+  pureCollect: Koleksi
+  pureDragSort: (Dapat Diseret untuk Mengurutkan)
+  pureEmpty: Tidak Ada Hasil
+  purePlaceholder: Cari Menu (Dukung Pinyin)
+panel:
+  pureSystemSet: Konfigurasi Sistem
+  pureCloseSystemSet: Tutup Konfigurasi
+  pureClearCacheAndToLogin: Bersihkan Cache dan Kembali Login
+  pureClearCache: Bersihkan Cache
+  pureOverallStyle: Gaya Tampilan
+  pureOverallStyleLight: Terang
+  pureOverallStyleLightTip: Tampilan segar dan cerah untuk suasana kerja yang nyaman
+  pureOverallStyleDark: Gelap
+  pureOverallStyleDarkTip: Suasana malam yang tenang dan elegan
+  pureOverallStyleSystem: Otomatis
+  pureOverallStyleSystemTip: Sinkronisasi waktu, tampilan berubah sesuai waktu
+  pureThemeColor: Warna Tema
+  pureLayoutModel: Mode Navigasi
+  pureVerticalTip: Menu kiri, tampilan familiar
+  pureHorizontalTip: Menu atas, tampilan ringkas
+  pureMixTip: Menu campuran, fleksibel
+  pureStretch: Lebar Halaman
+  pureStretchFixed: Tetap
+  pureStretchFixedTip: Tampilan kompak, informasi mudah ditemukan
+  pureStretchCustom: Kustom
+  pureStretchCustomTip: Minimal 1280, maksimal 1600
+  pureTagsStyle: Gaya Tab
+  pureTagsStyleSmart: Cerdas
+  pureTagsStyleSmartTip: Tab dinamis, menarik
+  pureTagsStyleCard: Kartu
+  pureTagsStyleCardTip: Tab kartu, efisien
+  pureTagsStyleChrome: Chrome
+  pureTagsStyleChromeTip: Gaya klasik Chrome
+  pureInterfaceDisplay: Tampilan Antarmuka
+  pureGreyModel: Mode Abu-abu
+  pureWeakModel: Mode Buta Warna
+  pureHiddenTags: Sembunyikan Tab
+  pureHiddenFooter: Sembunyikan Footer
+  pureMultiTagsCache: Cache Multi-Tab
+menus:
+  pureHome: Beranda
+  pureLogin: Masuk
+  pureEmpty: Halaman Tanpa Tata Letak
+  pureTable: Tabel
+  pureSysManagement: Manajemen Sistem
+  pureUser: Manajemen Pengguna
+  pureRole: Manajemen Peran
+  pureSystemMenu: Manajemen Menu
+  pureDept: Manajemen Departemen
+  pureSysMonitor: Pemantauan Sistem
+  pureOnlineUser: Pengguna Online
+  pureLoginLog: Log Masuk
+  pureOperationLog: Log Operasi
+  pureSystemLog: Log Sistem
+  pureCodeMirror: Editor Kode
+  pureMarkdown: Markdown
+  pureEditor: Editor
+  pureAbnormal: Halaman Kesalahan
+  pureFourZeroFour: "404"
+  pureFourZeroOne: "403"
+  pureFive: "500"
+  pureComponents: Komponen
+  pureDialog: Dialog Fungsional
+  pureDrawer: Laci Fungsional
+  pureMessage: Pesan
+  pureVideo: Video
+  pureSegmented: Kontrol Segmen
+  pureWaterfall: Scroll Tak Terbatas
+  pureMap: Peta
+  pureDraggable: Seret
+  pureSplitPane: Panel Terpisah
+  pureText: Potong Teks
+  pureSlider: Penggeser
+  pureElButton: Tombol Element
+  pureCheckButton: Tombol Pilihan
+  pureButton: Efek Tombol
+  pureCropping: Pemotongan Gambar
+  pureAnimatecss: Pilih animate.css
+  pureCountTo: Animasi Angka
+  pureSelector: Pemilih Rentang
+  pureFlowChart: Diagram Alur
+  pureSeamless: Scroll Tanpa Batas
+  pureContextmenu: Menu Klik Kanan
+  pureTypeit: Mesin Ketik
+  pureJsonEditor: Editor JSON
+  pureColorPicker: Pemilih Warna
+  pureDatePicker: Pemilih Tanggal
+  pureDateTimePicker: Pemilih Tanggal Waktu
+  pureTimePicker: Pemilih Waktu
+  pureTag: Label
+  pureStatistic: Statistik
+  pureCollapse: Panel Lipat
+  pureGanttastic: Gantt Chart
+  pureProgress: Progress Bar
+  pureUpload: Unggah File
+  pureCheckCard: Kartu Pilihan
+  pureMenus: Menu Bertingkat
+  pureMenu1: Menu 1
+  pureMenu1-1: Menu 1-1
+  pureMenu1-2: Menu 1-2
+  pureMenu1-2-1: Menu 1-2-1
+  pureMenu1-2-2: Menu 1-2-2
+  pureMenu1-3: Menu 1-3
+  pureMenu2: Menu 2
+  purePermission: Manajemen Izin
+  purePermissionPage: Izin Halaman
+  purePermissionButton: Izin Tombol
+  purePermissionButtonRouter: Tombol dari Router
+  purePermissionButtonLogin: Tombol dari API Login
+  pureTabs: Operasi Tab
+  pureGuide: Panduan
+  pureAble: Fungsi
+  pureMenuTree: Struktur Pohon Menu
+  pureVideoFrame: Tangkap Bingkai Video (wasm)
+  pureWavesurfer: Visualisasi Audio
+  pureRipple: Gelombang (Ripple)
+  pureMqtt: Klien MQTT
+  pureOptimize: Debounce, Throttle, Copy, Long Press
+  pureVerify: Kode Verifikasi Gambar
+  pureWatermark: Tanda Air
+  purePrint: Cetak
+  pureDownload: Unduh
+  pureExternalPage: Halaman Eksternal
+  pureExternalDoc: Dokumentasi Eksternal
+  pureEmbeddedDoc: Dokumentasi Tertanam
+  pureExternalLink: vue-pure-admin
+  pureUtilsLink: pure-admin-utils
+  pureColorHuntDoc: Palet Warna
+  pureUiGradients: Gradien
+  pureEpDoc: element-plus
+  pureTailwindcssDoc: tailwindcss
+  pureVueDoc: vue3
+  pureViteDoc: vite
+  purePiniaDoc: pinia
+  pureRouterDoc: vue-router
+  pureAbout: Tentang
+  pureResult: Halaman Hasil
+  pureSuccess: Halaman Sukses
+  pureFail: Halaman Gagal
+  pureIconSelect: Pemilih Ikon
+  pureTimeline: Linimasa
+  pureLineTree: Pohon Garis
+  pureList: Daftar
+  pureCardList: Daftar Kartu
+  pureDebounce: Debounce & Throttle
+  pureFormDesign: Perancang Formulir
+  pureBarcode: Barcode
+  pureQrcode: Kode QR
+  pureCascader: Pemilih Bertingkat
+  pureSwiper: Plugin Swiper
+  pureVirtualList: Daftar Virtual
+  purePdf: Pratinjau PDF
+  pureExcel: Ekspor Excel
+  pureInfiniteScroll: Scroll Tabel Tak Terbatas
+  pureSensitive: Filter Kata Sensitif
+  purePinyin: Pinyin
+  pureDanmaku: Komentar Mengambang
+  pureSchemaForm: Formulir
+  pureTableBase: Penggunaan Dasar
+  pureTableHigh: Penggunaan Tingkat Lanjut
+  pureTableEdit: Edit Langsung
+  pureVxeTable: Scroll Virtual
+  pureBoard: Papan Seni
+  pureMindMap: Peta Pikiran
+  pureMenuOverflow: Tooltip Menu Overflow
+  pureChildMenuOverflow: Tooltip Submenu Overflow
+status:
+  pureLoad: Memuat...
+  pureMessage: Pesan
+  pureNotify: Notifikasi
+  pureTodo: Tugas
+  pureNoMessage: Tidak Ada Pesan
+  pureNoNotify: Tidak Ada Notifikasi
+  pureNoTodo: Tidak Ada Tugas
+login:
+  pureUsername: Nama Pengguna
+  purePassword: Kata Sandi
+  pureVerifyCode: Kode Verifikasi
+  pureRemember: Ingat Saya
+  pureRememberInfo: Setelah login, Anda tidak perlu masuk ulang selama periode ini
+  pureSure: Konfirmasi Kata Sandi
+  pureForget: Lupa Kata Sandi?
+  pureLogin: Masuk
+  pureThirdLogin: Masuk dengan Pihak Ketiga
+  purePhoneLogin: Masuk dengan Telepon
+  pureQRCodeLogin: Masuk dengan Kode QR
+  pureRegister: Daftar
+  pureWeChatLogin: Masuk dengan WeChat
+  pureAlipayLogin: Masuk dengan Alipay
+  pureQQLogin: Masuk dengan QQ
+  pureWeiBoLogin: Masuk dengan Weibo
+  purePhone: Nomor Telepon
+  pureSmsVerifyCode: Kode SMS
+  pureBack: Kembali
+  pureTest: Tes Simulasi
+  pureTip: Setelah memindai, klik "Konfirmasi" untuk login
+  pureDefinite: Konfirmasi
+  pureLoginSuccess: Login Berhasil
+  pureLoginFail: Login Gagal
+  pureRegisterSuccess: Pendaftaran Berhasil
+  pureTickPrivacy: Harap centang kebijakan privasi
+  pureReadAccept: Saya telah membaca dan menyetujui
+  purePrivacyPolicy: "Kebijakan Privasi"
+  pureGetVerifyCode: Dapatkan Kode
+  pureInfo: detik lagi untuk mengirim ulang
+  pureUsernameReg: Masukkan Nama Pengguna
+  purePassWordReg: Masukkan Kata Sandi
+  pureVerifyCodeReg: Masukkan Kode Verifikasi
+  pureVerifyCodeCorrectReg: Masukkan Kode Verifikasi yang Benar
+  pureVerifyCodeSixReg: Masukkan 6 digit kode
+  purePhoneReg: Masukkan Nomor Telepon
+  purePhoneCorrectReg: Format Nomor Telepon Salah
+  purePassWordRuleReg: Kata sandi harus kombinasi dari 2 jenis angka, huruf, atau simbol (8-18 karakter)
+  purePassWordSureReg: Masukkan Konfirmasi Kata Sandi
+  purePassWordDifferentReg: Kata Sandi Tidak Cocok!
+  purePassWordUpdateReg: Kata Sandi Berhasil Diubah
+imip:
+  button:
+    obj1: Ubah
+    obj2: Hapus
+    obj3: Tambah
+    obj4: Arsip
+    obj5: Ekspor
+    obj6: Yakin ingin menghapus formulir bongkar muat ini?
+    obj7: Impor
+    obj8: Semua
+    obj9: Dermaga
+    obj10: Tongkang
+    obj11: Setelah tindakan ini, rencana terpilih akan dipindah ke arsip. Harap hati-hati.
+    obj12: Daftar rencana
+    obj13: Template rasio bongkar rencana
+    obj14: Daftar volume kerja rencana
+    obj15: Yakin hapus beberapa rencana?
+    obj16: Yakin hapus rencana ini?
+    obj17: Lainnya
+    obj18: Pindah Sandar
+    obj19: Tambah Bongkaran
+    obj20: Daftar Bongkaran
+    obj21: Sedang Sandar
+    obj22: Statistik Layar Besar
+    obj23: Yakin ubah rencana menjadi sedang sandar?
+    obj24: Operasi berhasil
+    obj25: Impor Rencana
+    obj26: Impor Perhitungan Kecepatan Bongkar
+    obj27: Impor Volume Bongkaran
+    obj28: Seret berkas ke sini, atau
+    obj29: Klik untuk unggah
+    obj30: Hanya file berformat xls, xlsx yang diperbolehkan
+    obj31: Unduh Template
+    obj32: Perbarui rencana yang sudah ada?
+    obj33: Batal
+    obj34: Kirim
+    obj38: Atur Ulang
+    obj39: Berhasil membatalkan pengarsipan
+  page1:
+    obj1: Nama Kapal
+    obj2: Status
+    obj3: Nama Bahan
+    obj4: Dermaga
+    obj5: Tipe
+    obj6: Pelabuhan
+    obj7: Wkt Akhir
+    obj8: Status Muat
+    obj9: No Tambang
+    obj10: IMO
+    obj11: Panjang (m)
+    obj12: Unit Pakai
+    obj13: Jumlah Kerja(ton/unit)
+    obj14: Real(ton/unit)
+    obj15: Kartu
+    obj16: Total Ton
+    obj17: Wkt Lepas
+    obj18: Wkt Tiba
+    obj19: Rencana Sandar
+    obj20: Sandar
+    obj21: Kerja
+    obj22: Tonase Rencana
+    obj23: Lepas
+    obj24: Berangkat
+    obj25: Buang Sauh
+    obj26: Wkt Valid
+    obj27: Efisien
+    obj28: Rata-Rata
+    obj29: Denda ($/hr)
+    obj30: Target/Hari
+    obj31: Tarif/Hari
+    obj32: Pelabuhan Sblm
+    obj33: Pelabuhan Ssn
+    obj34: Agen Kapal
+    obj35: Draft Air
+    obj36: Buat Waktu
+    obj37: Catatan
+    obj38: Aksi
+    obj39: Jumlah Kapal
+    obj40: Volume
+    obj41: Biaya Cepat
+    obj42: Kapal Domestik/Impor
+    obj43: Jumlah Aktual
+    loadingType: Jenis Muat
+    obj44: Biaya($)
+  page2:
+    obj1: Masukkan jenis kapal
+    obj2: Masukkan nama kapal
+    obj3: Masukkan panjang kapal (m)
+    obj4: Masukkan unit pemakai
+    obj5: Masukkan nama barang
+    obj6: Masukkan nama dermaga
+    obj7: Info dasar
+    obj8: Info waktu
+    obj9: Info pelayaran
+    obj10: Info kontrak
+    obj11: Jumlah total
+    obj12: Pelabuhan muat
+    obj13: No. permintaan pembelian
+    obj14: No. kontrak
+    obj15: Pelaksana kontrak
+    obj16: Nama pemasok
+    obj17: Batch
+    obj18: Perusahaan inspeksi
+    obj19: Manajemen Rencana
+    obj20: Manajemen Arsip Daftar Rencana
+    obj21: Daftar rencana akan dipulihkan dan dipindah. Harap berhati-hati.
+    obj22: Batal Arsipkan
+    obj23: Lihat
+    obj24: Daftar Bongkar
+    obj25: Bulan
+    obj26: Silakan pilih jenis rencana
+    obj27: Manajemen Pekerjaan Bongkar Muat
+    obj28: Ekspor Formulir Bongkar Muat
+    obj29: Ekspor Log Formulir Bongkar Muat
+    obj30: Setelah operasi ini selesai, formulir bongkar muat tidak dapat dioperasikan. Harap berhati-hati.
+    obj31: Selesaikan Formulir Bongkar Muat
+    obj32: Setelah operasi ini selesai, formulir bongkar muat akan dapat dioperasikan kembali. Harap berhati-hati.
+    obj33: Pulihkan Formulir Bongkar Muat
+    obj34: Yakin ingin menghapus beberapa formulir bongkar muat?
+    obj35: Status Rencana
+    obj36: Tanggal Shift
+    obj37: Shift
+    obj38: Shift Siang
+    obj39: Shift Malam
+  page3:
+    obj1: Status Pekerjaan
+    obj2: Harap isi informasi penting seperti giliran kerja, penanggung jawab, dan tanggal giliran terlebih dahulu
+    obj3: Penanggung jawab
+    obj4: Peralatan kerja
+    obj5: Tonase bongkar
+    obj6: Jumlah unit bongkar
+    obj7: Waktu mulai
+    obj8: Waktu berhenti
+    obj9: Jumlah jeda
+    obj10: Durasi jeda
+    obj11: Berhasil menghapus daftar pembongkaran
+    obj12: Berhasil menyelesaikan daftar pembongkaran
+    obj13: Berhasil memulihkan daftar pembongkaran
+    obj14: Silakan pilih waktu shift
+    obj15: Silakan masukkan shift
+    obj16: Silakan masukkan penanggung jawab
+    obj17: Silakan masukkan waktu mulai
+    obj18: Waktu Shift
+    obj19: Lanjutkan Pekerjaan
+    obj20: Jeda Pekerjaan
+    obj21: Selesaikan Pekerjaan
+    obj22: Total
+    obj23: Tingkat Penggunaan Dermaga
+    obj24: Pilih bulan untuk melihat grafik batang efisiensi penggunaan dermaga pada bulan tersebut
+    obj25: Pilih Bulan
+    obj26: Ekspor Rincian Dermaga
+    obj27: Tingkat Penggunaan
+    obj28: Rincian Waktu Pemakaian Dermaga
+    obj29: Nama
+    obj30: Status Dermaga
+    obj31: Jenis Dermaga
+    obj32: Cari
+    obj33: Manajemen Dermaga
+    obj34: Tambah Dermaga
+    obj35: Tempat Sandar
+    obj36: Yakin ingin hapus data?
+    obj37: Kode Nama
+    obj38: Nama Dermaga
+    obj39: Kode Dermaga
+  page4:
+    obj1: Nama Sandar
+    obj2: Info Tambahan (misal alasan pemeliharaan)
+    obj3: Kode Sandar
+    obj4: Masukkan Nama/Kode Sandar (mis. 5A#)
+    obj5: Pilih Status Sandar
+    obj6: Bisa isi lain, mis. alasan perawatan
+    obj7: Silakan masukkan nama dermaga
+    obj8: Silakan masukkan kode nama dermaga
+    obj9: Silakan pilih jenis dermaga
+    obj10: Silakan pilih jenis tempat sandar
+    obj11: Harap isi alasan perawatan di kolom catatan
+    obj12: Harap gambar area
+    obj13: Area belum digambar
+    obj14: Area yang digambar melebihi batas dermaga, harap gambar ulang
+    obj15: Satu tempat sandar hanya boleh memiliki satu area biru
+    obj16: Satu dermaga hanya boleh memiliki satu area biru, harap hapus area biru yang ada sebelum menambahkan yang baru
+    obj17: Hapus area tempat sandar
+    obj18: Hapus area biru
+    obj19: Terdapat tempat sandar di bawah dermaga, tidak dapat menghapus area biru
+    obj20: Layar penuh
+    obj21: Keluar layar penuh
+    obj22: Aktifkan
+    obj23: Nonaktifkan
+    obj24: Tambah Nama Barang
+    obj25: Manajemen Nama Barang
+    obj26: Tidak Ada Data
+    obj27: Hapus barang ini?
+    obj28: Simpan
+    obj29: Urutan
+    obj30: Bidang ini wajib diisi
+    obj31: Harap isi kolom sebelumnya terlebih dahulu
+    obj32: Waktu harus lebih besar dari waktu sebelumnya
+    obj33: Berhasil
+    obj34: Gagal
+    obj35: Kosong
+    obj36: Sedang Digunakan
+    obj37: Pemeliharaan
+    obj38: Dijeda
+  menu:
+    obj1: Info Pelabuhan
+    obj2: Layar Data
+    obj3: Manajemen Rencana
+    obj4: Rencana Kapal
+    obj5: Arsip Rencana
+    obj6: Statistik Pelabuhan
+    obj7: Pemakaian Dermaga
+    obj8: Zona Area
+    obj9: Nama Material
+    obj10: Edit Rencana
+    obj11: Lihat Rencana
+    obj12: Bongkar Muat
+  items:
+    item1: Dermaga Besar
+    item2: Dermaga Tongkang
+    item3: Aktif
+    item4: Nonaktif
+    item5: Jenis pekerjaan
+    item6: Jenis pekerjaan harus diisi
+    item7: Isian Aktual (ton/unit) wajib diisi
+    item8: Total Tonase(Rencana)
+    item9: Mengikat karyawan ke dermaga  
+    item10: Mengikat personel  
+    item11: Informasi dermaga  
+    item12: Nomor dermaga  
+    item13: Personel yang dipilih  
+    item14: Hapus personel  
+    item15: NIP 
+    item16: Nama
+    item17: Tetapkan Pengguna
+    item18: Isian Rencana (ton/unit) wajib diisi
+    item19: Informasi Material
+  others:  
+    other1: (Tambah/Ubah) Surat Rencana  
+    other2: 🚢Informasi Dasar  
+    other3: Panjang Kapal (meter)  
+    other4: Tonase Rencana (GT)  
+    other5: Jenis Kapal Bongkar/Muat  
+    other6: ⚓Informasi Waktu  
+    other7: Tanggal Tiba di Pelabuhan  
+    other8: Waktu Mulai Pekerjaan  
+    other9: Waktu Selesai Pekerjaan  
+    other10: 📦Informasi Material  
+    other11: Urutan Bongkar/Muat Kapal  
+    other12: Nama Material  
+    other13: Tambah  
+    other14: Hapus  
+operationForm:
+  planCount: Total {count} rencana
+  archiveMonth: Bulan Arsip
+  archiveMonthPlaceholder: Masukkan bulan arsip
+  moveBerthTime: Waktu Buang
+  moveBerthTimePlaceholder: Pilih waktu
+  berth: Sandar
+  berthPlaceholder: Pilih sandar
+  dockingTime: Waktu Sandar
+  dockingTimePlaceholder: Pilih waktu
+  operationTime: Waktu Operasi
+  operationTimePlaceholder: Pilih waktu
+  moveBerthTimeRule: Masukkan waktu buang/pindah sandar
+  dockingTimeRule: Masukkan waktu sandar
+  archiveMonthRule: Masukkan bulan arsip
+  screenStatusLabel: Tampilkan di statistik layar besar
+  screenStatusShow: Tampilkan
+  screenStatusHide: Sembunyikan
+  screenStatusRule: Pilih status tampilan

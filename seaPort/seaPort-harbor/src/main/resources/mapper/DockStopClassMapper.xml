@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockStopClassMapper">
+    <resultMap id="DockStopClassResult" type="com.iwip.harbor.domain.DockStopClass">
+        <result property="id" column="id"/>
+        <result property="detail" column="detail"/>
+        <result property="avoidCollectFee" column="avoid_collect_fee"/>
+        <result property="avoidEfficiency" column="avoid_efficiency"/>
+        <result property="remark01" column="remark01"/>
+        <result property="remark02" column="remark02"/>
+        <result property="remark03" column="remark03"/>
+    </resultMap>
+    <sql id="selectCommon">
+        SELECT dsc.id,dsc.detail,dsc.avoid_collect_fee,dsc.avoid_efficiency,dsc.remark01,dsc.remark02,dsc.remark03 FROM dock_stop_class AS dsc
+    </sql>
+    <select id="selectDockStopClassList" resultMap="DockStopClassResult">
+        <include refid="selectCommon"/>
+        <where>
+            <if test="id != null">AND dsc.id = #{id}</if>
+            <if test="detail !=null and detail != ''"> AND dsc.detail LIKE CONCAT('%',#{detail},'%')</if>
+            <if test="avoidCollectFee != null">AND dsc.avoid_collect_fee = #{avoidCollectFee}</if>
+            <if test="avoidEfficiency != null">AND dsc.avoid_efficiency = #{avoidEfficiency}</if>
+        </where>
+    </select>
+    <insert id="insertDockStopClass" parameterType="com.iwip.harbor.domain.DockStopClass">
+        INSERT INTO dock_stop_class(detail,avoid_collect_fee,remark01)
+        VALUES(#{detail},#{avoidCollectFee},#{remark01})
+    </insert>
+    <update id="updateDockStopClass" parameterType="com.iwip.harbor.domain.DockStopClass">
+        UPDATE dock_stop_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="detail !=null and detail != ''">detail = #{detail},</if>
+            <if test="avoidCollectFee != null">avoid_collect_fee = #{avoidCollectFee},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteDockStopClass">
+        DELETE FROM dock_stop_class WHERE id = #{id}
+    </delete>
+</mapper>

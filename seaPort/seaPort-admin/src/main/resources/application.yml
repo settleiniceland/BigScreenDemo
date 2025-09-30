@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: @artifactId@
+  profiles:
+    active: prod
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+websocket:
+  period: 20 #websocket发送消息间隙（单位:s）

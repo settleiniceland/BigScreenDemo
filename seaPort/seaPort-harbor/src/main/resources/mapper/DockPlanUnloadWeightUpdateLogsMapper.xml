@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockPlanUnloadWeightUpdateLogsMapper">
+    <resultMap id="UpdateLogResult" type="com.iwip.harbor.domain.DockPlanUnloadWeightUpdateLogs">
+        <result property="id" column="id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="loadSequence" column="load_sequence"/>
+        <result property="usageUnit" column="usage_unit"/>
+        <result property="materialName" column="material_name"/>
+        <result property="packageNum" column="package_num"/>
+        <result property="oldUnloadWeight" column="old_unload_weight"/>
+        <result property="newUnloadWeight" column="new_unload_weight"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="refreshTime" column="refresh_time"/>
+        <result property="distanceLastTime" column="distance_last_time"/>
+        <result property="remark01" column="remark01"/>
+        <result property="remark02" column="remark02"/>
+        <result property="remark03" column="remark03"/>
+    </resultMap>
+    <resultMap id="planDataTool" type="com.iwip.harbor.domain.DockPlan">
+        <result property="unloadWeight" column="unload_weight"/>
+        <result property="usageUnit" column="usage_unit"/>
+        <result property="materialName" column="material_name"/>
+        <result property="packageNum" column="package_num"/>
+    </resultMap>
+    <resultMap id="planAssistantDataTool" type="com.iwip.harbor.domain.DockPlanAssistant">
+        <result property="unloadWeight" column="unload_weight"/>
+        <result property="usageUnit" column="usage_unit"/>
+        <result property="materialName" column="material_name"/>
+        <result property="packageNum" column="package_num"/>
+    </resultMap>
+    <sql id="selectUpdateLog">
+        SELECT id,plan_id,load_sequence,usage_unit,material_name,package_num,
+               old_unload_weight,new_unload_weight,user_id,user_name,nick_name,
+               refresh_time,distance_last_time,remark01,remark02,remark03
+        FROM dock_plan_unload_weight_update_logs
+    </sql>
+    <insert id="inertItem" parameterType="com.iwip.harbor.domain.DockPlanUnloadWeightUpdateLogs">
+        INSERT INTO dock_plan_unload_weight_update_logs(
+            plan_id,load_sequence,usage_unit,material_name,package_num,
+            old_unload_weight,new_unload_weight,user_id,user_name,nick_name,
+            refresh_time,distance_last_time,remark01,remark02,remark03)
+        VALUES(
+            #{planId},#{loadSequence},#{usageUnit},#{materialName},#{packageNum},
+            #{oldUnloadWeight},#{newUnloadWeight},#{userId},#{userName},#{nickName},
+            #{refreshTime},#{distanceLastTime},#{remark01},#{remark02},#{remark03})
+    </insert>
+    <select id="getNewestItem" resultMap="UpdateLogResult" parameterType="long">
+        <include refid="selectUpdateLog"/>
+        WHERE plan_id = #{planId} ORDER BY refresh_time DESC LIMIT 1
+    </select>
+    <select id="selectMainOldUnloadWeight" resultMap="planDataTool">
+        SELECT unload_weight,usage_unit,material_name,package_num FROM dock_plan WHERE id=#{id}
+    </select>
+    <select id="selectOtherOldUnloadWeight" resultMap="planAssistantDataTool">
+        SELECT unload_weight,usage_unit,material_name,package_num FROM dock_plan_assistant WHERE plan_id=#{planId} AND load_sequence=#{loadSequence}
+    </select>
+    <select id="getByPlanIds" resultMap="UpdateLogResult" parameterType="java.util.List">
+        <include refid="selectUpdateLog"/>
+        WHERE plan_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+    <select id="getThroughput" resultType="java.math.BigDecimal">
+        SELECT SUM(CAST(plan_tonnage AS DECIMAL(10,2))) AS total
+        FROM dock_plan WHERE status="7" AND is_archived="1" AND del_flag="0"
+        AND plan_tonnage IS NOT NULL AND out_berth_time BETWEEN #{st} AND #{et} AND dept_id IN
+        <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockBerthMapper">
+
+    <resultMap type="com.iwip.harbor.domain.DockBerth" id="DockBerthResult">
+        <result property="berthId"    column="berth_id"    />
+        <result property="berthHpId"    column="berth_hp_id"    />
+        <result property="berthName"    column="berth_name"    />
+        <result property="berthStatus"    column="berth_status"    />
+        <result property="berthCode"    column="berth_code"    />
+        <result property="berthSort"    column="berth_sort"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="berthGeoJson"    column="berth_geo_json"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark01"    column="remark01"    />
+        <result property="remark02"    column="remark02"    />
+        <result property="remark03"    column="remark03"    />
+    </resultMap>
+
+    <sql id="selectDockBerthVo">
+        select berth_id,berth_code, berth_hp_id, berth_name,
+               berth_status, berth_sort, dept_id, berth_geo_json,
+               del_flag, user_id, create_by, create_time, update_by,
+               update_time, remark, remark01, remark02, remark03 from dock_berth
+    </sql>
+
+
+
+    <select id="selectDockBerthList" parameterType="com.iwip.harbor.domain.DockBerth" resultMap="DockBerthResult">
+<!--        <include refid="selectDockBerthVo"/>-->
+        select dp.berth_id, dp.berth_code, dp.berth_hp_id,
+               dp.berth_name, dp.berth_status, dp.berth_sort,
+               dp.dept_id, dp.berth_geo_json, dp.del_flag,
+               dp.user_id, dp.create_by, dp.create_time, dp.update_by,
+               dp.update_time, dp.remark, dp.remark01, dp.remark02,
+               dp.remark03 from dock_berth as dp
+            left join sys_dept as d on dp.dept_id = d.dept_id
+        <where>
+            AND dp.del_flag = '0'
+            <if test="berthHpId != null  and berthHpId != ''"> and dp.berth_hp_id = #{dbHpId}</if>
+            <if test="berthName != null  and berthName != ''"> and dp.berth_name like concat('%', #{berthName}, '%')</if>
+            <if test="berthStatus != null  and berthStatus != ''"> and dp.berth_status = #{berthStatus}</if>
+            <if test="berthCode != null  and berthCode != ''"> and dp.berth_code = #{berthCode}</if>
+            <if test="berthSort != null "> and dp.berth_sort = #{berthSort}</if>
+            <if test="deptId != null  and deptId != ''"> and dp.dept_id = #{deptId}</if>
+            <if test="berthGeoJson != null  and geoJson != ''"> and dp.berth_geo_json = #{berthGeoJson}</if>
+            <if test="userId != null "> and dp.user_id = #{userId}</if>
+            <if test="createBy != null  and createBy != ''"> and dp.create_by = #{createBy}</if>
+            <if test="createTime != null "> and dp.create_time = #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and dp.update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and dp.update_time = #{updateTime}</if>
+            <if test="remark01 != null  and remark01 != ''"> and dp.remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and dp.remark02 = #{remark02}</if>
+            <if test="remark03 != null  and remark03 != ''"> and dp.remark03 = #{remark03}</if>
+            ${params.dataScope}
+        </where>
+        ORDER BY dp.berth_hp_id, dp.create_time
+    </select>
+
+    <select id="screenBerthStatusList" parameterType="com.iwip.harbor.domain.DockBerth" resultType="com.iwip.harbor.domain.screen.ScreenPlanStatusVo">
+        SELECT
+            '0' AS STATUS,
+            COUNT( b.berth_id ) AS count
+        FROM
+            dock_berth b
+        WHERE
+            b.berth_status = '0'
+          AND b.del_flag = '0' UNION ALL
+        SELECT
+            '1',
+            COUNT( b.berth_id )
+        FROM
+            dock_berth b
+        WHERE
+            b.berth_status = '1'
+          AND b.del_flag = '0' UNION ALL
+        SELECT
+            '2',
+            COUNT( b.berth_id )
+        FROM
+            dock_berth b
+        WHERE
+            b.berth_status = '2'
+          AND b.del_flag = '0' UNION ALL
+        SELECT
+            '3',
+            COUNT( b.berth_id )
+        FROM
+            dock_berth b
+        WHERE
+            b.berth_status = '3'
+          AND b.del_flag = '0'
+    </select>
+
+    <select id="selectDockBerthByDbId" parameterType="Long" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        where berth_id = #{berthId}
+    </select>
+
+    <select id="selectDockBerthByName" parameterType="String" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        where del_flag = '0'  and  berth_name = #{berthName}
+    </select>
+
+    <select id="selectDockBerthByCode" parameterType="String" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        where del_flag = '0'  and  berth_code = #{berthCode}
+    </select>
+
+    <select id="selectDockBerthByNameOrCode" parameterType="String" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        where del_flag = '0'  and
+        (
+        berth_name = #{berthName}
+        or berth_code = #{berthName}
+        )
+    </select>
+
+    <select id="selectDockBerthByBerthHpIdId" parameterType="Long" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        where del_flag = '0' and berth_hp_id = #{berthHpId}
+    </select>
+
+    <select id="selectDockBerthByStatus" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        where del_flag = '0' and berth_status in
+        <foreach collection="berthStatusList" item="berthStatus" open="(" separator="," close=")">
+            #{berthStatus}
+        </foreach>
+    </select>
+
+    <insert id="insertDockBerth" parameterType="com.iwip.harbor.domain.DockBerth" useGeneratedKeys="true" keyProperty="berthId">
+        insert into dock_berth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="berthHpId != null">berth_hp_id,</if>
+            <if test="berthName != null">berth_name,</if>
+            <if test="berthStatus != null">berth_status,</if>
+            <if test="berthCode != null">berth_code,</if>
+            <if test="berthSort != null">berth_sort,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="berthGeoJson != null">berth_geo_json,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="remark01 != null">remark01,</if>
+            <if test="remark02 != null">remark02,</if>
+            <if test="remark03 != null">remark03,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="berthHpId != null">#{berthHpId},</if>
+            <if test="berthName != null">#{berthName},</if>
+            <if test="berthStatus != null">#{berthStatus},</if>
+            <if test="berthCode != null">#{berthCode},</if>
+            <if test="berthSort != null">#{berthSort},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="berthGeoJson != null">#{berthGeoJson},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="remark01 != null">#{remark01},</if>
+            <if test="remark02 != null">#{remark02},</if>
+            <if test="remark03 != null">#{remark03},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDockBerth" parameterType="com.iwip.harbor.domain.DockBerth">
+        update dock_berth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="berthHpId != null">berth_hp_id = #{berthHpId},</if>
+            <if test="berthName != null">berth_name = #{berthName},</if>
+            <if test="berthStatus != null">berth_status = #{berthStatus},</if>
+            <if test="berthCode != null">berth_code = #{berthCode},</if>
+            <if test="berthSort != null">berth_sort = #{berthSort},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="berthGeoJson != null">berth_geo_json = #{berthGeoJson},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="remark01 != null">remark01 = #{remark01},</if>
+            <if test="remark02 != null">remark02 = #{remark02},</if>
+            <if test="remark03 != null">remark03 = #{remark03},</if>
+        </trim>
+        where berth_id = #{berthId}
+    </update>
+
+    <update id="updateDockBerthStatus" parameterType="com.iwip.harbor.domain.DockBerth">
+        update dock_berth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="berthStatus != null">berth_status = #{berthStatus},</if>
+        </trim>
+        where berth_id = #{berthId}
+    </update>
+
+    <update id="removeDockBerthByDbId" parameterType="com.iwip.harbor.domain.DockBerth">
+        update dock_berth
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where berth_id = #{berthId}
+    </update>
+
+    <delete id="deleteDockBerthByDbId" parameterType="Long">
+        delete from dock_berth where berth_id = #{berthId}
+    </delete>
+
+    <delete id="deleteDockBerthByDbIds" parameterType="String">
+        delete from dock_berth where berth_id in
+        <foreach item="berthId" collection="array" open="(" separator="," close=")">
+            #{berthId}
+        </foreach>
+    </delete>
+
+    <!-- 👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇新大屏方法👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇   -->
+    <select id="newScreen_SelectListByDeptIds" resultMap="DockBerthResult" parameterType="java.util.List">
+        <include refid="selectDockBerthVo"/>
+        WHERE del_flag = 0 AND dept_id IN
+        <foreach collection="list" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </select>
+</mapper>

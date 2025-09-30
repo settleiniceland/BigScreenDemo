@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iwip.harbor.mapper.DockWindowPeriodMapper">
+    <resultMap id="DockWindowPeriodResult" type="com.iwip.harbor.domain.DockWindowPeriod">
+        <result property="id" column="id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="periodType" column="period_type"/>
+        <result property="stopClassId" column="stop_class_id"/>
+        <result property="stopClassDetail" column="stop_class_detail"/>
+        <result property="avoidCollectFee" column="avoid_collect_fee"/>
+        <result property="remark" column="remark"/>
+        <result property="remark1" column="remark1"/>
+        <result property="remark2" column="remark2"/>
+        <result property="remark3" column="remark3"/>
+    </resultMap>
+    <sql id="selectCommon">
+        SELECT id,plan_id,start_time,end_time,period_type,stop_class_id,stop_class_detail,avoid_collect_fee,remark,remark1,remark2,remark3 FROM dock_window_period
+    </sql>
+    <select id="selectDockWindowPeriodList" resultMap="DockWindowPeriodResult">
+        <include refid="selectCommon"/>
+        <where>
+            <if test="id != null">AND id = #{id}</if>
+            <if test="planId != null">AND plan_id = #{planId}</if>
+            <if test="periodType != null">AND period_type = #{periodType}</if>
+            <if test="stopClassDetail != null and stopClassDetail != ''">AND stop_class_detail LIKE CONCAT('%',#{stopClassDetail},'%')</if>
+            <if test="avoidCollectFee != null">AND avoid_collect_fee = #{avoidCollectFee}</if>
+            <if test="remark != null and remark != ''">AND remark LIKE CONCAT('%',#{remark},'%')</if>
+        </where>
+        ORDER BY start_time asc
+    </select>
+    <select id="selectByPlanIds" resultMap="DockWindowPeriodResult" parameterType="java.util.List">
+        <include refid="selectCommon"/>
+        WHERE plan_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+    </select>
+    <insert id="insertDockWindowPeriod" parameterType="com.iwip.harbor.domain.DockWindowPeriod">
+        INSERT INTO dock_window_period(plan_id,start_time,end_time,period_type,stop_class_id,stop_class_detail,avoid_collect_fee,remark,remark1,remark2)
+        VALUES (#{planId},#{startTime},#{endTime},#{periodType},#{stopClassId},#{stopClassDetail},#{avoidCollectFee},#{remark},#{remark1},#{remark2})
+    </insert>
+    <update id="updateDockWindowPeriod" parameterType="com.iwip.harbor.domain.DockWindowPeriod">
+        UPDATE dock_window_period
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="periodType != null">period_type = #{periodType},</if>
+            <if test="stopClassId != null">stop_class_id = #{stopClassId},</if>
+            <if test="stopClassDetail != null and stopClassDetail != ''">stop_class_detail = #{stopClassDetail},</if>
+            <if test="avoidCollectFee != null">avoid_collect_fee = #{avoidCollectFee},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="remark1 != null and remark1 != ''">remark1 = #{remark1},</if>
+            <if test="remark2 != null and remark2 != ''">remark2 = #{remark2},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteDockWindowPeriod">
+        DELETE FROM dock_window_period WHERE id = #{id}
+    </delete>
+</mapper>
