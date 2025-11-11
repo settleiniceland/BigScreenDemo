@@ -23,5 +23,8 @@ public class InMemoryTaskLogStore {
     public static void clear() {
         logCache.clear();
     }
+    // 删除指定 key
+    public static void remove(String key) {
+        logCache.remove(key);
+    }
 }
-

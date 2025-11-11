@@ -80,4 +80,6 @@ public interface DockBerthMapper
 
     /*👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇新大屏方法👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇*/
     List<DockBerth> newScreen_SelectListByDeptIds(List<Long> deptIds);
+
+    DockBerth getOneByCode(@Param("berthCode") String berthCode);
 }

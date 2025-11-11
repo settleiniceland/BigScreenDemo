@@ -18,7 +18,8 @@ export function useColumns() {
   const form = ref({
     materialName: null,
     materialStatus: null,
-    remark01: null
+    remark02: null,
+    remark: null,
   });
 
   const loadingTypeOptions = ref([]);
@@ -72,29 +73,12 @@ export function useColumns() {
     },
     {
       label: transformI18n("imip.page1.loadingType"),
-      prop: "remark01",
+      prop: "remark02",
       cellRenderer: ({ row, index }) =>
         editMap[index]?.editable ? (
-          <el-select
-            v-model={editMap[index].remark01}
-            placeholder={transformI18n("imip.page1.loadingType")}
-          >
-            {loadingTypeOptions.value.map(item => (
-              <el-option
-                label={item.label}
-                value={item.value}
-                key={item.value}
-              />
-            ))}
-          </el-select>
+          <el-input v-model={editMap[index].remark02} />
         ) : (
-          <span>
-            {(
-              loadingTypeOptions.value.find(
-                (item: any) => item.value === row.remark01
-              ) || {}
-            ).label || row.remark01}
-          </span>
+          <p>{row.remark02}</p>
         )
     },
     {
@@ -184,7 +168,7 @@ export function useColumns() {
       id: null,
       materialName: "",
       materialStatus: "0",
-      remark01: null,
+      remark02: null,
       sort: 1 // 新增的排第一
     };
 
@@ -223,7 +207,7 @@ export function useColumns() {
           materialName: row.materialName,
           materialStatus: row.materialStatus,
           remark: row.remark,
-          remark01: row.remark01,
+          remark02: row.remark02,
           sort: row.sort
         });
         ElMessage.success("修改成功");
@@ -232,7 +216,7 @@ export function useColumns() {
         const { data } = (await addMaterial({
           materialName: row.materialName,
           materialStatus: row.materialStatus,
-          remark01: row.remark01,
+          remark02: row.remark02,
           remark: row.remark,
           sort: row.sort
         })) as any;
@@ -285,7 +269,8 @@ export function useColumns() {
   function resetForm() {
     form.value.materialName = null;
     form.value.materialStatus = null;
-    form.value.remark01 = null;
+    form.value.remark02 = null;
+    form.value.remark = null;
     fetchData();
   }
 

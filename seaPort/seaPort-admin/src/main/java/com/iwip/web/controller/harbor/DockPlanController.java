@@ -11,6 +11,7 @@ import com.iwip.common.annotation.RepeatSubmit;
 import com.iwip.common.core.domain.BaseEntity;
 import com.iwip.common.utils.DateUtils;
 import com.iwip.common.utils.SecurityUtils;
+import com.iwip.harbor.domain.DockMaterial;
 import com.iwip.harbor.domain.DockPlanAssistant;
 import com.iwip.harbor.domain.DockStartWorkVo;
 import com.iwip.harbor.domain.excel.DockPlanExcel;
@@ -61,9 +62,7 @@ public class DockPlanController extends BaseController
      */
     @GetMapping("/list")
     @PreAuthorize("@ss.hasPermi('public')")
-    public TableDataInfo list(DockPlan dockPlan)
-    {
-
+    public TableDataInfo list(DockPlan dockPlan){
         Map<Object,Object> map = dockPlanService.summaryCalculation(dockPlan);
         startPage();
         List<DockPlan> dockPlanList = dockPlanService.selectDockPlanList(dockPlan);
@@ -229,6 +228,11 @@ public class DockPlanController extends BaseController
     public AjaxResult submitUnloadWork(@RequestBody DockPlanAssistant dpa){
         dockPlanService.submitUnloadWork(dpa);
         return success();
+    }
+    @PostMapping("/reflushByMaterialName")
+    public AjaxResult flushByMaterialName(@RequestBody DockMaterial dm){
+        Integer i=dockPlanService.reflushPlanByMaterialName(dm);
+        return success("刷新成功"+i+"条计划");
     }
     /**
      * 归档

@@ -62,7 +62,7 @@ public class DockPierServiceImpl implements IDockPierService
             List<DockBerth> dockBerthList = pier.getChildren();
             for (DockBerth dockBerth : dockBerthList) {
                 // 码头名称
-                dockBerth.setRemark01(pier.getPierName());
+//                dockBerth.setRemark01(pier.getPierName());
                 dockBerth.setType("berth");
             }
         }

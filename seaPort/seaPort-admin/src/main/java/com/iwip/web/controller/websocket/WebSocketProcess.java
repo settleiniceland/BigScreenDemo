@@ -45,10 +45,7 @@ public class WebSocketProcess {
      **/
     private Session session;
     private Long id; // 存储当前 WebSocket 实例的 id
-
-    private static IDockPlanService dockPlanService;
-    private static IDockBerthService dockBerthService;
-
+    private static DockMaterialMapper dockMaterialMapper;
     private static SysUserMapper sysUserMapper;
     private static SysDeptMapper sysDeptMapper;
     private static DockPierMapper dockPierMapper;
@@ -62,12 +59,8 @@ public class WebSocketProcess {
     private static DockSlowDownWorkLogsMapper dockSlowDownWorkLogsMapper;
     // 内存记录
     @Autowired
-    public void setDockBerthService(IDockBerthService dockBerthService) {
-        WebSocketProcess.dockBerthService = dockBerthService;
-    }
-    @Autowired
-    public void setDockPlanService(IDockPlanService dockPlanService) {
-        WebSocketProcess.dockPlanService = dockPlanService;
+    public void setDockMaterialMapper(DockMaterialMapper dockMaterialMapper){
+        WebSocketProcess.dockMaterialMapper = dockMaterialMapper;
     }
     @Autowired
     public void setSysUserMapper(SysUserMapper sysUserMapper) {
@@ -223,28 +216,6 @@ public class WebSocketProcess {
      */
     private Map<String, Object> selectScreenAllDate(Long deptId){
         Map<String, Object> screenMap = new HashMap<>();
-
-        //老的👇👇👇👇👇👇👇👇👇👇 查询数据
-//        List<ScreenPlanBerthVo> screenBerthList = dockPlanService.screenPlanBerthList();// 泊位信息
-//        List<ScreenWaitBerthVo> screenDockList = dockPlanService.screenWaitBerthList(); // 等泊信息
-//        List<ScreenPlanStatusVo> screenPlanStatusList = dockPlanService.screenPlanStatusList(new BaseEntity());  // 计划单状态信息
-//        List<ScreenPlanStatusVo> screenBerthStatusList = dockBerthService.screenBerthStatusList(); // 泊位状态信息
-//        List<ScreenWorkPlan> screenBigPeriList = dockBerthService.screenPierPlanList("1"); // 大码头作业情况
-//        List<ScreenWorkPlan> screenBargeList = dockBerthService.screenPierPlanList("2"); // 驳船码头作业情况
-//        List<ScreenShipArrivalVo> screenShipArrivalList = dockPlanService.screenShipArrivalStatistics(); // 今日/明日到船（物资）统计
-//        Map<String, String> screenThroughput = dockPlanService.screenThroughput(new DockPlan()); // 当日/当月/当年累计吞吐量
-//        List<ScreenPierVo> screenPierVoList = dockBerthService.screenPierBerthPlanList(); // 大屏区域
-//        // 组装数据
-//        screenMap.put("screenBerthList", screenBerthList);  // 泊位信息
-//        screenMap.put("screenDockList", screenDockList);   // 等泊信息
-//        screenMap.put("screenPlanStatusList", screenPlanStatusList); // 计划单状态信息
-//        screenMap.put("screenBerthStatusList", screenBerthStatusList); // 计划单状态信息
-//        screenMap.put("screenBigPeriList", screenBigPeriList); // 大码头类型
-//        screenMap.put("screenBargeList", screenBargeList); // 驳船类型
-//        screenMap.put("screenShipArrivalList", screenShipArrivalList); // 今日/明日到船（物资）统计
-//        screenMap.put("screenThroughput", screenThroughput); // 当日/当月累计吞吐量
-//        screenMap.put("screenPierVoList", screenPierVoList); // 大屏区域
-//        screenMap.put("type", "0"); // 计划单状态信息
         //👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆👆
         List<Long> deptIds = sysDeptMapper.newScreen_SelectListByAncestors(deptId);
         deptIds.add(deptId);
@@ -342,6 +313,11 @@ public class WebSocketProcess {
             screenMap.put("dockPlans3", dockPlans3);
             return screenMap;
         }
+        List<DockMaterial> dockMaterials = dockMaterialMapper.selectDockMaterialList(new DockMaterial());
+        Map<String,String> materialMap = new HashMap<>();
+        dockMaterials.forEach(dockMaterial -> {
+            materialMap.put(dockMaterial.getMaterialName(),dockMaterial.getRemark02());
+        });
         List<DockPlanUnloadWeightUpdateLogs> undateLogs = dockPlanUnloadWeightUpdateLogsMapper.getByPlanIds(dockPlans3Ids);//获取所有plan3的已作业更改日志
         List<DockPlanAssistant> dockPlans3_Assistant = dockPlanAssistantMapper.selectByBatchPlanIds(dockPlans3Ids);//获取所有plan3的物料附表
         List<DockWindowPeriod> dockPlans3_WindowPeriods = dockWindowPeriodMapper.selectByPlanIds(dockPlans3Ids);//获取所有plan3的空窗日志表
@@ -430,8 +406,8 @@ public class WebSocketProcess {
 //                            efficiencyWorkLoad = efficiencyWorkLoad.add(unloadWork.getTotalUnloadWeight());
 //                        }else{
                             efficiencyWorkLoad = efficiencyWorkLoad
-                                    .add(BigDecimal.valueOf(unloadWork.getUnloadNum()))
-                                    .add(unloadWork.getTotalUnloadWeight());
+                                    .add(BigDecimal.valueOf(unloadWork.getUnloadNum()==null?0:unloadWork.getUnloadNum()))
+                                    .add(unloadWork.getTotalUnloadWeight()==null?BigDecimal.ZERO:unloadWork.getTotalUnloadWeight());
 //                        }
                         BigDecimal workTime=BigDecimal.valueOf(Duration.between(unloadWork.getStartTime(),unloadWork.getEndTime()).toMinutes());//分钟
                         for(DockUnloadDetail workTimeDetail:unloadDetailSplitTool.getOrDefault(unloadWork.getDuId(),Collections.emptyList())){
@@ -456,13 +432,7 @@ public class WebSocketProcess {
                 }else {
                     efficiency = efficiencyWorkLoad.divide(efficiencyTime,2,BigDecimal.ROUND_HALF_UP).toString();
                 }
-                if(assistant.getPackageNum()==2){
-                    efficiency+=" PCS/H";
-                }else if(assistant.getPackageNum()==1){
-                    efficiency+=" T/H";
-                }else{
-                    efficiency+=" PCS或T/H";
-                }
+                efficiency+=materialMap.get(assistant.getMaterialName())+"每小时";
                 params.put("efficiency",efficiency);//作业效率
                 params.put("unloadWorkList",unloadSplitToolForEfficiency.getOrDefault(assistant.getPlanId(),Collections.emptyMap()).getOrDefault(assistant.getLoadSequence(),Collections.emptyList()));
                 assistant.setParams(params);
@@ -511,13 +481,7 @@ public class WebSocketProcess {
             }else {
                 efficiency = mainGoodEfficiencyWorkLoad.divide(mainGoodEfficiencyTime,2,BigDecimal.ROUND_HALF_UP).toString();
             }
-            if(item.getPackageNum()!=null && item.getPackageNum()==2){//件
-                efficiency+=" PCS/H";
-            }else if(item.getPackageNum()!=null && item.getPackageNum()==1){
-                efficiency+=" T/H";
-            }else{
-                efficiency+=" PCS或T/H";
-            }
+            efficiency+=materialMap.get(item.getMaterialName())+"每小时";
             planParams.put("efficiency",efficiency);//作业效率
 //        ├─ 已作业量更改日志
             planParams.put("updateLogs",logSplitTool.getOrDefault(item.getId(),Collections.emptyMap()).getOrDefault(1,Collections.emptyList()));

@@ -35,6 +35,14 @@
         <span>{{ showPopFirstData.params.completeName }}</span>
       </div>
       <div class="property-class" :style="{backgroundImage: `url(${pdf})`}">
+        <span>客户单位：</span>
+        <span>{{ showPopFirstData.params.completeClientName }}</span>
+      </div>
+      <div class="property-class" :style="{backgroundImage: `url(${pdf})`}">
+        <span>装卸类型：</span>
+        <span>{{ showPopFirstData.params.loadType }}</span>
+      </div>
+      <div class="property-class" :style="{backgroundImage: `url(${pdf})`}">
         <template v-if="choseStatus===1">
           <span>装卸情况：</span>
           <span>{{ showPopFirstData.params.completeAchieveWork }}</span>
@@ -197,7 +205,7 @@ const showMoreData = ()=>{
   border-radius: 6px;
   z-index: 3;
   width: 50vh;
-  height: 21vh;
+  height: 29vh;
   user-select: none; /* 拖动时防止选中文字 */
   background-size: 100% 100%;
   background-position: center;

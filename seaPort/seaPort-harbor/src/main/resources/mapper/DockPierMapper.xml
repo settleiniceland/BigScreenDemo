@@ -107,7 +107,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         berth.berth_status,
         berth.berth_sort,
         berth.berth_geo_json,
-        berth.remark
+        berth.remark,
+        berth.remark01
         FROM
         dock_pier pier
         LEFT JOIN dock_berth berth ON pier.pier_id = berth.berth_hp_id AND berth.del_flag = '0'

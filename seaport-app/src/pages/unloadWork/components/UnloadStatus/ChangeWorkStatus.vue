@@ -51,25 +51,9 @@
             :label="columnLabel.label"
             :prop="columnLabel.value"
             label-width="100px"
-            :placeholder="`请输入${columnLabel.label}`"
+            :placeholder="columnLabel.placeholder"
             clearable
           />
-          <view class="flex justify-center items-center">
-            <wd-radio-group
-              v-model="unLoadType"
-              shape="button"
-              @change="change"
-              class="flex"
-              :disabled="radioDisabled"
-            >
-              <wd-radio
-                v-for="item in radioOptions"
-                :key="item.value"
-                :value="item.value"
-                >{{ item.label }}</wd-radio
-              >
-            </wd-radio-group>
-          </view>
         </view>
         <wd-input
           v-model="localModelForm.workEquipment"
@@ -119,13 +103,12 @@ import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
 import { WorkStatusType } from '@/contans/index'
 const { t } = useI18n()
-const unLoadType = ref()
 const formRef = ref(null)
 const ClassOptions = ref([
 	{label:"others.obj15",value:"1"},
 	{label:"others.obj16",value:"2"}
 ])
-const {modelForm,type,handleWorkStatus,isEdit,startTime,packageNum} =
+const {modelForm,type,handleWorkStatus,isEdit,startTime,dataUnit} =
   defineProps({
     modelForm: {
       type: Object,
@@ -147,7 +130,7 @@ const {modelForm,type,handleWorkStatus,isEdit,startTime,packageNum} =
       type: [String, Number],
       default: null
     },
-    packageNum: {
+    dataUnit: {
       type: String,
       default: '0'
     },
@@ -160,51 +143,14 @@ const {modelForm,type,handleWorkStatus,isEdit,startTime,packageNum} =
 const localModelForm = ref({ ...modelForm })
 const openOperation = ()=>{
 	localModelForm.value = { ...modelForm }
-	if(localModelForm.value.workEquipment!==null&&//判断是否是修改
-		localModelForm.value.workEquipment!==''&&
-		localModelForm.value.workEquipment!==undefined){
-			if(localModelForm.value.totalUnloadWeight!==null&&
-				localModelForm.value.totalUnloadWeight!==''&&
-				localModelForm.value.totalUnloadWeight!==undefined){
-				unLoadType.value = 1;
-			}else if(localModelForm.value.unloadNum!==null&&
-				localModelForm.value.unloadNum!==''&&
-				localModelForm.value.unloadNum!==undefined){
-				unLoadType.value = 2
-			}
-		}
 }
 const columnLabel = computed(() => {
-  if (unLoadType.value === 2) {
-    return {
-      label: t('port.workLog.shiftUnloadPieces'),
-      value: 'unloadNum',
-      placeholder: t('port.workLog.inputShiftUnloadPieces')
-    }
-  }else{
-		return {
-			label: t('port.workLog.shiftUnloadTonnage'),
-			value: 'totalUnloadWeight',
-			placeholder: t('port.workLog.inputShiftUnloadTonnage')
-		}
+	return {
+		label: t('others2.obj12')+"["+dataUnit+"]",
+		value: 'totalUnloadWeight',
+		placeholder: t('others2.obj13')+"["+dataUnit+"]"
 	}
 })
-
-const radioOptions = computed(() => {
-  if (packageNum === 1) {
-    return [{ label: t('port.workLog.tons'), value: 1 }]
-  }
-  if (packageNum === 2) {
-    return [
-      { label: t('port.workLog.pieces'), value: 2 }
-    ]
-  }
-  return [
-    { label: t('port.workLog.tons'), value: 1 },
-    { label: t('port.workLog.pieces'), value: 2 }
-  ]
-})
-const radioDisabled = computed(() => packageNum === 1 || packageNum === 2)
 // 自定义校验函数：检查结束时间是否大于开始时间
 const validateEndTime = (rule, value) => {
   if (!value) {

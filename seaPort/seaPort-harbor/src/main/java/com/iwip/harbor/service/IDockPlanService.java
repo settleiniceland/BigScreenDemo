@@ -1,6 +1,7 @@
 package com.iwip.harbor.service;
 
 import com.iwip.common.core.domain.BaseEntity;
+import com.iwip.harbor.domain.DockMaterial;
 import com.iwip.harbor.domain.DockPlan;
 import com.iwip.harbor.domain.DockPlanAssistant;
 import com.iwip.harbor.domain.DockStartWorkVo;
@@ -147,4 +148,6 @@ public interface IDockPlanService
     Integer newUpdateDockPlan(DockPlan dockPlan);
 
     void submitUnloadWork(DockPlanAssistant dpa);
+
+    Integer reflushPlanByMaterialName(DockMaterial dm);
 }

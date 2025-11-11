@@ -238,4 +238,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{deptId}
         </foreach>
     </select>
+    <select id="getOneByCode" resultMap="DockBerthResult">
+        <include refid="selectDockBerthVo"/>
+        WHERE del_flag = 0
+            AND berth_name = #{berthCode}
+            AND berth_code = #{berthCode}
+    </select>
 </mapper>

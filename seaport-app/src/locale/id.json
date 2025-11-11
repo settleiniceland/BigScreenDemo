@@ -360,7 +360,7 @@
       "3": "Sandar",
       "4": "Memuat/Bongkar",
       "5": "Menunggu keluar dermaga",
-      "6": "Menunggu tinggalkan pelabuhan",
+      "6": "Hampir selesai",
       "7": "Selesai",
       "8": "Menunggu sandar kembali",
       "9": "Pindah sandar",
@@ -464,7 +464,7 @@
 	"others": {
 	  "obj1": "Material",
 	  "obj2": "Unit",
-	  "obj3": "Realisasi (Ton/Potong)",
+	  "obj3": "Total",
 	  "obj4": "Telah Dikerjakan",
 	  "obj5": "Pemilik",
 	  "obj6": "Urutan Muat/Bongkar",
@@ -490,18 +490,27 @@
 		"obj26": "Selesai - Lepas Sandar",
 		"obj27": "Jeda kosong ke-{n}",
 		"obj28": "Pekerjaan Lambat ke-{n}",
-		"obj29": "Log Kerja Lambat"
+		"obj29": "Log Kerja Lambat",
+		"obj30": "Jenis muat bongkar",
+		"obj31": "Total"
 	},
 	"others2": {
-	    "obj1": "Kembali",
-	    "obj2": "Isi Laporan",
-	    "obj3": "Cari/Ubah",
-	    "obj4": "Pengisian Pekerjaan Lambat",
-	    "obj5": "Alasan pekerjaan lambat tidak boleh kosong",
-	    "obj6": "Waktu selesai harus lebih besar dari waktu mulai, dan waktu mulai harus lebih besar dari waktu mulai bongkar/muat",
-	    "obj7": "Berhasil ditambahkan",
-	    "obj8": "Alasan Pekerjaan Lambat",
-	    "obj9": "Ubah Pekerjaan Lambat",
-			"obj10": "Waktu mulai dan waktu selesai harus berada dalam rentang."
+		"obj1": "Kembali",
+		"obj2": "Isi Laporan",
+		"obj3": "Cari/Ubah",
+		"obj4": "Pengisian Pekerjaan Lambat",
+		"obj5": "Alasan pekerjaan lambat tidak boleh kosong",
+		"obj6": "Waktu selesai harus lebih besar dari waktu mulai, dan waktu mulai harus lebih besar dari waktu mulai bongkar/muat",
+		"obj7": "Berhasil ditambahkan",
+		"obj8": "Alasan Pekerjaan Lambat",
+		"obj9": "Ubah Pekerjaan Lambat",
+		"obj10": "Waktu mulai dan waktu selesai harus berada dalam rentang.",
+		"obj11": "Bongkar muat",
+		"obj12": "Bongkar shift",
+		"obj13": "Isi bongkar shift",
+		"obj14": "Isi masa jeda",
+		"obj15": "Tanpa timbangan",
+		"obj16": "Timbang aktif",
+		"obj17": "Timbang mati"
 	}
 }

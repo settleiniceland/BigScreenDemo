@@ -182,7 +182,6 @@ const baseForm = {
 
 // 可重置的显示字段
 const resetableFields = {
-  hbIds: [],
   endTimes: [], // 结束时间范围
   status: '', // 状态
   planNo: '', // 计划编号
@@ -259,6 +258,7 @@ const handleEdit = async (paramData) => {
 const closeWindowPerios = () => {
 	toast.success(t('task.addSuccess'))
 	Object.assign(planData,{})
+	handleReset()
 	state.WindowPeriosLogSubmitShow = false
 }
 const getLackType =(dockPlan) => {

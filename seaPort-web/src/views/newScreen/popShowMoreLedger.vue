@@ -23,6 +23,7 @@
             <th>船名</th>
             <th>到港时间</th>
             <th>作业完成时间</th>
+            <th>装卸类型</th>
             <th>物料</th>
             <th>客户单位</th>
             <th>已作业量/总量</th>
@@ -44,6 +45,9 @@
             </td>
             <td v-if="item.rowspan>0" :rowspan="item.rowspan">
               <span :title="item.endTime">{{ item.endTime }}</span>
+            </td>
+            <td class="item-class">
+              <span :title="item.remark01">{{ item.remark01 }}</span>
             </td>
             <td>
               <span :title="item.materialName">{{ item.materialName }}</span>
@@ -142,6 +146,7 @@ const showData = computed(()=>{
       arrivalTime: item.arrivalTime,
       endTime: item.endTime,
       //------👆共有---👇私有------------
+      remark01: item.remark01,
       materialName: item.materialName,
       usageUnit: item.usageUnit,
       workStatus: (item.unloadWeight!==null?item.unloadWeight:0)+" / "+item.tonnage,
@@ -155,6 +160,7 @@ const showData = computed(()=>{
           shipName: item.shipName,
           arrivalTime: item.arrivalTime,
           endTime: item.endTime,
+          remark01: ass.remark01,
           materialName: ass.materialName,
           usageUnit: ass.usageUnit,
           workStatus: (ass.unloadWeight!==null?ass.unloadWeight:0)+" / "+ass.tonnage,
@@ -241,5 +247,11 @@ const showData = computed(()=>{
   border-radius: 50%;
   display: inline-block;
   background: currentColor;
+}
+.item-class {
+  max-width: 6vh;       /* 限制宽度 */
+  overflow: hidden;   /*   超出隐藏 */
+  white-space: nowrap;  /* 不换行 */
+  text-overflow: ellipsis; /* 超出用...显示 */
 }
 </style>

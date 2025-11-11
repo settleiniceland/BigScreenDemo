@@ -56,7 +56,7 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
     // 左侧部门树的id
     deptId: "",
     userName: "",
-    phonenumber: "",
+    nickName: "",
     status: "",
     pageNum: 1,
     pageSize: 10

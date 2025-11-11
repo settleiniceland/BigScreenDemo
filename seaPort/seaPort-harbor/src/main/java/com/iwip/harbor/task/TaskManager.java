@@ -18,14 +18,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 @Slf4j
@@ -89,40 +87,89 @@ public class TaskManager {
                 InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
                 return;
             }
-            String[] urls = taskConfig.getTargetUrl().split("@");
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("tagids", urls[1]);
-            requestBody.put("tagname", "");
-            requestBody.put("charset", "gbk");
-            requestBody.put("archived", 0);
-            /*
-            2、取该计划的作业开始时间，以该时间往前推30min，至该时间，以一个区间，
-                去查该区间的数采总累积量，取时间最晚的那条数组作为初始重量
-                取不到直接退出❌
-             */
-            requestBody.put("btime",plans.get(0).getOperationTime().minusMinutes(15).format(formatter));
-            requestBody.put("etime",plans.get(0).getOperationTime().format(formatter));
-            Object originBtime = requestBody.get("btime");
-            Object originEtime = requestBody.get("etime");
-            BigDecimal originData = sentRequest(requestBody, urls[0]);
-            if(originData==null){
-                log.info("{}泊位定时任务未更新，初始时间<{}至{}>采不到数",taskConfig.getHbName(),originBtime,originEtime);
-                String logMsg = String.format("%s:%s泊位定时任务未更新，初始时间<%s至%s>采不到数",LocalDateTime.now().format(formatter),taskConfig.getHbName(),originBtime,originEtime);
-                InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
-                return;
-            }
-            /*
-            3、取当前时间，以当前时间往前推30min,至该时间，以一个区间，去查该区间的数采总累积量，取时间最晚的那条数组作为现在重量
-	            取不到直接退出❌
-             */
-            requestBody.put("btime",(LocalDateTime.now()).minusMinutes(10).format(formatter));
-            requestBody.put("etime",(LocalDateTime.now()).plusMinutes(2).format(formatter));
-            Object nowBtime = requestBody.get("btime");
-            Object nowEtime = requestBody.get("etime");
-            BigDecimal nowData = sentRequest(requestBody, urls[0]);
-            if(nowData==null){
-                log.info("{}泊位定时任务未更新，当前时间<{}至{}>采不到数",taskConfig.getHbName(),nowBtime,nowEtime);
-                String logMsg = String.format("%s:%s泊位定时任务未更新，当前时间<%s至%s>采不到数",LocalDateTime.now().format(formatter),taskConfig.getHbName(),nowBtime,nowEtime);
+            Object originBtime=new Object();
+            Object originEtime=new Object();
+            Object nowBtime=new Object();
+            Object nowEtime=new Object();
+            BigDecimal originData = BigDecimal.ZERO;
+            BigDecimal nowData = BigDecimal.ZERO;
+            if(taskConfig.getTargetUrl().contains("@") && !taskConfig.getTargetUrl().contains("&")){//包含@，不包含&就是老数采，采用老逻辑
+                String[] urls = taskConfig.getTargetUrl().split("@");
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("tagids", urls[1]);
+                requestBody.put("tagname", "");
+                requestBody.put("charset", "gbk");
+                requestBody.put("archived", 0);
+                /*
+                2、取该计划的作业开始时间，以该时间往前推30min，至该时间，以一个区间，
+                    去查该区间的数采总累积量，取时间最晚的那条数组作为初始重量
+                    取不到直接退出❌
+                 */
+                requestBody.put("btime",plans.get(0).getOperationTime().minusMinutes(15).format(formatter));
+                requestBody.put("etime",plans.get(0).getOperationTime().format(formatter));
+                originBtime = requestBody.get("btime");
+                originEtime = requestBody.get("etime");
+                originData = sentRequest(requestBody, urls[0]);
+                if(originData==null){
+                    log.info("{}泊位定时任务未更新，初始时间<{}至{}>采不到数",taskConfig.getHbName(),originBtime,originEtime);
+                    String logMsg = String.format("%s:%s泊位定时任务未更新，初始时间<%s至%s>采不到数",LocalDateTime.now().format(formatter),taskConfig.getHbName(),originBtime,originEtime);
+                    InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
+                    return;
+                }
+                /*
+                3、取当前时间，以当前时间往前推30min,至该时间，以一个区间，去查该区间的数采总累积量，取时间最晚的那条数组作为现在重量
+                    取不到直接退出❌
+                 */
+                requestBody.put("btime",(LocalDateTime.now()).minusMinutes(10).format(formatter));
+                requestBody.put("etime",(LocalDateTime.now()).plusMinutes(2).format(formatter));
+                nowBtime = requestBody.get("btime");
+                nowEtime = requestBody.get("etime");
+                nowData = sentRequest(requestBody, urls[0]);
+                if(nowData==null){
+                    log.info("{}泊位定时任务未更新，当前时间<{}至{}>采不到数",taskConfig.getHbName(),nowBtime,nowEtime);
+                    String logMsg = String.format("%s:%s泊位定时任务未更新，当前时间<%s至%s>采不到数",LocalDateTime.now().format(formatter),taskConfig.getHbName(),nowBtime,nowEtime);
+                    InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
+                    return;
+                }
+            }else if(taskConfig.getTargetUrl().contains("&") && !taskConfig.getTargetUrl().contains("@")){//包含&,不包含@就是新数采，采用新逻辑
+                String[] urls = taskConfig.getTargetUrl().split("&");
+                Map<String, Object> requestBody = new HashMap<>();
+                requestBody.put("resolution",60000);
+                requestBody.put("name", new String[]{urls[1]});
+                /*
+                2、取该计划的作业开始时间，以该时间往前推30min，至该时间，以一个区间，
+                    去查该区间的数采总累积量，取时间最晚的那条数组作为初始重量
+                    取不到直接退出❌
+                 */
+                requestBody.put("start",plans.get(0).getOperationTime().minusMinutes(15).format(formatter));
+                requestBody.put("stop",plans.get(0).getOperationTime().format(formatter));
+                originBtime = requestBody.get("start");
+                originEtime = requestBody.get("stop");
+                originData = sentRequest_new(requestBody, urls[0]);
+                if(originData==null){
+                    log.info("{}泊位定时任务未更新，初始时间<{}至{}>采不到数",taskConfig.getHbName(),originBtime,originEtime);
+                    String logMsg = String.format("%s:%s泊位定时任务未更新，初始时间<%s至%s>采不到数",LocalDateTime.now().format(formatter),taskConfig.getHbName(),originBtime,originEtime);
+                    InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
+                    return;
+                }
+                /*
+                3、取当前时间，以当前时间往前推30min,至该时间，以一个区间，去查该区间的数采总累积量，取时间最晚的那条数组作为现在重量
+                    取不到直接退出❌
+                 */
+                requestBody.put("start",(LocalDateTime.now()).minusMinutes(10).format(formatter));
+                requestBody.put("stop",(LocalDateTime.now()).plusMinutes(2).format(formatter));
+                nowBtime = requestBody.get("start");
+                nowEtime = requestBody.get("stop");
+                nowData = sentRequest_new(requestBody, urls[0]);
+                if(nowData==null){
+                    log.info("{}泊位定时任务未更新，当前时间<{}至{}>采不到数",taskConfig.getHbName(),nowBtime,nowEtime);
+                    String logMsg = String.format("%s:%s泊位定时任务未更新，当前时间<%s至%s>采不到数",LocalDateTime.now().format(formatter),taskConfig.getHbName(),nowBtime,nowEtime);
+                    InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
+                    return;
+                }
+            }else{
+                log.info("{}泊位的数采url<{}>书写不符合要求",taskConfig.getHbName(),taskConfig.getTargetUrl());
+                String logMsg = String.format("%s:%s泊位的数采url<%s>书写不符合要求",LocalDateTime.now().format(formatter),taskConfig.getHbName(),taskConfig.getTargetUrl());
                 InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
                 return;
             }
@@ -189,7 +236,7 @@ public class TaskManager {
                 if(weightData.compareTo(assiatantTonnage)<0){
                     dockPlanAssistantMapper.updateUnloadWeightById(dockPlanAssistant.getId(),weightData);
                     log.info("{}泊位定时任务更新成功✔，更新第{}个物料",taskConfig.getHbName(),dockPlanAssistant.getLoadSequence());
-                    String logMsg = String.format("%s:%s泊位定时任务更新成功✔，更新第s%个物料",LocalDateTime.now().format(formatter),taskConfig.getHbName(),dockPlanAssistant.getLoadSequence());
+                    String logMsg = String.format("%s:%s泊位定时任务更新成功✔，更新第%s个物料",LocalDateTime.now().format(formatter),taskConfig.getHbName(),dockPlanAssistant.getLoadSequence());
                     InMemoryTaskLogStore.put(taskConfig.getHbName(), logMsg);
                     return;
                 }else {
@@ -283,10 +330,57 @@ public class TaskManager {
                     log.info("采不到数:"+requestBody.get("btime")+"-->"+requestBody.get("etime"));
                 }
             }
+            InMemoryTaskLogStore.remove(url);
         }catch (Exception e) {
             e.printStackTrace();
+            InMemoryTaskLogStore.put(url,url+",读取失败,连接超时或其他原因");
         }finally {
             return returnData;
         }
     }
-}
+    //👦《新数采》--发送请求取数
+    private BigDecimal sentRequest_new(Map<String, Object> requestBody,String url) {
+        BigDecimal returnData = null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAcceptCharset(java.util.Collections.singletonList(java.nio.charset.StandardCharsets.UTF_8));
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                String body = response.getBody();
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(body);
+                Iterator<String> fieldNames = root.fieldNames();
+                if (!fieldNames.hasNext()) {
+                    throw new RuntimeException("返回的 JSON 为空，未找到任何字段");
+                }
+                String firstKey = fieldNames.next();//第一个字段名
+                JsonNode dataArray = root.path(firstKey);//
+                if(dataArray.size()==0){
+                    throw new RuntimeException("返回的 JSON 为空，未找到任何字段");
+                }
+                double latestValue = 0;//对应值
+                String latestTime = "";//最新时间
+                if (dataArray.isArray()) {
+                    for (JsonNode node : dataArray) {
+                        String time = node.path("time").asText();
+                        double value = node.path("value").asDouble();
+                        if (latestTime.isEmpty() || time.compareTo(latestTime) > 0) {
+                            latestTime = time;
+                            latestValue = value;
+                        }
+                    }
+                }
+                returnData = new BigDecimal(latestValue).setScale(0, RoundingMode.HALF_UP);
+                InMemoryTaskLogStore.remove(url);
+            }
+            }catch(Exception e){
+                e.printStackTrace();
+                log.info("新数采采不到数:"+requestBody.get("start")+"-->"+requestBody.get("stop")+e.getMessage());
+                InMemoryTaskLogStore.put(url,url+",读取失败,连接超时或其他原因");
+            }finally{
+                return returnData;
+            }
+        }
+    }

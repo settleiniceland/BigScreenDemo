@@ -39,10 +39,11 @@
         )
     </select>
     <insert id="insertBatchDockPlanAssistant" parameterType="java.util.List">
-        INSERT INTO dock_plan_assistant(plan_id,package_num,tonnage,unload_weight,usage_unit,material_name,load_sequence)
+        INSERT INTO dock_plan_assistant(plan_id,package_num,tonnage,unload_weight,usage_unit,material_name,load_sequence,remark01,remark02,remark03)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.planId},#{item.packageNum},#{item.tonnage},#{item.unloadWeight},#{item.usageUnit},#{item.materialName},#{item.loadSequence})
+            (#{item.planId},#{item.packageNum},#{item.tonnage},#{item.unloadWeight},#{item.usageUnit},#{item.materialName},#{item.loadSequence}
+            ,#{item.remark01},#{item.remark02},#{item.remark03})
         </foreach>
     </insert>
     <delete id="delByPlanId">
@@ -59,5 +60,10 @@
     </update>
     <update id="updateUnloadWeightById">
         update dock_plan_assistant SET unload_weight = #{param2} WHERE id = #{param1}
+    </update>
+    <update id="reflushPlanByMaterialName">
+        update dock_plan_assistant SET remark02 = #{remark02}
+        WHERE material_name = #{materialName}
+            AND (remark02 != #{remark02} OR remark02 IS NULL)
     </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.iwip.harbor.mapper;
 
+import com.iwip.harbor.domain.DockMaterial;
 import com.iwip.harbor.domain.DockPlan;
 import com.iwip.harbor.domain.DockPlanAssistant;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -16,4 +17,5 @@ public interface DockPlanAssistantMapper {
     void submitUnloadWorkForPlan(DockPlan dockPlan);
     void submitUnloadWorkForPlanAssistant(DockPlanAssistant dockPlanAssistant);
     void updateUnloadWeightById(Long id, BigDecimal weightData);
+    void reflushPlanByMaterialName(DockMaterial dm);
 }

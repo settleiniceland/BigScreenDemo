@@ -25,8 +25,7 @@
               <th>开始时间</th>
               <th>结束时间</th>
               <th>状态</th>
-              <th>卸货(T)</th>
-              <th>卸货(件)</th>
+              <th>卸货</th>
               <th>作业机具</th>
               <th>备注</th>
               <th>查看日志</th>
@@ -45,8 +44,7 @@
                   {{ getLoadingLedgerStatusName(row.workType).name }}
                 </span>
               </td>
-              <td class="ship-cell"><span :title="row.totalUnloadWeight">{{ row.totalUnloadWeight }}</span></td>
-              <td class="ship-cell"><span :title="row.unloadNum">{{ row.unloadNum }}</span></td>
+              <td class="ship-cell"><span :title="row.totalUnloadWeight">{{ row.totalUnloadWeight }}{{ map.get(materialName) }}</span></td>
               <td class="ship-cell"><span :title="row.workEquipment">{{ row.workEquipment }}</span></td>
               <td class="ship-cell"><span :title="row.remark">{{ row.remark }}</span></td>
               <td>
@@ -63,6 +61,7 @@
 import {ref,onBeforeUnmount,defineProps} from "vue";
 import {getLoadingLedgerStatusName} from "./data.js"
 import llbd from "@/assets/newScreen/loadingLedgerBg.png"
+import {getAllMaterial} from "@/api/newScreen/index.ts"
 const visible = ref(false);
 const top = ref(0);
 const left = ref(0);
@@ -70,6 +69,8 @@ const originX = ref(0);
 const originY = ref(0);
 const data = ref([]);
 const title = ref(undefined)
+const materialName = ref(undefined)
+const map = new Map();
 let dragging = false;
 let offsetX = 0;
 let offsetY = 0;
@@ -83,12 +84,19 @@ const props = defineProps({
     default:()=>{}
   }
 })
-const open = (options = {}) => {
+const open =async (options = {}) => {
   close();
   originX.value = options.x;
   originY.value = options.y;
+  materialName.value = options.materialName;
   if(options.data!==null&&options.data!==undefined){
     data.value = options.data;
+    const res = await getAllMaterial();
+    if(res.code==200){
+      res.rows.forEach(item=>{
+        map.set(item.materialName,item.remark02);
+      })
+    }
   }
   title.value = options.title;
   visible.value = true;
@@ -126,7 +134,7 @@ onBeforeUnmount(() => {
   document.removeEventListener("mouseup", stopDrag);
 });
 const showDetail=(row)=>{
-  props.handleStopSlowDetail(row.params.unloadWorkDetail,row.params.slowDownWork,title.value);
+  props.handleStopSlowDetail(row.params.unloadWorkDetail,row.params.slowDownWork,title.value+">>"+row.classTime+">>"+row.classes);
 }
 defineExpose({ open, close });
 </script>

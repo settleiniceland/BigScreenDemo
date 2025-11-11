@@ -292,8 +292,8 @@ imip:
     obj10: 国际海事组织
     obj11: 船长(m)
     obj12: 使用单位
-    obj13: 已作业量(吨/件)
-    obj14: 实际(吨/件)
+    obj13: 已作业量
+    obj14: 实际
     obj15: 卡数
     obj16: 总吨
     obj17: 离上港时间
@@ -323,7 +323,7 @@ imip:
     obj41: 速遣费
     obj42: 内/外贸船
     obj43: 实际件数
-    loadingType: 装货类型
+    loadingType: 计数单位
     obj44: 收费($)
   page2:
     obj1: 请输入内/外贸船

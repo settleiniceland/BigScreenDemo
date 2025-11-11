@@ -1,6 +1,6 @@
 <template>
   <el-dialog 
-    :title="transformI18n('题目')" 
+    :title="transformI18n('暂停原因维护')" 
     v-model="dialogVisible" 
     width="80vh" 
     top="12vh" 

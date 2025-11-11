@@ -155,14 +155,17 @@ const submit = async ()=>{
 						})
 					}
 				}
-				Object.assign(formData,{
-					id: undefined,
-					planId: undefined,
-					unloadWorkId: undefined,
-					startTime: undefined,
-					endTime: undefined,
-					remark: undefined,
-				})
+				// Object.assign(formData,{
+				// 	id: undefined,
+				// 	planId: undefined,
+				// 	unloadWorkId: undefined,
+				// 	startTime: undefined,
+				// 	endTime: undefined,
+				// 	remark: undefined,
+				// })
+				formData.startTime = undefined;
+				formData.endTime = undefined;
+				formData.remark = undefined;
 				submitComplete()
 			}
 		}

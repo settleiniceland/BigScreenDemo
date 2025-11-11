@@ -30,7 +30,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialStatus != null  and materialStatus != ''"> and material_status = #{materialStatus}</if>
             <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
             <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
-            <if test="remark02 != null  and remark02 != ''"> and remark02 = #{remark02}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 LIKE concat('%',#{remark02},'%')</if>
+            <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
+        </where>
+        ORDER BY sort
+    </select>
+    <select id="selectDockMaterialList1" parameterType="com.iwip.harbor.domain.DockMaterial" resultMap="DockMaterialResult">
+        <include refid="selectDockMaterialVo"/>
+        <where>
+            AND del_flag = '0'
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="materialStatus != null  and materialStatus != ''"> and material_status = #{materialStatus}</if>
+            and (remark = '0' or remark is null)
+            <if test="remark01 != null  and remark01 != ''"> and remark01 = #{remark01}</if>
+            <if test="remark02 != null  and remark02 != ''"> and remark02 LIKE concat('%',#{remark02},'%')</if>
             <if test="remark03 != null  and remark03 != ''"> and remark03 = #{remark03}</if>
         </where>
         ORDER BY sort

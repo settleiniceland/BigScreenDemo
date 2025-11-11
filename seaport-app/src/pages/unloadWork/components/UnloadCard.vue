@@ -49,19 +49,26 @@
         <view class="card-content">
           <!-- 左侧关键数据（灰色背景） -->
           <view class="left-column" v-if="data.workType === '2'">
-            <view
-              v-for="(item, index) in leftFields"
-              :key="index"
-              class="info-row highlight"
-            >
-              <text class="label">{{ t(item.label) }}</text>
-              <text
-                :class="['value', item.class]"
-                :style="{ color: item.color }"
-              >
-                {{ data[item.key] || '-' }}
+            <view class="info-row highlight">
+              <text style="color:yellowgreen; font-weight:bold; font-size: 27px;">
+                {{ data.classTime }}
               </text>
+						</view>
+						<view class="info-row highlight">
+							<text style="color:black; font-weight:bold; font-size: 36px;">
+							  {{ t(showClassesName(data.classes)) }}
+							</text>
             </view>
+						<view class="info-row highlight">
+							<text style="color:deepskyblue; font-weight:bold; font-size: 18px;">
+								{{t('others2.obj11')}}:
+							</text>
+						</view>
+						<view class="info-row highlight">
+							<text style="color:blue; font-weight:bold; font-size: 36px;">
+								{{data.totalUnloadWeight}}
+							</text>
+						</view>
           </view>
           <view class="left-btn" v-else>
             <wd-button
@@ -90,26 +97,26 @@
 						</wd-divider>
 						<view class="info-row" v-if="data.workType !== '0'">
 							<text class="label">{{t('others.obj10')}}：</text>
-							<text style="color:crimson">{{planBaseInfo.packageNum}}</text>
+							<text style="color:crimson">{{planBaseInfo.dataUnit}}</text>
 						</view>
           </view>
           <!-- 右侧次要数据 -->
           <view class="right-column">
 						<view class="info-row">
 							<text class="label">{{t('others.obj1')}}：</text>
-							<text style="color:crimson">{{planBaseInfo.materialName}}</text>
+							<text style="color:crimson; font-weight:bold;">{{planBaseInfo.materialName}}</text>
 						</view>
 						<view class="info-row">
 							<text class="label">{{t('others.obj5')}}：</text>
-							<text style="color:crimson">{{planBaseInfo.usageUnit}}</text>
+							<text style="color:crimson; font-weight:bold;">{{planBaseInfo.usageUnit}}</text>
 						</view>
 						<view class="info-row" v-if="data.workType === '0' || data.workType === '2'">
-							<text class="label">{{t('others.obj10')}}：</text>
-							<text style="color:crimson">{{planBaseInfo.packageNumShow}}</text>
+							<text class="label">{{t('others.obj2')}}：</text>
+							<text style="color:blue; font-weight:bold; font-size: 26px;">{{planBaseInfo.dataUnit}}</text>
 						</view>
 						<view class="info-row">
 							<text class="label">{{t('others.obj6')}}：</text>
-							<text style="color:crimson">{{planBaseInfo.loadSequence}}</text>
+							<text style="color:crimson; font-weight:bold;">{{planBaseInfo.loadSequence}}</text>
 						</view>
             <view
               v-for="(item, index) in rightFields"
@@ -119,7 +126,7 @@
               <text class="label">{{ t(item.label) }}</text>
               <text
                 :class="['value', item.class]"
-                :style="{ color: item.color }"
+                :style="{ color: item.color}"
               >
                 {{ data[item.key] || '-' }}
               </text>
@@ -205,7 +212,7 @@
           :isEdit="state.isEdit"
           :handleWorkStatus="handleWorkStatus"
           :startTime="data.startTime"
-          :packageNum="planBaseInfo.packageNum"
+          :dataUnit="planBaseInfo.dataUnit"
 					:dataStatus="planBaseInfo.status"
         />
       </wd-action-sheet>
@@ -271,8 +278,7 @@ const { t } = useI18n()
 const planBaseInfo = ref({
 	tonnage: undefined,
 	unloadWeight: undefined,
-	packageNum: undefined,
-	packageNumShow: undefined,
+	dataUnit: undefined,
 	usageUnit: undefined,
 	materialName: undefined,
 	isFinish: undefined,
@@ -326,47 +332,6 @@ const {
 		default: () => ({})
 	},
 })
-// const tryTwoRroperties = (retryCount = 0) => {
-// 	const maxRetries = 10
-// 	const delay = 500
-// 	// handleReset()
-// 	if(data && Object.keys(data).length > 0 && planData && Object.keys(planData).length > 0){
-// 		if(data.remark01 === "1" || data.remark01 === null){
-// 			planBaseInfo.value.tonnage = planData.tonnage;
-// 			planBaseInfo.value.unloadWeight = planData.unloadWeight;
-// 			planBaseInfo.value.packageNum = planData.packageNum
-// 			planBaseInfo.value.packageNumShow = planData.packageNum === 2?"按件/Barang ":"按吨/Ton";
-// 			planBaseInfo.value.usageUnit = planData.usageUnit;
-// 			planBaseInfo.value.materialName = planData.materialName;
-// 			planBaseInfo.value.loadSequence = 1;
-// 			console.info("✅装卸卡片-赋值第一个物料",planBaseInfo.value)
-// 		}else{
-// 			const sortedList = [...planData.params.subMaterial].sort((a, b) => a.loadSequence - b.loadSequence)
-// 			for(const item of sortedList){
-// 				if(item.loadSequence == data.remark01){
-// 					planBaseInfo.value.tonnage = item.tonnage;
-// 					planBaseInfo.value.unloadWeight = item.unloadWeight;
-// 					planBaseInfo.value.packageNum = item.packageNum
-// 					planBaseInfo.value.packageNumShow = item.packageNum === 2?"按件/Barang ":"按吨/Ton";
-// 					planBaseInfo.value.usageUnit = item.usageUnit;
-// 					planBaseInfo.value.materialName = item.materialName;
-// 					planBaseInfo.value.loadSequence = item.loadSequence;
-// 					console.info("✅装卸卡片-赋值其他物料",planBaseInfo.value)
-// 					break;
-// 				}
-// 			}
-// 		}
-// 	}else{
-// 		console.info(`⏳data&planData 未就绪，重试中（第 ${retryCount + 1} 次）`,data,planData)
-// 		if(retryCount < maxRetries){
-// 			setTimeout(()=>{
-// 				tryTwoRroperties(retryCount+1)
-// 			},delay)
-// 		}else{
-// 			console.info("❌ 重试超过最大次数，data&planData 仍未就绪")
-// 		}
-// 	}
-// }
 watch(
 	()=>[data,planData],
 	([dataVal,pdVal])=>{
@@ -375,8 +340,7 @@ watch(
 			if(dataVal.remark01 === "1" || dataVal.remark01 === null){
 				planBaseInfo.value.tonnage = pdVal.tonnage;
 				planBaseInfo.value.unloadWeight = pdVal.unloadWeight;
-				planBaseInfo.value.packageNum = pdVal.packageNum
-				planBaseInfo.value.packageNumShow = pdVal.packageNum === 2?"按件/Barang ":"按吨/Ton";
+				planBaseInfo.value.dataUnit = pdVal.remark03
 				planBaseInfo.value.usageUnit = pdVal.usageUnit;
 				planBaseInfo.value.materialName = pdVal.materialName;
 				planBaseInfo.value.loadSequence = 1;
@@ -387,8 +351,7 @@ watch(
 					if(item.loadSequence == dataVal.remark01){
 						planBaseInfo.value.tonnage = item.tonnage;
 						planBaseInfo.value.unloadWeight = item.unloadWeight;
-						planBaseInfo.value.packageNum = item.packageNum
-						planBaseInfo.value.packageNumShow = item.packageNum === 2?"按件/Barang ":"按吨/Ton";
+						planBaseInfo.value.dataUnit = item.remark02
 						planBaseInfo.value.usageUnit = item.usageUnit;
 						planBaseInfo.value.materialName = item.materialName;
 						planBaseInfo.value.loadSequence = item.loadSequence;
@@ -437,48 +400,52 @@ const handleWorkClosed = () => {
   }
   showAddFormFn(true)
 }
+const showClassesName = (name) => {
+	switch(name){
+		case "白班":
+			return "contans.class.day"
+		case "夜班":
+			return "contans.class.night"
+	}
+}
 // 定义左侧字段
-const leftFields = computed(() => {
-  const baseFields = [
-    {
-      label: 'work.averageRate',
-      key: 'avgDischargeRate',
-      color: '#626aef',
-      class: 'rate'
-    },
-    {
-      label: 'work.effectiveRate',
-      key: 'effectiveRate',
-      color: '#67C23A',
-      class: 'effective'
-    },
-    {
-      label: 'work.effectiveTime',
-      key: 'effectiveTime',
-      color: '#67C23A',
-      class: 'effective'
-    }
-  ]
-	if(data.unloadNum !== null && 
-		data.unloadNum !== undefined && 
-		data.unloadNum !== ''){
-	  baseFields.push({
-			label: 'unloadWorkLog.unloadNumLabel',
-			key: 'unloadNum',
-	    color: '#333'
-	  })
-	}
-	if(data.totalUnloadWeight !== null && 
-		data.totalUnloadWeight !== undefined && 
-		data.totalUnloadWeight !== ''){
-		baseFields.push({
-			label: 'unloadWorkLog.unloadWeightLabel',
-			key: 'totalUnloadWeight',
-			color: '#333'
-		})
-	}
-  return baseFields
-})
+// const leftFields = computed(() => {
+//   const baseFields = [
+//     {
+//       label: '日期',
+//       key: 'classTime',
+//       color: '#626aef',
+//       class: 'rate',
+// 			size: 19
+//     },
+//     {
+      
+//       key: 'classes',
+//       color: '#67C23A',
+//       class: 'effective',
+// 			size: 36
+//     },
+//     {
+//       label: '装卸量',
+//       key: 'totalUnloadWeight',
+//       color: '#67C23A',
+//       class: 'effective',
+// 			size: 36
+//     },
+//   ]
+// 	// switch(data.classes){
+// 	// 	case "白班":
+// 	// 		baseFields.push({
+// 	// 			label: '班次',
+// 	// 			key:
+// 	// 		})
+// 	// 		break;
+// 	// 	case "夜班":
+		
+// 	// 		break;
+// 	// }
+//   return baseFields
+// })
 // 定义右侧字段（动态判断 workType，暂停次数放在最上方）
 const rightFields = computed(() => {
   const baseFields = [

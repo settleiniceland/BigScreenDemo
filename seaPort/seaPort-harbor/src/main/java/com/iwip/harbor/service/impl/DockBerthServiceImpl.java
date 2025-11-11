@@ -104,6 +104,7 @@ public class DockBerthServiceImpl implements IDockBerthService {
         dockBerth.setCreateBy(SecurityUtils.getNickName());
         dockBerth.setDelFlag("0");
         dockBerth.setRemark(dockPierAndBerthVo.getRemark());
+        dockBerth.setRemark01(dockPierAndBerthVo.getRemark01());
         dockBerth.setDeptId(SecurityUtils.getDeptId());
         dockBerth.setBerthGeoJson(dockPierAndBerthVo.getBerthGeoJson());
         return dockBerthMapper.insertDockBerth(dockBerth);
@@ -143,6 +144,7 @@ public class DockBerthServiceImpl implements IDockBerthService {
         dockBerth.setBerthCode(dockPierAndBerthVo.getBerthCode());
         dockBerth.setBerthGeoJson(dockPierAndBerthVo.getBerthGeoJson());
         dockBerth.setRemark(dockPierAndBerthVo.getRemark());
+        dockBerth.setRemark01(dockPierAndBerthVo.getRemark01());
         dockBerth.setUpdateBy(SecurityUtils.getUsername());
         dockBerth.setUpdateTime(LocalDateTime.now());
         return dockBerthMapper.updateDockBerth(dockBerth);

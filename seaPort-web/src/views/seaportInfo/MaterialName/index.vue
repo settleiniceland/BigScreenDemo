@@ -11,6 +11,7 @@ import Refresh from "@iconify-icons/ep/refresh";
 import { reactive, ref, onMounted } from "vue";
 import { transformI18n } from "@/plugins/i18n";
 import { listData } from "@/api/system/dict/data";
+import {reflushPlanByMaterialName} from "@/api/plan/newApi"
 const {
   columns,
   dataList,
@@ -40,6 +41,16 @@ onMounted(async () => {
     }));
   }
 });
+const onReflushPlans=async (row)=>{
+  let mes = "计数单位为空,刷新失败 / Satuan hitung kosong, penyegaran gagal."
+  if(row.remark02!==null &&
+      row.remark02!==undefined &&
+      String(row.remark02).trim().length!==0){
+    const res = await reflushPlanByMaterialName(row);
+    mes = res.msg;
+  }
+  alert(mes)
+}
 </script>
 
 <template>
@@ -71,21 +82,22 @@ onMounted(async () => {
         </el-select>
       </el-form-item>
       <el-form-item :label="transformI18n('imip.page1.loadingType')">
-        <el-select
-          v-model="form.remark01"
-          :placeholder="transformI18n('imip.page1.loadingType')"
+        <el-input
+          v-model="form.remark02"
+          :placeholder="transformI18n('imip.page3.obj29')"
           class="!w-[200px]"
           clearable
-        >
-          <el-option
-            v-for="item in loadingTypeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+        />
+      </el-form-item>
+      <el-form-item :label="transformI18n('是否过皮带秤')">
+        <el-select
+          v-model="form.remark"
+          class="!w-[200px]"
+          clearable>
+          <el-option value="0" :label="transformI18n('不过皮带秤')" />
+          <el-option value="1" :label="transformI18n('过皮带秤')" />
         </el-select>
       </el-form-item>
-
       <el-form-item>
         <el-button
           type="primary"
@@ -145,6 +157,12 @@ onMounted(async () => {
                   :icon="useRenderIcon(EditPen)"
                   @click="onEdit(row, $index)"
                   >{{ transformI18n("imip.button.obj1") }}
+                </el-button>
+                <el-button
+                  class="reset-margin"
+                  type="success"
+                  @click="onReflushPlans(row)"
+                  >{{ transformI18n("刷新计划") }}
                 </el-button>
                 <el-popconfirm
                   :title="transformI18n('imip.page4.obj27')"

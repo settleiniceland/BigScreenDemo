@@ -10,3 +10,5 @@ management:
         include: "*"
 websocket:
   period: 20 #websocket发送消息间隙（单位:s）
+restTemplate:
+  timeOut: 7 #超时时间7s

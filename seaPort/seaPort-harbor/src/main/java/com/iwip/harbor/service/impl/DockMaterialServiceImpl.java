@@ -52,6 +52,9 @@ public class DockMaterialServiceImpl implements IDockMaterialService
     @Override
     public List<DockMaterial> selectDockMaterialList(DockMaterial dockMaterial)
     {
+        if("0".equals(dockMaterial.getRemark())){
+            return dockMaterialMapper.selectDockMaterialList1(dockMaterial);
+        }
         return dockMaterialMapper.selectDockMaterialList(dockMaterial);
     }
 

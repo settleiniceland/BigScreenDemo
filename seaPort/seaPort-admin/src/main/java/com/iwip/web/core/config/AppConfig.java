@@ -1,14 +1,20 @@
 package com.iwip.web.core.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfig {
+    @Value("${restTemplate.timeOut}")
+    private int timeOut;
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(timeOut*1000);
+        factory.setReadTimeout(timeOut*1000);
+        return new RestTemplate(factory);
     }
 }
-

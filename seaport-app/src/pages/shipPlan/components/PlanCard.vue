@@ -18,28 +18,22 @@
         </wd-tooltip>
       </view>
       <view class="status-badge">
-        <wd-tag
-          class="tag_class mr-1"
-          :type="ShipOperationType[data.remark01]?.type || 'primary'"
-          >{{
-            t(ShipOperationType[data.remark01]?.label) || data.remark01
-          }}</wd-tag
-        >
-        <wd-tag
-          class="tag_class mr-1"
-          :type="PireTypeOptionsObj[data.pierType]?.color"
-          plain
-        >
-          {{
-            findDictLabelFromObject(PireTypeOptionsObj, data.pierType) ||
-            t('common.unknown')
-          }}
-        </wd-tag>
-        <wd-tag class="tag_class" :bg-color="Colors[data.status]">
-          {{
-            t('contans.colors.' + data.status) ||
-            statusOptions.find((item) => item.value === data.status)?.label
-          }}
+				<wd-button 
+					size="small" 
+					:style="{borderRadius: '4px',marginRight: '8px',
+						backgroundColor: showTask(data.inspectionCompany).style,}"
+						@tap="showTaskDetail(data)">
+					<span style="color: black;">
+						{{t(showTask(data.inspectionCompany).value)}}
+					</span>
+				</wd-button>
+        <wd-tag class="tag_class mr-1"
+          :type="ShipOperationType[data.remark01]?.type || 'primary'">
+					{{t(ShipOperationType[data.remark01]?.label) || data.remark01}}
+				</wd-tag>
+        <wd-tag class="tag_class" 
+					:bg-color="Colors[data.status]">
+          {{t('contans.colors.' + data.status) || statusOptions.find((item) => item.value === data.status)?.label}}
         </wd-tag>
       </view>
     </view>
@@ -58,7 +52,7 @@
 						</view>
 						<view class="info-item">
 							<text class="info-label">{{ t('others.obj2') }}:</text>
-							<text class="info-value">{{ item.packageNum || '-' }}</text>
+							<text class="info-value">{{ item.dataUnit || '-' }}</text>
 						</view>
 						<view class="info-item">
 							<text class="info-label">{{ t('others.obj3') }}:</text>
@@ -101,9 +95,10 @@
         <wd-button
           size="small"
           class="footer-btn"
-          @tap="() => handleEdit(data)"
-          >{{ t('contans.operations.edit') }}</wd-button
-        >
+          @tap="() => handleEdit(data)">
+					{{ data.handledBy=="1"||data.handledBy=="2"?t('others2.obj14'):t('contans.operations.edit') }}
+				</wd-button>
+				<view>{{ JSON.stringify(data.handleBy) }}</view>
         <wd-button
           type="warning"
           v-if="data.status === '2'"
@@ -284,6 +279,21 @@ const handleWorkClosed = () => {
 const handleChange = () => {
   // 这里可以根据需要自定义逻辑，暂时为空实现
 }
+const showTask = (item) => {
+	if(item===null||item===undefined||item===""){
+		return {value:"others2.obj15",style:"#949497"}
+	}else{
+		if(item.includes("1")){
+			return {value:"others2.obj16",style:"#0CF823"}
+		}else{
+			return {value:"others2.obj17",style:"#D10127"}
+		}
+	}
+}
+const showTaskDetail = (item) => {
+	console.log("点击按钮的数据",item)
+	//TODO 之后等一泊位多称搞完之后再来搞这个
+}
 watch(
   () => data,
   (newVal) => {
@@ -292,7 +302,7 @@ watch(
 			materials.value.push({
 				tonnage: newVal.tonnage,
 				unloadWeight: newVal.unloadWeight,
-				packageNum: newVal.packageNum === 2?"按件/Barang ":"按吨/Ton",
+				dataUnit: newVal.remark03,
 				usageUnit: newVal.usageUnit,
 				materialName: newVal.materialName,
 				loadSequence: 1
@@ -303,7 +313,7 @@ watch(
 					materials.value.push({
 						tonnage: item.tonnage,
 						unloadWeight: item.unloadWeight===null?'0':String(item.unloadWeight),
-						packageNum: item.packageNum === 2?"按件/Barang ":"按吨/Ton",
+						dataUnit: item.remark02,
 						usageUnit: item.usageUnit,
 						materialName: item.materialName,
 						loadSequence: item.loadSequence
@@ -315,7 +325,6 @@ watch(
   { immediate: true, deep: true }
 )
 </script>
-
 <style lang="scss">
 .ship-card {
   border-radius: 16rpx;

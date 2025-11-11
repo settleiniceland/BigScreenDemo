@@ -1,6 +1,6 @@
 <template>
   <el-dialog 
-    :title="transformI18n('题目')" 
+    :title="transformI18n('定时任务配置')" 
     v-model="dialogVisible" 
     width="80vh" 
     top="5vh" 
@@ -24,7 +24,7 @@
       <el-form-item :label='transformI18n("数据来源URL")' prop="targetUrl">
         <el-input
           v-model="formData.targetUrl"
-          :placeholder='transformI18n("数据来源URL")'
+          :placeholder='transformI18n("老数采配置格式<http:...@点位id>,新数采配置格式<http...&点位name>(注：只有1个@或&)")'
           clearable
         />
       </el-form-item>

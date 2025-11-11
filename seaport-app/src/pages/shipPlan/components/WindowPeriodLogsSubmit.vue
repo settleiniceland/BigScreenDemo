@@ -52,7 +52,7 @@
 				disabled
 			/>
 		</wd-cell-group>
-		<wd-divider color="#4D80F0">✍️👇👇👇</wd-divider>
+		<wd-divider color="#4D80F0">✍👇👇👇空窗期</wd-divider>
 		<wd-cell-group border>
 			<wd-calendar
 				type="datetime"

@@ -74,10 +74,10 @@ const {
             class="!w-[180px]"
           />
         </el-form-item>
-        <el-form-item label="手机号码：" prop="phonenumber">
+        <el-form-item label="姓名：" prop="nickName">
           <el-input
-            v-model="form.phonenumber"
-            placeholder="请输入手机号码"
+            v-model="form.nickName"
+            placeholder="请输入姓名"
             clearable
             class="!w-[180px]"
           />

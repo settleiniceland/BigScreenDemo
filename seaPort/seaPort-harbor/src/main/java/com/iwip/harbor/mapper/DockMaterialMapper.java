@@ -27,6 +27,7 @@ public interface DockMaterialMapper
      * @return 物资信息集合
      */
     public List<DockMaterial> selectDockMaterialList(DockMaterial dockMaterial);
+    public List<DockMaterial> selectDockMaterialList1(DockMaterial dockMaterial);
 
     /**
      * 新增物资信息

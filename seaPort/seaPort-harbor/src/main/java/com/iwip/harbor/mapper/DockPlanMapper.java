@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.iwip.common.core.domain.BaseEntity;
+import com.iwip.harbor.domain.DockBerth;
+import com.iwip.harbor.domain.DockMaterial;
 import com.iwip.harbor.domain.DockPlan;
 import com.iwip.harbor.domain.excel.DockBerthUsaDetailExcel;
 import com.iwip.harbor.domain.excel.DockUnloadWeighExcel;
@@ -143,4 +145,9 @@ public interface DockPlanMapper
     List<DockPlan> newScreen_SelectPlanListForMap(List<Long> deptIds);
     /*👇👇👇第二版大屏方法👇👇👇👇*/
     List<DockPlan> newNewScreen_SelectPlanListForPup(@Param("berchCode")String berchCode,@Param("list")List<Long> deptIds);
+    List<DockPlan> newNewScreen_SelectPlanList3(@Param("deptIds") List<Long> deptIds,@Param("mostEndTime")LocalDateTime mostEndTime);
+    //根据物料名刷新计划的单位
+    Integer reflushPlanByMaterialName(DockMaterial dm);
+    //获取其他泊位计划数据
+    List<DockPlan> getOthersByCodes(@Param("berthCodes") List<String> berthCodes);
 }

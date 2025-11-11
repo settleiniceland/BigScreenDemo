@@ -141,7 +141,7 @@ const choseTap = (item)=>{
   position: absolute;
   border-radius: 6px;
   z-index: 10;
-  width: 25%;
+  width: 36%;
   height: 21vh;
   user-select: none; /* 拖动时防止选中文字 */
   background-size: 100% 100%;
@@ -175,7 +175,7 @@ const choseTap = (item)=>{
 }
 .content-title {
   color: aliceblue;
-  margin-left: 12vh;
+  margin-left: 17.3vh;
   font-weight: bold;
   font-size: 1.11vh;
 }

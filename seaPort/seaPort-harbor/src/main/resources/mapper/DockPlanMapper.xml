@@ -93,7 +93,30 @@
 
 
     <sql id="selectDockPlanVo">
-        select id,plan_docking_time,screen_status,plc_real_time,plc_sum_weight, ship_rade,archived_month,is_archived, ship_name, imo, ship_length, usage_unit, material_name, tonnage, plan_tonnage, remaining_weight, update_weight_time, hb_id, hb_name, package_num, status, unload_status, reason, last_port, next_port, ship_agency, mine_number, draft, order_no, contract_no, suplier_name, batch_number, unload_weight, weight, card_count, docking_time, operation_time, end_time, leave_time, arrival_time, plan_time, out_berth_time, move_berth_time, inspection_company, loading_port, effective_time, effective_rate, avg_discharge_rate, demurrage_fee, contract_rate, contract_fee, plan_type, handled_by, del_flag, user_id, create_by, create_time, dept_id, update_by, update_time, remark, remark01, remark02, remark03, source_type, source_id from dock_plan
+        select id,plan_docking_time,screen_status,
+               plc_real_time,plc_sum_weight,
+               ship_rade,archived_month,is_archived,
+               ship_name, imo, ship_length, usage_unit,
+               material_name, tonnage, plan_tonnage,
+               remaining_weight, update_weight_time,
+               hb_id, hb_name, package_num, status,
+               unload_status, reason, last_port,
+               next_port, ship_agency, mine_number,
+               draft, order_no, contract_no,
+               suplier_name, batch_number,
+               unload_weight, weight, card_count,
+               docking_time, operation_time,
+               end_time, leave_time, arrival_time,
+               plan_time, out_berth_time, move_berth_time,
+               inspection_company, loading_port,
+               effective_time, effective_rate,
+               avg_discharge_rate, demurrage_fee,
+               contract_rate, contract_fee, plan_type,
+               handled_by, del_flag, user_id, create_by,
+               create_time, dept_id, update_by, update_time,
+               remark, remark01, remark02, remark03,
+               source_type, source_id
+        from dock_plan
     </sql>
 
 
@@ -1034,6 +1057,12 @@
     <update id="updatePlanUnloadWeightById">
         update dock_plan SET unload_weight = #{param2} WHERE id = #{param1}
     </update>
+    <update id="reflushPlanByMaterialName">
+        UPDATE dock_plan SET remark03 = #{remark02}
+        WHERE material_name=#{materialName}
+            AND del_flag = '0'
+            AND (remark03 != #{remark02} OR remark03 IS NULL)
+    </update>
 
     <select id="selectListByDockingTime" resultType="com.iwip.harbor.domain.excel.DockBerthUsaDetailExcel">
         SELECT
@@ -1089,15 +1118,14 @@
         WHERE del_flag = 0 AND (
             (arrival_time BETWEEN #{todayStart} AND #{todayEnd}) OR
             (arrival_time BETWEEN #{tomorrowStart} AND #{tomorrowEnd}) OR
-            (out_berth_time BETWEEN #{todayStart} AND #{todayEnd}) OR
-            (out_berth_time BETWEEN #{tomorrowStart} AND #{tomorrowEnd})
+            (out_berth_time BETWEEN #{todayStart} AND #{todayEnd})
         ) AND dept_id IN
         <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
             #{deptId}
         </foreach>
     </select>
     <select id="newScreen_SelectPlanList2" resultMap="DockPlanResult" parameterType="java.util.List">
-        SELECT id,ship_name,material_name,hb_name,plan_tonnage,arrival_time,plan_docking_time FROM dock_plan
+        SELECT id,ship_name,material_name,hb_name,plan_tonnage,arrival_time,plan_docking_time,dept_id FROM dock_plan
         WHERE del_flag = 0 AND arrival_time IS NOT NULL
           AND plan_docking_time IS NOT NULL
           AND docking_time IS NULL
@@ -1105,6 +1133,7 @@
         <foreach collection="list" item="deptId" open="(" separator="," close=")">
             #{deptId}
         </foreach>
+        ORDER BY dept_id asc,hb_name asc
     </select>
     <select id="newScreen_SelectPlanList3" resultMap="DockPlanResult" parameterType="java.util.List">
         <include refid="selectDockPlanVo"/>
@@ -1112,7 +1141,14 @@
         <foreach collection="list" item="deptId" open="(" separator="," close=")">
             #{deptId}
         </foreach>
-        ORDER BY hb_name
+        ORDER BY dept_id asc, hb_name asc
+    </select>
+    <select id="newNewScreen_SelectPlanList3" resultMap="DockPlanResult">
+        <include refid="selectDockPlanVo"/>
+        WHERE del_flag = 0 AND status IN ('5','6','7') AND end_time >= #{mostEndTime} AND dept_id IN
+        <foreach collection="deptIds" item="deptId" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
     </select>
     <select id="newScreen_SelectPlanListForMap" resultMap="DockPlanResult" parameterType="java.util.List">
         SELECT id,hb_name,ship_name,material_name,arrival_time FROM dock_plan
@@ -1122,11 +1158,38 @@
         </foreach>
     </select>
     <select id="newNewScreen_SelectPlanListForPup" resultMap="DockPlanResult">
-        SELECT id,status,hb_name,ship_name,usage_unit,material_name,arrival_time,end_time,unload_weight,tonnage FROM dock_plan
+        SELECT id,status,hb_name,ship_name,usage_unit,material_name,arrival_time,end_time,unload_weight,tonnage,remark01 FROM dock_plan
         WHERE del_flag = 0 AND status IN ("0","1","2","3","4","5","6") AND arrival_time IS NOT NULL AND is_archived = '0' AND hb_name = #{berchCode} AND dept_id IN
         <foreach collection="list" item="deptId" open="(" separator="," close=")">
             #{deptId}
         </foreach>
         ORDER BY status
+    </select>
+    <select id="getOthersByCodes" resultMap="DockPlanResult">
+        SELECT * FROM (
+            select ship_name,usage_unit,material_name,hb_name,
+                   remark01,id,remark03,status,tonnage,dept_id,
+                   ROW_NUMBER() OVER (
+                        PARTITION BY hb_name
+                        ORDER BY(CASE status
+                            WHEN '5' THEN 1
+                            WHEN '6' THEN 2
+                            WHEN '3' THEN 3
+                            WHEN '2' THEN 4
+                            WHEN '1' THEN 5
+                            WHEN '0' THEN 6
+                            ELSE 7
+                            END
+                        ) ASC,plan_docking_time IS NULL ASC
+                        ,plan_docking_time ASC,arrival_time ASC
+                   ) as row_num
+            from dock_plan
+            where status IN ("0","1","2","3","5","6")
+                  and del_flag = 0 and is_archived = '0' and hb_name IN
+            <foreach collection="berthCodes" item="code" open="(" separator="," close=")">
+                #{code}
+            </foreach>
+        ) AS x
+        WHERE x.row_num = 1
     </select>
 </mapper>

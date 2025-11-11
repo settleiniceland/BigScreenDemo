@@ -433,6 +433,13 @@ const childColumns: any[] = [
     headerAlign: "center"
   },
   {
+    label: "装卸类型",
+    prop: "remark01",
+    width: 500,
+    align: "center",
+    headerAlign: "center"
+  },
+  {
     label: "使用单位",
     prop: "usageUnit",
     width: 500,
@@ -440,14 +447,14 @@ const childColumns: any[] = [
     headerAlign: "center"
   },
   {
-    label: "实际(吨/件)",
+    label: "实际",
     prop: "tonnage",
     width: 500,
     align: "center",
     headerAlign: "center"
   },
   {
-    label: "已作业量(吨/件)",
+    label: "已作业量",
     prop: "unloadWeight",
     width: 500,
     align: "center",
@@ -455,16 +462,15 @@ const childColumns: any[] = [
   },
   {
     label: "单位",
-    prop: "packageNum",
+    prop: "remark02",
     width: 500,
     cellRenderer: ({ row }) => {
-      const p = row?.packageNum;
-      if (p==1) {
-        return "按吨";
-      }else if(p==2){
-        return "按件";
+      if(row.remark02!==null&&
+          row.remark02!==undefined&&
+          row.remark02!==''){
+        return row.remark02;
       }else{
-        return "不确定"
+        return "吨/T";
       }
     },
     align: "center",

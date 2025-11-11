@@ -20,6 +20,8 @@ public class NewScreenServiceImpl implements NewScreenService {
     @Autowired
     private SysDeptMapper deptMapper;
     @Autowired
+    private DockMaterialMapper dockMaterialMapper;
+    @Autowired
     private DockBerthMapper dockBerthMapper;
     @Autowired
     private DockPlanMapper dockPlanMapper;
@@ -117,16 +119,22 @@ public class NewScreenServiceImpl implements NewScreenService {
                 List<DockPlanAssistant> dpss = new ArrayList<>();
                 String completeName = plan.getMaterialName();
                 String completeAchieveWork = (plan.getUnloadWeight()!=null?plan.getUnloadWeight():0)+"/"+plan.getTonnage();
+                String completeClientName = plan.getUsageUnit();
+                String loadType = (plan.getRemark01() != null && !plan.getRemark01().isEmpty()) ? plan.getRemark01().substring(0, 2) : "";
                 if(littleTool.containsKey(plan.getId())){
                     for(DockPlanAssistant dps : littleTool.get(plan.getId())){
                         dpss.add(dps);
                         completeName += " | "+dps.getMaterialName();
                         completeAchieveWork += " | "+(dps.getUnloadWeight()!=null?dps.getUnloadWeight():0)+"/"+dps.getTonnage();
+                        completeClientName += " | "+dps.getUsageUnit();
+                        loadType += " | "+((dps.getRemark01() != null && !dps.getRemark01().isEmpty()) ? dps.getRemark01().substring(0, 2) : "");
                     }
                 }
                 Map<String,Object> map = new HashMap<>();
                 map.put("completeName",completeName);
                 map.put("completeAchieveWork",completeAchieveWork);
+                map.put("completeClientName",completeClientName);
+                map.put("loadType",loadType);
                 map.put("dpss",dpss);
                 plan.setParams(map);
             });
@@ -137,6 +145,19 @@ public class NewScreenServiceImpl implements NewScreenService {
     @Override
     public List<DockPlan> getPlan2(List<Long> deptIds) {
         List<DockPlan> dockPlans2 = dockPlanMapper.newScreen_SelectPlanList2(deptIds);
+        List<DockBerth> dockBerths = dockBerthMapper.newScreen_SelectListByDeptIds(deptIds);
+        Map<String,String> map = new HashMap<>();
+        dockBerths.forEach(dockBerth -> {
+            map.put(dockBerth.getBerthCode(),dockBerth.getRemark01());
+        });
+        dockPlans2.forEach(plan->{
+            if(map.containsKey(plan.getHbName())&&map.get(plan.getHbName())!=null){
+                plan.setSourceId(Long.parseLong(map.get(plan.getHbName())));
+            }else {
+                plan.setSourceId(0L);
+            }
+        });
+        dockPlans2.sort(Comparator.comparing(DockPlan::getDeptId).thenComparing(DockPlan::getSourceId));
         return addCompleMaterialName(dockPlans2);
     }
     private Map<String,LocalDateTime> getDateMapTool(){
@@ -200,8 +221,94 @@ public class NewScreenServiceImpl implements NewScreenService {
         ├─ 已作业量更改日志
         ├─ 作业效率
         └─ 滞期费 */
+        List<DockMaterial> dockMaterials = dockMaterialMapper.selectDockMaterialList(new DockMaterial());
+        Map<String,String> materialMap = new HashMap<>();
+        dockMaterials.forEach(dockMaterial -> {
+            materialMap.put(dockMaterial.getMaterialName(),dockMaterial.getRemark02());
+        });
+        List<DockBerth> dockBerths = dockBerthMapper.newScreen_SelectListByDeptIds(deptIds);
+        Map<String,String> map = new HashMap<>();
+        Map<String,Long> deptIdMap = new HashMap<>();
+        dockBerths.forEach(dockBerth -> {
+            map.put(dockBerth.getBerthCode(),dockBerth.getRemark01());
+            deptIdMap.put(dockBerth.getBerthCode(),dockBerth.getDeptId());
+        });
+        Map<String,Integer> excludeMap = new HashMap<>();
         List<DockPlan> dockPlans3 = dockPlanMapper.newScreen_SelectPlanList3(deptIds);//计划3主对象
-        List<Long> dockPlans3Ids = dockPlans3.stream().map(DockPlan::getId).toList();
+        dockPlans3.forEach(dockPlan -> {
+           if(map.containsKey(dockPlan.getHbName())&&map.get(dockPlan.getHbName())!=null){
+               dockPlan.setSourceId(Long.parseLong(map.get(dockPlan.getHbName())));
+               excludeMap.put(dockPlan.getHbName(),1);
+           }else {
+               dockPlan.setSourceId(0L);
+           }
+        });
+        List<String> otherBerthCode = new ArrayList<>();
+        dockBerths.forEach(dockBerth -> {
+            if(!excludeMap.containsKey(dockBerth.getBerthCode())){
+                otherBerthCode.add(dockBerth.getBerthCode());
+            }
+        });
+        if(otherBerthCode.size()>0){
+            List<DockPlan> others = dockPlanMapper.getOthersByCodes(otherBerthCode);
+            //1、把缺的补上来；2、添加一个特殊字段做区分
+            Set<String> alreadyHaveOtherBerthCodeSet = new HashSet<>();
+            others.forEach(dockPlan -> {
+                alreadyHaveOtherBerthCodeSet.add(dockPlan.getHbName());
+                dockPlan.setCardCount("1");//选个垃圾属性作为标识
+                //再选个垃圾属性作为展示详情
+                String detail="";
+                switch (dockPlan.getStatus()){
+                    case "0":
+                        detail = "待靠港";
+                        break;
+                    case "1":
+                        detail = "待靠港";
+                        break;
+                    case "2":
+                        detail = "待靠泊";
+                        break;
+                    case "3":
+                        detail = "靠泊待开始作业";
+                        break;
+                    case "5":
+                        detail = "作业完成待离泊";
+                        break;
+                    case "6":
+                        detail = "作业完成待离泊";
+                        break;
+                }
+                dockPlan.setBatchNumber(detail);//再选个垃圾属性盛放详情
+                dockPlan.setSourceId(Long.parseLong(map.get(dockPlan.getHbName())));
+            });
+            otherBerthCode.forEach(code -> {
+                if(!alreadyHaveOtherBerthCodeSet.contains(code)){
+                    DockPlan dockPlan=new DockPlan();
+                    dockPlan.setHbName(code);
+                    dockPlan.setCardCount("2");
+                    dockPlan.setBatchNumber("泊位无新船");
+                    dockPlan.setSourceId(Long.parseLong(map.get(code)));
+                    dockPlan.setDeptId(deptIdMap.get(code));
+                    others.add(dockPlan);
+                }
+            });
+            dockPlans3.addAll(others);
+        }
+        dockPlans3.sort(Comparator.comparing(DockPlan::getDeptId)
+            .thenComparing(DockPlan::getSourceId));
+        LocalDateTime before24h = LocalDateTime.now().minusHours(24);
+        List<DockPlan> dockPlans = dockPlanMapper.newNewScreen_SelectPlanList3(deptIds, before24h);
+        dockPlans.forEach(dockPlan -> {
+            if(map.containsKey(dockPlan.getHbName())&&map.get(dockPlan.getHbName())!=null){
+                dockPlan.setSourceId(Long.parseLong(map.get(dockPlan.getHbName())));
+            }else {
+                dockPlan.setSourceId(0L);
+            }
+        });
+        dockPlans.sort(Comparator.comparing(DockPlan::getDeptId)
+                .thenComparing(DockPlan::getSourceId));
+        dockPlans3.addAll(dockPlans);
+        List<Long> dockPlans3Ids = dockPlans3.stream().map(DockPlan::getId).filter(Objects::nonNull).toList();
         if(dockPlans3Ids.size()<1){
             return dockPlans3;
         }
@@ -270,6 +377,11 @@ public class NewScreenServiceImpl implements NewScreenService {
         });
         dockPlans3.forEach(item->{
             Map<String,Object> planParams=new HashMap<>();
+            if("1".equals(item.getCardCount())||"2".equals(item.getCardCount())){
+                planParams.put("assistantList",assSplitTool.getOrDefault(item.getId(),Collections.emptyList()));
+                item.setParams(planParams);
+                return;
+            }
 //      ├─ 计划附表
 //      │  ├─ updateLogs:已作业量更改日志
 //      │  ├─ 作业效率
@@ -287,15 +399,9 @@ public class NewScreenServiceImpl implements NewScreenService {
                                 .getOrDefault(assistant.getLoadSequence(),Collections.emptyList())){
                     //算卸货效率
                     if(unloadWork.getStartTime()!=null && unloadWork.getEndTime()!=null){
-//                        if(assistant.getPackageNum()==2){//件
-//                            efficiencyWorkLoad = efficiencyWorkLoad.add(BigDecimal.valueOf(unloadWork.getUnloadNum()));
-//                        }else if(assistant.getPackageNum()==1){//吨
-//                            efficiencyWorkLoad = efficiencyWorkLoad.add(unloadWork.getTotalUnloadWeight());
-//                        }else{
                         efficiencyWorkLoad = efficiencyWorkLoad
-                                .add(BigDecimal.valueOf(unloadWork.getUnloadNum()))
-                                .add(unloadWork.getTotalUnloadWeight());
-//                        }
+                                .add(BigDecimal.valueOf(unloadWork.getUnloadNum()==null?0:unloadWork.getUnloadNum()))
+                                .add(unloadWork.getTotalUnloadWeight()==null?BigDecimal.ZERO:unloadWork.getTotalUnloadWeight());
                         BigDecimal workTime=BigDecimal.valueOf(Duration.between(unloadWork.getStartTime(),unloadWork.getEndTime()).toMinutes());//分钟
                         for(DockUnloadDetail workTimeDetail:unloadDetailSplitTool.getOrDefault(unloadWork.getDuId(),Collections.emptyList())){
                             if("2".equals(workTimeDetail.getRemark()) && workTimeDetail.getStartTime()!=null && workTimeDetail.getEndTime()!=null){
@@ -319,13 +425,7 @@ public class NewScreenServiceImpl implements NewScreenService {
                 }else {
                     efficiency = efficiencyWorkLoad.divide(efficiencyTime,2,BigDecimal.ROUND_HALF_UP).toString();
                 }
-                if(assistant.getPackageNum()==2){
-                    efficiency+=" PCS/H";
-                }else if(assistant.getPackageNum()==1){
-                    efficiency+=" T/H";
-                }else{
-                    efficiency+=" PCS或T/H";
-                }
+                efficiency+="<br>"+materialMap.get(assistant.getMaterialName())+"<br>每小时";
                 params.put("efficiency",efficiency);//作业效率
                 params.put("unloadWorkList",unloadSplitToolForEfficiency.getOrDefault(assistant.getPlanId(),Collections.emptyMap()).getOrDefault(assistant.getLoadSequence(),Collections.emptyList()));
                 assistant.setParams(params);
@@ -347,11 +447,6 @@ public class NewScreenServiceImpl implements NewScreenService {
                 unloadWork.setParams(params);
                 //效率相关
                 if(unloadWork.getStartTime()!=null && unloadWork.getEndTime()!=null){
-//                    if(item.getPackageNum()!=null && item.getPackageNum()==2){//件
-//                        mainGoodEfficiencyWorkLoad = mainGoodEfficiencyWorkLoad.add(BigDecimal.valueOf(unloadWork.getUnloadNum()==null?0:unloadWork.getUnloadNum()));
-//                    }else if(item.getPackageNum()!=null && item.getPackageNum()==1){//吨
-//                        mainGoodEfficiencyWorkLoad = mainGoodEfficiencyWorkLoad.add(unloadWork.getTotalUnloadWeight()==null?BigDecimal.ZERO:unloadWork.getTotalUnloadWeight());
-//                    }else {
                     mainGoodEfficiencyWorkLoad = mainGoodEfficiencyWorkLoad
                             .add(unloadWork.getTotalUnloadWeight()==null?BigDecimal.ZERO:unloadWork.getTotalUnloadWeight())
                             .add(BigDecimal.valueOf(unloadWork.getUnloadNum()==null?0:unloadWork.getUnloadNum()));
@@ -374,13 +469,7 @@ public class NewScreenServiceImpl implements NewScreenService {
             }else {
                 efficiency = mainGoodEfficiencyWorkLoad.divide(mainGoodEfficiencyTime,2,BigDecimal.ROUND_HALF_UP).toString();
             }
-            if(item.getPackageNum()!=null && item.getPackageNum()==2){//件
-                efficiency+=" PCS/H";
-            }else if(item.getPackageNum()!=null && item.getPackageNum()==1){
-                efficiency+=" T/H";
-            }else{
-                efficiency+=" PCS或T/H";
-            }
+            efficiency+="<br>"+materialMap.get(item.getMaterialName())+"<br>每小时";
             planParams.put("efficiency",efficiency);//作业效率
 //        ├─ 已作业量更改日志
             planParams.put("updateLogs",logSplitTool.getOrDefault(item.getId(),Collections.emptyMap()).getOrDefault(1,Collections.emptyList()));

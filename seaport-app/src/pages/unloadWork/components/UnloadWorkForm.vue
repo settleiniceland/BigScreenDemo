@@ -67,7 +67,8 @@ watch(
 				loadSequence: 1,
 				usageUnit: val.usageUnit,
 				materialName: val.materialName,
-				packageNum: val.packageNum===2?"按件/Barang":"按吨/Ton"
+				dataUnit: val.remark03,
+				loadType: val.remark01
 			})
 			if(val.params.subMaterial!==null && val.params.subMaterial!==undefined){
 				const sortedList = [...val.params.subMaterial].sort((a, b) => a.loadSequence - b.loadSequence)
@@ -76,7 +77,8 @@ watch(
 						loadSequence: item.loadSequence,
 						usageUnit: item.usageUnit,
 						materialName: item.materialName,
-						packageNum: item.packageNum===2?"按件/Barang ":"按吨/Ton"
+						dataUnit: item.remark02,
+						loadType: val.remark01
 					})
 				}
 			}
@@ -172,14 +174,14 @@ const onSwiperChange = (e) => {
 						<wd-cell-group>
 							<wd-cell :title="t('others.obj1')" :value="item.materialName" />
 							<wd-cell :title="t('others.obj5')" :value="item.usageUnit" />
-							<wd-cell :title="t('others.obj2')" :value="item.packageNum" />
-							<wd-cell :title="t('others.obj6')" :value="item.loadSequence" />
+							<wd-cell :title="t('others.obj2')" :value="item.dataUnit" />
+							<wd-cell :title="t('others.obj6')" :value="item.loadSequence+'->'+item.loadType" />
 						</wd-cell-group>
 					</view>
 				</swiper-item>
 			</swiper>
 		</view>
-		<wd-divider color="#4D80F0">✍️👇👇👇</wd-divider>
+		<wd-divider color="#4D80F0">✍️👇👇👇装卸单</wd-divider>
     <wd-form ref="form" :model="data">
       <wd-cell-group border>
 				<wd-input

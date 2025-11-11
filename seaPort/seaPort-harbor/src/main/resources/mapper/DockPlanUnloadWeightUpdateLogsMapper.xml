@@ -54,10 +54,10 @@
         WHERE plan_id = #{planId} ORDER BY refresh_time DESC LIMIT 1
     </select>
     <select id="selectMainOldUnloadWeight" resultMap="planDataTool">
-        SELECT unload_weight,usage_unit,material_name,package_num FROM dock_plan WHERE id=#{id}
+        SELECT unload_weight,usage_unit,material_name,remark03 FROM dock_plan WHERE id=#{id}
     </select>
     <select id="selectOtherOldUnloadWeight" resultMap="planAssistantDataTool">
-        SELECT unload_weight,usage_unit,material_name,package_num FROM dock_plan_assistant WHERE plan_id=#{planId} AND load_sequence=#{loadSequence}
+        SELECT unload_weight,usage_unit,material_name,remark02 FROM dock_plan_assistant WHERE plan_id=#{planId} AND load_sequence=#{loadSequence}
     </select>
     <select id="getByPlanIds" resultMap="UpdateLogResult" parameterType="java.util.List">
         <include refid="selectUpdateLog"/>

@@ -22,3 +22,6 @@ export const getOldPlan3 = (deptId)=>{
 export const getPopData = (deptId,berchCode)=>{
   return http.request<Result>("get","/newScreen/getPopWindowData/"+deptId+"/"+berchCode);
 }
+export const getAllMaterial = ()=>{
+  return http.request<Result>("get","/harbor/material/getAll")
+}

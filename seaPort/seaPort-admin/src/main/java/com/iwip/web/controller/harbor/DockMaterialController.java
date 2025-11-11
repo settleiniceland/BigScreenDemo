@@ -1,6 +1,8 @@
 package com.iwip.web.controller.harbor;
 
 import java.util.List;
+
+import com.iwip.harbor.mapper.DockMaterialMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,8 @@ public class DockMaterialController extends BaseController
 {
     @Autowired
     private IDockMaterialService dockMaterialService;
-
+    @Autowired
+    private DockMaterialMapper dockMaterialMapper;
     /**
      * 查询物资信息列表
      */
@@ -45,8 +48,11 @@ public class DockMaterialController extends BaseController
         List<DockMaterial> list = dockMaterialService.selectDockMaterialList(dockMaterial);
         return getDataTable(list);
     }
-
-
+    @GetMapping("/getAll")
+    public TableDataInfo getAll(){
+        List<DockMaterial> list = dockMaterialMapper.selectDockMaterialList(new DockMaterial());
+        return getDataTable(list);
+    }
     @GetMapping("/enableList")
     public TableDataInfo enableList(DockMaterial dockMaterial)
     {

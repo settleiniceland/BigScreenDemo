@@ -289,8 +289,8 @@ imip:
     obj10: IMO
     obj11: Panjang (m)
     obj12: Unit Pakai
-    obj13: Jumlah Kerja(ton/unit)
-    obj14: Real(ton/unit)
+    obj13: Jumlah Kerja
+    obj14: Real
     obj15: Kartu
     obj16: Total Ton
     obj17: Wkt Lepas
@@ -320,7 +320,7 @@ imip:
     obj41: Biaya Cepat
     obj42: Kapal Domestik/Impor
     obj43: Jumlah Aktual
-    loadingType: Jenis Muat
+    loadingType: Satuan Hitung
     obj44: Biaya($)
   page2:
     obj1: Masukkan jenis kapal

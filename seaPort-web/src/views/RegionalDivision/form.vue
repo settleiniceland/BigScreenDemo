@@ -75,6 +75,18 @@
         :rows="1"
       />
     </el-form-item>
+    <el-form-item
+      :label='transformI18n("排序")'
+      prop="remark01"
+    >
+    <el-input
+        v-model="formData.remark01"
+        type="number"
+        :placeholder='transformI18n("填数字")'
+        class="!w-[400px]"
+        :rows="1"
+      />
+    </el-form-item>
     <MapDrawer
       v-if="isMapReady"
       :geoJson="props.formInline.mapFeatures"
@@ -184,6 +196,7 @@ const submitForm = (callback, actionType) => {
           sanitizedData.berthStatus = formData.berthStatus;
           sanitizedData.berthGeoJson = JSON.stringify(formData.geoJson2);
           sanitizedData.berthCode = formData.berthCode;
+          sanitizedData.remark01 = formData.remark01;
         }
         console.log(sanitizedData);
 

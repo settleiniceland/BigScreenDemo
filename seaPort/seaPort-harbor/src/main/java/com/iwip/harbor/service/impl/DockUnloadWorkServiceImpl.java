@@ -182,11 +182,11 @@ public class DockUnloadWorkServiceImpl implements IDockUnloadWorkService
 
         // 查询最新一条，如果状态不是已结束不可新增
         DockUnloadWork unloadDescWork = dockUnloadWorkMapper.selectDockUnloadWorkDesc(dockUnloadWork.getPlanId());
-        if (unloadDescWork != null){
-            if (!StringUtils.equals(unloadDescWork.getWorkType(),"2")){
-                throw new ServiceException("上一条卸货单未完成 不可新增！");
-            }
-        }
+//        if (unloadDescWork != null){
+//            if (!StringUtils.equals(unloadDescWork.getWorkType(),"2")){
+//                throw new ServiceException("上一条卸货单未完成 不可新增！");
+//            }
+//        }
 
         if (dockUnloadWork.getPlanId() == null) {
             throw new ServiceException("新增失败，未关联计划单");
@@ -206,27 +206,27 @@ public class DockUnloadWorkServiceImpl implements IDockUnloadWorkService
         }
 
         List<DockUnloadWork> unloadWorkList = dockUnloadWorkMapper.selectUnloadWorkListByPlanId(dockUnloadWork.getPlanId());
-        if (!unloadWorkList.isEmpty()){
-            for (DockUnloadWork unloadWork : unloadWorkList) {
-                if (unloadWork.getEndTime() != null){
-                    boolean validate = isWithinRange(dockUnloadWork.getStartTime(), unloadWork.getStartTime(), unloadWork.getEndTime());
-                    if (validate){
-                        throw new ServiceException("班次开始时间不能在之前的班次的作业范围之内！");
-                    }
-                }else {
-                    boolean validate = DateUtils.validateTime(dockUnloadWork.getStartTime(),unloadWork.getStartTime());
-                    if (!validate){
-                        throw new ServiceException("班次开始时间不能在之前的班次的作业开始时间之前！");
-                    }
-                }
-            }
-        }
+//        if (!unloadWorkList.isEmpty()){
+//            for (DockUnloadWork unloadWork : unloadWorkList) {
+//                if (unloadWork.getEndTime() != null){
+//                    boolean validate = isWithinRange(dockUnloadWork.getStartTime(), unloadWork.getStartTime(), unloadWork.getEndTime());
+//                    if (validate){
+//                        throw new ServiceException("班次开始时间不能在之前的班次的作业范围之内！");
+//                    }
+//                }else {
+//                    boolean validate = DateUtils.validateTime(dockUnloadWork.getStartTime(),unloadWork.getStartTime());
+//                    if (!validate){
+//                        throw new ServiceException("班次开始时间不能在之前的班次的作业开始时间之前！");
+//                    }
+//                }
+//            }
+//        }
 
         // 根据时间和班次查询是否已存在
-        DockUnloadWork unloadWork = dockUnloadWorkMapper.selectUnloadWorkByTimeAndClass(dockUnloadWork.getPlanId(),dockUnloadWork.getClassTime(),dockUnloadWork.getClasses());
-        if (unloadWork != null){
-            throw new ServiceException(dockUnloadWork.getClassTime()+" - "+unloadWork.getClasses()+" 已存在，新增失败");
-        }
+//        DockUnloadWork unloadWork = dockUnloadWorkMapper.selectUnloadWorkByTimeAndClass(dockUnloadWork.getPlanId(),dockUnloadWork.getClassTime(),dockUnloadWork.getClasses());
+//        if (unloadWork != null){
+//            throw new ServiceException(dockUnloadWork.getClassTime()+" - "+unloadWork.getClasses()+" 已存在，新增失败");
+//        }
         dockUnloadWork.setDelFlag("0");
         dockUnloadWork.setWorkType("0");
         // 新建卸货单时判断上一次的卸货单是否在暂停状态下结束的，如果是新建的卸货单状态也要为 暂停

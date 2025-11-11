@@ -17,6 +17,75 @@
         </view>
       </view>
     </wd-card>
+		<wd-card :title="t('others.obj1')" class="detail-group">
+			<view class="group-content">
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj6')}}</text>
+					<text class="info-value">1</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj30')}}</text>
+					<text class="info-value">{{state.planInfo.remark01}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj1')}}</text>
+					<text class="info-value">{{state.planInfo.materialName}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj5')}}</text>
+					<text class="info-value">{{state.planInfo.usageUnit}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj4')}}</text>
+					<text class="info-value">{{state.planInfo.unloadWeight}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj31')}}</text>
+					<text class="info-value">{{state.planInfo.tonnage}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj2')}}</text>
+					<text class="info-value">{{state.planInfo.remark03}}</text>
+				</view>
+			</view>
+		</wd-card>
+		<view v-if="state.planInfo.params!==undefined">
+		<wd-card
+			:title="t('others.obj1')" class="detail-group"
+			v-for="(item,index) in state.planInfo.params.subMaterial"
+			:key="index">
+			<view class="group-content">
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj6')}}</text>
+					<text class="info-value">{{item.loadSequence}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj30')}}</text>
+					<text class="info-value">{{item.remark01}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj1')}}</text>
+					<text class="info-value">{{item.materialName}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj5')}}</text>
+					<text class="info-value">{{item.usageUnit}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj4')}}</text>
+					<text class="info-value">{{item.unloadWeight}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj31')}}</text>
+					<text class="info-value">{{item.tonnage}}</text>
+				</view>
+				<view class="info-row">
+					<text class="info-label">{{t('others.obj2')}}</text>
+					<text class="info-value">{{item.remark02}}</text>
+				</view>
+			</view>
+		</wd-card>
+		</view>
   </div>
 </template>
 
@@ -46,19 +115,9 @@ const group = [
   {
     title: t('port.planDetail.baseInfo'),
     columns: [
-      { label: t('port.planDetail.tradeType'), prop: 'shipRade', width: 120 },
       { label: t('port.planManagement.shipName'), prop: 'shipName' },
-      { label: t('port.planManagement.mineNumber'), prop: 'mineNumber' },
-      { label: t('port.planDetail.imo'), prop: 'imo' },
-      { label: t('port.planManagement.materialName'), prop: 'materialName' },
-      { label: t('port.planDetail.usageUnit'), prop: 'usageUnit' },
       { label: t('port.berth.pier'), prop: 'hbName', width: 120 },
       { label: t('port.planDetail.shipLength'), prop: 'shipLength' },
-      { label: t('port.planDetail.planTonnage'), prop: 'planTonnage' },
-      { label: t('port.workLog.actualTonnage'), prop: 'tonnage' },
-      { label: t('port.planDetail.packageNum'), prop: 'packageNum' },
-      { label: t('port.planManagement.completedWork'), prop: 'unloadWeight' },
-      { label: t('task.remark'), prop: 'remark' }
     ]
   },
   {
@@ -73,35 +132,6 @@ const group = [
       { label: t('port.time.leaveTime'), prop: 'leaveTime' }
     ]
   },
-  {
-    title: t('port.planDetail.shippingInfo'),
-    columns: [
-      { label: t('port.planDetail.shipAgency'), prop: 'shipAgency' },
-      { label: t('port.planDetail.loadingPort'), prop: 'loadingPort' },
-      { label: t('port.planDetail.lastPort'), prop: 'lastPort' },
-      { label: t('port.planDetail.nextPort'), prop: 'nextPort' },
-      { label: t('port.planDetail.draft'), prop: 'draft' },
-      { label: t('port.planDetail.weight'), prop: 'weight' },
-      { label: t('port.planDetail.cardCount'), prop: 'cardCount' }
-    ]
-  },
-  {
-    title: t('port.planDetail.contractInfo'),
-    columns: [
-      { label: t('port.planDetail.contractRate'), prop: 'contractRate' },
-      { label: t('port.planDetail.contractFee'), prop: 'contractFee' },
-      { label: t('contans.planType.demurrage'), prop: 'demurrageFee' },
-      { label: t('port.planDetail.orderNo'), prop: 'orderNo' },
-      { label: t('port.planDetail.contractNo'), prop: 'contractNo' },
-      { label: t('port.planDetail.handledBy'), prop: 'handledBy' },
-      { label: t('port.planDetail.suplierName'), prop: 'suplierName' },
-      { label: t('port.planDetail.batchNumber'), prop: 'batchNumber' },
-      {
-        label: t('port.planDetail.inspectionCompany'),
-        prop: 'inspectionCompany'
-      }
-    ]
-  }
 ]
 
 // 格式化显示值
@@ -115,7 +145,7 @@ const getPlanDetail = async () => {
   try {
     const res = await getHarborPlan(state.planId)
     if (res.code === 200) {
-      state.planInfo = res.data // 假设接口返回 data 字段
+      state.planInfo = res.data;
     }
   } catch (error) {
     console.error('获取计划单详情失败: ', error)
@@ -127,26 +157,23 @@ onLoad((options) => {
   state.planId = options?.planId || ''
 })
 
-onShow(() => {
+onShow(async () => {
   if (state.planId) {
-    getPlanDetail()
+    await getPlanDetail()
   }
 })
 </script>
 
 <style lang="scss">
 .ship-detail {
-  // padding: 20rpx;
   background: #f7f9fc;
   min-height: 100vh;
-
   .detail-group {
     border-radius: 16rpx;
     background: #fff;
     margin-bottom: 20rpx;
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
     overflow: hidden;
-
     .wd-card__title {
       padding: 16rpx 20rpx;
       font-size: 32rpx;
@@ -155,20 +182,16 @@ onShow(() => {
       background: #f8fafc;
       border-bottom: 1rpx solid #e5e7eb;
     }
-
     .group-content {
       padding: 16rpx 20rpx;
-
       .info-row {
         display: flex;
         align-items: flex-start;
         padding: 14rpx 0;
         border-bottom: 1rpx dashed #f1f5f9;
-
         &:last-child {
           border-bottom: none;
         }
-
         .info-label {
           font-size: 26rpx;
           color: #9ca3af;
@@ -176,7 +199,6 @@ onShow(() => {
           width: 180rpx;
           line-height: 36rpx;
         }
-
         .info-value {
           font-size: 30rpx;
           color: #1f2937;

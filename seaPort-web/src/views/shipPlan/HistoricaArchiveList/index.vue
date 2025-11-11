@@ -7,7 +7,7 @@
       :columns="columns"
       @refresh="getPlanData"
     >
-      <template #title>
+      <!-- <template #title>
         <el-radio-group
           v-model="searchParams.pierType"
           @change="handlePierTypeChange"
@@ -16,7 +16,7 @@
           <el-radio-button value="1">{{transformI18n("imip.button.obj9")}}</el-radio-button>
           <el-radio-button value="2">{{transformI18n("imip.button.obj10")}}</el-radio-button>
         </el-radio-group>
-      </template>
+      </template> -->
       <template #buttons>
         <el-tooltip
           placement="top-start"
@@ -309,14 +309,14 @@ const childColumns: any[] = [
     headerAlign: "center"
   },
   {
-    label: "实际(吨/件)",
+    label: "实际",
     prop: "tonnage",
     width: 500,
     align: "center",
     headerAlign: "center"
   },
   {
-    label: "已作业量(吨/件)",
+    label: "已作业量",
     prop: "unloadWeight",
     width: 500,
     align: "center",
@@ -324,36 +324,20 @@ const childColumns: any[] = [
   },
   {
     label: "单位",
-    prop: "packageNum",
+    prop: "remark03",
     width: 500,
     cellRenderer: ({ row }) => {
-      const p = row?.packageNum;
-      if (p==1) {
-        return "按吨";
-      }else if(p==2){
-        return "按件";
+      if(row.remark03!==null&&
+          row.remark03!==undefined&&
+          row.remark03!==''){
+        return row.remark03;
       }else{
-        return "不确定"
+        return "吨/T";
       }
     },
     align: "center",
     headerAlign: "center"
   },
-  // {
-  //   label: "是否装卸完毕",
-  //   prop: "isFinish",
-  //   width: 500,
-  //   cellRenderer: ({ row }) => {
-  //     const i = row?.isFinish;
-  //     if (i==1) {
-  //       return "已装卸完";
-  //     }else{
-  //       return "未装卸完"
-  //     }
-  //   },
-  //   align: "center",
-  //   headerAlign: "center"
-  // }
 ]
 </script>
 

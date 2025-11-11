@@ -42,23 +42,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item :label="transformI18n('imip.others.other5')" prop="remark01">
-                <el-select v-model="formData.remark01" style="width: 100%">
-                  <el-option
-                    v-for="item in loadTypeDict"
-                    :key="item" :label="item"
-                    :value="item"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="8">
               <el-form-item :label="transformI18n('imip.page1.obj29')" prop="contractFee">
                 <el-input-number v-model="formData.contractFee" style="width: 100%"/>
               </el-form-item>
             </el-col>
-            <el-col :span="16">
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="24">
               <el-form-item :label="transformI18n('imip.page1.obj37')" prop="remark">
                 <el-input type="textarea" :row="7" v-model="formData.remark" />
               </el-form-item>
@@ -136,17 +126,26 @@
             </el-col>
           </el-row>
         </el-card>
-        <div :class="{ 'readonly-wrapper': !formData.params.allowSubMaterial }">
         <el-card class="mb-4" :header="transformI18n('imip.others.other10')">
-          <el-row :gutter="20">
+          <el-row :gutter="0">
             <el-col :span="3" style="text-align: left">
               <el-form-item :label="transformI18n('imip.others.other11')">
                 <el-input :value="1" disabled input-style="text-align: center;"/>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
+              <el-form-item :label="transformI18n('imip.others.other5')" prop="remark01">
+                <el-select v-model="formData.remark01" style="width: 100%">
+                  <el-option
+                    v-for="item in loadTypeDict"
+                    :key="item" :label="item"
+                    :value="item"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
               <el-form-item :label="transformI18n('imip.others.other12')" prop="materialName">
-                <el-select v-model="formData.materialName" @change="handleFdmaterialChange" style="width: 100%">
+                <el-select filterable clearable v-model="formData.materialName" @change="handleFdmaterialChange" style="width: 100%">
                   <el-option
                     v-for="item in materialData"
                     :key="item.id" :label="item.materialName"
@@ -154,36 +153,46 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item :label="transformI18n('imip.page1.obj12')" prop="usageUnit">
                 <el-input v-model="formData.usageUnit" />
               </el-form-item>
             </el-col>
-            <el-col :span="5">
-              <el-form-item :label="transformI18n('imip.page1.obj14')" prop="tonnage">
+            <el-col :span="4">
+              <el-form-item :label="transformI18n('imip.page1.obj14')+'('+formData.remark03+')'" prop="tonnage">
                 <el-input-number v-model="formData.tonnage" style="width: 100%"/>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item :label="transformI18n('imip.page1.obj13')" prop="unloadWeight">
                 <el-input-number v-model="formData.unloadWeight" style="width: 100%"/>
               </el-form-item>
             </el-col>
-            <el-col :span="1" style="text-align: right">
+            <el-col :span="1" style="text-align: right" :class="{ 'readonly-wrapper': !formData.params.allowSubMaterial }">
               <el-button type="primary" @click="addMaterial">{{ transformI18n('imip.others.other13') }}</el-button>
             </el-col>
           </el-row>
           <el-divider/>
           <div v-for="(item, index) in formData.params.subMaterial" :key="index">
-            <el-row :gutter="20">
+            <el-row :gutter="0">
               <el-col :span="3" style="text-align: left">
                 <el-form-item :label="transformI18n('imip.others.other11')">
                   <el-input v-model="item.loadSequence" disabled input-style="text-align: center;"/>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
+              <el-form-item :label="transformI18n('imip.others.other5')" prop="remark01">
+                <el-select v-model="item.remark01" style="width: 100%">
+                  <el-option
+                    v-for="val in loadTypeDict"
+                    :key="val" :label="val"
+                    :value="val"/>
+                </el-select>
+              </el-form-item>
+            </el-col>
+              <el-col :span="4">
                 <el-form-item :label="transformI18n('imip.others.other12')">
-                  <el-select v-model="item.materialName" @change="val => handleSubmaterialChange(val,item)" style="width: 100%">
+                  <el-select filterable clearable v-model="item.materialName" @change="val => handleSubmaterialChange(val,item)" style="width: 100%">
                     <el-option
                       v-for="item in materialData"
                       :key="item.id" :label="item.materialName"
@@ -191,34 +200,33 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item :label="transformI18n('imip.page1.obj12')">
                   <el-input v-model="item.usageUnit" />
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
-                <el-form-item :label="transformI18n('imip.page1.obj14')">
+              <el-col :span="4">
+                <el-form-item :label="transformI18n('imip.page1.obj14')+'('+item.remark02+')'">
                   <el-input-number v-model="item.tonnage" style="width: 100%" />
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item :label="transformI18n('imip.page1.obj13')">
                   <el-input-number v-model="item.unloadWeight" style="width: 100%" />
                 </el-form-item>
               </el-col>
-              <el-col :span="1" style="text-align: right">
+              <el-col :span="1" style="text-align: right" :class="{ 'readonly-wrapper': !formData.params.allowSubMaterial }">
                 <el-button type="danger" @click="removeMaterial(index)">{{ transformI18n('imip.others.other14') }}</el-button>
               </el-col>
             </el-row>
             <el-divider/>
           </div>
         </el-card>
-        </div>
       </el-form>
     </div>
     <!-- 提交按钮 -->
     <div style="text-align: center; margin-top: 20px">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit">提交了</el-button>
     </div>
   </el-dialog>
 </template>
@@ -242,11 +250,11 @@ const formData = reactive({
   shipLength: undefined,//船长度(米)
   planTonnage: undefined,//计划（吨/件）
   remark01: undefined,  //装卸船类型
-  packageNum: undefined, //按吨计，按件计标识
+  remark03: undefined, //按吨计，按件计标识
   materialName: undefined,//物料名
   usageUnit: undefined,   //使用单位
   tonnage: undefined,   //实际（吨/件）
-  unloadWeight: undefined,//已作业量(吨/件)
+  unloadWeight: undefined,//已作业量
   arrivalTime: undefined, //到港日期
   planDockingTime: undefined, //计划靠泊时间
   dockingTime: undefined,   //靠泊时间
@@ -286,7 +294,7 @@ const initFormData = () => {
     shipLength: undefined,
     planTonnage: undefined,
     remark01: undefined,
-    packageNum: undefined,
+    remark03: undefined,
     materialName: undefined,
     usageUnit: undefined,
     tonnage: undefined,
@@ -328,7 +336,7 @@ const addMaterial = () => {
   const sequenceNum = formData.params.subMaterial.length
   formData.params.subMaterial.push({
     materialName: undefined,
-    packageNum: undefined,
+    remark03: undefined,
     usageUnit: undefined,
     tonnage: undefined,
     unloadWeight: undefined,
@@ -344,13 +352,13 @@ const handleHbChange = (val) => {
 const handleFdmaterialChange = (val) => {
   const selected = materialData.value.find(item => item.materialName === val)
   if(selected){
-    formData.packageNum = selected.remark01
+    formData.remark03 = selected.remark02
   }
 }
 const handleSubmaterialChange = (val, currentItem) => {
   const selected = materialData.value.find(item => item.materialName === val)
   if(selected){
-    currentItem.packageNum = selected.remark01
+    currentItem.remark02 = selected.remark02
   }
 }
 const removeMaterial = (index) => {

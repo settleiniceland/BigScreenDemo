@@ -15,10 +15,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class SeaPortApplication {
     public static void main(String[] args) {
-
-         System.setProperty("spring.devtools.restart.enabled", "false");
+        System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(SeaPortApplication.class, args);
-
         System.out.println("(♥◠‿◠)ﾉﾞ  港口系统启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 "        ~~~~        \n" +
                 "   ~~     ~~        \n" +

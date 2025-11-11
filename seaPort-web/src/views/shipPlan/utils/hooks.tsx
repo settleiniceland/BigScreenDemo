@@ -82,11 +82,11 @@ export const useShipPlan = () => {
       prop: "hbName",
       minWidth: 80
     },
-    {
-      label: transformI18n("imip.page1.obj6"),
-      slot: "pierType",
-      minWidth: 100
-    },
+    // {
+    //   label: transformI18n("imip.page1.obj6"),
+    //   slot: "pierType",
+    //   minWidth: 100
+    // },
     // { label: transformI18n("imip.page1.obj10"), prop: "imo", minWidth: 110 },
     { label: transformI18n("imip.page1.obj11"), prop: "shipLength", minWidth: 100 },
     {
@@ -116,16 +116,17 @@ export const useShipPlan = () => {
     },
     {
       label: transformI18n("单位"), 
-      prop: "packageNum", 
+      prop: "remark03", 
       minWidth: 100,
       cellRenderer: ({ row }) => {
-        const p = row?.packageNum;
-        if (p===2) {
-          return "按件计";
+        if(row.remark03!==null&&
+            row.remark03!==undefined&&
+            row.remark03!==''){
+          return row.remark03;
         }else{
-          return "按吨计";
+          return "吨/T";
         }
-      }
+      },
     },
     {
       label: transformI18n("其余物资"), 

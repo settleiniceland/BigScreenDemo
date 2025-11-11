@@ -138,11 +138,22 @@ public class DockPlanServiceImpl implements IDockPlanService {
      * @param dockPlan 计划单
      * @return 计划单
      */
+    @Autowired
+    private DockTaskConfigMapper dockTaskConfigMapper;
     @Override
     @DataScope(deptAlias = "d")
     public List<DockPlan> selectDockPlanList(DockPlan dockPlan) {
         List<DockPlan> dockPlans = dockPlanMapper.selectDockPlanLeftPierList(dockPlan);
         if(dockPlans.size()>0){
+            List<DockTaskConfig> dockTaskConfigList = dockTaskConfigMapper.selectDockTaskConfigList(new DockTaskConfig());
+            Map<String,List<Boolean>> configMap = new HashMap<>();
+            for(DockTaskConfig dockTaskConfig : dockTaskConfigList){
+                if(!configMap.containsKey(dockTaskConfig.getHbName())){
+                    List<Boolean> list = new ArrayList<>();
+                    configMap.put(dockTaskConfig.getHbName(), list);
+                }
+                configMap.get(dockTaskConfig.getHbName()).add(dockTaskConfig.getEnabled());
+            }
             List<Long> planIds = new ArrayList<>();
             for(DockPlan dp : dockPlans) {
                 planIds.add(dp.getId());
@@ -160,11 +171,38 @@ public class DockPlanServiceImpl implements IDockPlanService {
                 map.put(materialParams,DPAMap.get(plan.getId()));
                 map.put(collectFee,calculateCollectFee(plan.getId(),plan.getDockingTime(),plan.getOutBerthTime(),plan.getContractFee()));
                 plan.setParams(map);
+                if(!checkHaveWindowPeriod(plan)&&//确实少此类的空窗期日志
+                        "6".equals(plan.getStatus())&&//是待离泊状态
+                        plan.getOutBerthTime()!=null&&//离泊时间已填
+                        plan.getLeaveTime()==null){//离港时间未填
+                    plan.setHandledBy("1");//选择垃圾属性做标识
+                }
+                if(!checkHaveWindowPeriod_copy(plan)&&
+                        plan.getOperationTime()!=null){
+                    plan.setHandledBy("2");
+                }
+                if(configMap.containsKey(plan.getHbName())){
+                    String configData = "";
+                    for(Boolean item:configMap.get(plan.getHbName())){
+                        if(item){
+                            configData+="1";
+                        }else {
+                            configData+="0";
+                        }
+                    }
+                    plan.setInspectionCompany(configData);//选择垃圾属性做标识
+                }
             });
         }
         return dockPlans;
     }
-
+    private Boolean checkHaveWindowPeriod_copy(DockPlan dockPlan){
+        DockWindowPeriod dwp=new DockWindowPeriod();
+        dwp.setPlanId(dockPlan.getId());
+        dwp.setPeriodType(1);
+        List<DockWindowPeriod> dockWindowPeriods = dockWindowPeriodMapper.selectDockWindowPeriodList(dwp);
+        return dockWindowPeriods.size()>0?true:false;
+    }
 
     @Override
     @DataScope(deptAlias = "d")
@@ -502,15 +540,11 @@ public class DockPlanServiceImpl implements IDockPlanService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int appEdit(DockPlan dockPlan) {
-
         DockPlan plan = dockPlanMapper.selectDockPlanById(dockPlan.getId());
         if (plan == null) {
             throw new ServiceException("操作失败，没有查询到计划单！");
         }
-
-
         boolean updatePlcSumWeightDateFlag = false;
-
         if (StringUtils.isNotBlank(dockPlan.getHbName())) {
             plan.setHbName(dockPlan.getHbName());
         }
@@ -532,11 +566,14 @@ public class DockPlanServiceImpl implements IDockPlanService {
         }
         if (dockPlan.getOutBerthTime() != null) {
             plan.setOutBerthTime(dockPlan.getOutBerthTime());
-            plan.setIsArchived("1");
-            LocalDate currentDate = LocalDate.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-            plan.setArchivedMonth(currentDate.format(formatter));
-            plan.setLeaveTime(dockPlan.getOutBerthTime().plusMinutes(1));
+            //不缺最后一个空窗期才自动归档＋附上离港时间
+            if(checkHaveWindowPeriod(plan)){
+                plan.setIsArchived("1");
+                LocalDate currentDate = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+                plan.setArchivedMonth(currentDate.format(formatter));
+                plan.setLeaveTime(dockPlan.getOutBerthTime().plusMinutes(1));
+            }
         }
         if (dockPlan.getLeaveTime() != null) {
             plan.setLeaveTime(dockPlan.getLeaveTime());
@@ -547,39 +584,16 @@ public class DockPlanServiceImpl implements IDockPlanService {
         // 更新计划状态和泊位状态
         updatePlanStatus(plan);
         updateBerthStatus(plan);
-
-        // TODO 1# 4# 8#泊位
-        Set<Long> VALID_HB_IDS = Set.of(9L, 12L);
-        // 待离泊状态结束读取皮带秤 记录当前皮带秤总累计量
-        if (updatePlcSumWeightDateFlag && VALID_HB_IDS.contains(plan.getHbId())) {
-            IPLCDataProcess plcDataProcess = PLCDataProcessContext.getByBerthName(dockPlan.getHbName());
-            plcDataProcess.setLastTimeWeight(dockPlan.getHbName());
-        }
-
-
-        /**
-         * 卸货校验
-         */
-        String newWeight = dockPlan.getUnloadWeight();
-        String oldWeight = plan.getUnloadWeight();
-        if (StringUtils.isBlank(newWeight)) {
-
-        } else if (!Objects.equals(newWeight, oldWeight)) {
-
-            // 如果新增的卸货数量不为空，redis也存入这条信息
-            if (StringUtils.isNotBlank(dockPlan.getUnloadWeight())) {
-                String redisKey = "PLC:" + dockPlan.getId() + "_" + dockPlan.getHbName();
-                Map<String, BigDecimal> redisMap = redisCache.getCacheMap(redisKey);
-                if (redisMap != null && !redisMap.isEmpty()) {
-                    redisMap.put("unloadWeight", BigDecimal.valueOf(Double.parseDouble(dockPlan.getUnloadWeight())));
-                    redisCache.setCacheMap(redisKey, redisMap);
-                }
-            }
-        }
         refreshWindowPeriodLog(plan);
         return dockPlanMapper.updateDockPlan(plan);
     }
-
+    private Boolean checkHaveWindowPeriod(DockPlan dockPlan) {
+        DockWindowPeriod dwp=new DockWindowPeriod();
+        dwp.setPlanId(dockPlan.getId());
+        dwp.setPeriodType(2);
+        List<DockWindowPeriod> dockWindowPeriods = dockWindowPeriodMapper.selectDockWindowPeriodList(dwp);
+        return dockWindowPeriods.size()>0?true:false;
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int startWork(DockStartWorkVo dockStartWorkVo) {
@@ -593,18 +607,8 @@ public class DockPlanServiceImpl implements IDockPlanService {
         // 更新计划状态和泊位状态
         updatePlanStatus(dockPlan);
         updateBerthStatus(dockPlan);
-
-        // TODO 1# 4# 8#泊位
-        Set<Long> VALID_HB_IDS = Set.of(9L, 12L);
         // 自动生成卸货单
         if ("4".equals(dockPlan.getStatus())) {
-
-            // 需要触发装卸的状态集合
-            // 如果是在装卸状态，开始读取PLC
-//            if (dockPlan.getHbId() != null && VALID_HB_IDS.contains(dockPlan.getHbId())) {
-//                plcTaskService.startTask(dockPlan.getId(), dockPlan.getHbName());
-//            }
-
             List<DockUnloadWork> unloadWorkList = dockUnloadWorkService.selectUnloadWorkListByPlanId(dockPlan.getId());
             if (unloadWorkList.isEmpty()) {
                 DockUnloadWork unloadWork = new DockUnloadWork();
@@ -622,17 +626,6 @@ public class DockPlanServiceImpl implements IDockPlanService {
                 dockUnloadWorkService.createUnloadWork(unloadWork);
             }
         }
-        // 待离泊状态结束读取皮带秤（状态为 5、6、7 且为指定泊位 ID）
-//        if (Arrays.asList("5", "6", "7").contains(dockPlan.getStatus())
-//                && VALID_HB_IDS.contains(dockPlan.getHbId())) {
-//
-//            plcTaskService.stopTask(dockPlan.getId(), dockPlan.getHbName());
-//
-//            // 结束之后删除 redis 并且把 PLC 数据存到数据库中
-//            removeCacheEditPlc(dockPlan);
-//        }
-
-
         return dockPlanMapper.updateDockPlan(dockPlan);
     }
 
@@ -2199,6 +2192,10 @@ public class DockPlanServiceImpl implements IDockPlanService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int newInsertDockPlan(DockPlan dockPlan) {
+        DockBerth dockBerth = dockBerthMapper.getOneByCode(dockPlan.getHbName());
+        if(dockBerth == null){
+            throw new RuntimeException("泊位信息不存在，请联系管理员");
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         List<DockPlanAssistant> subMaterials = objectMapper.convertValue(
                 dockPlan.getParams().get(materialParams),
@@ -2207,7 +2204,7 @@ public class DockPlanServiceImpl implements IDockPlanService {
         dockPlan.setDelFlag("0");
         dockPlan.setSourceType("0");
         dockPlan.setUserId(SecurityUtils.getUserId());
-        dockPlan.setDeptId(SecurityUtils.getDeptId());
+        dockPlan.setDeptId(dockBerth.getDeptId());
         dockPlan.setCreateBy(SecurityUtils.getNickName());
         dockPlan.setCreateTime(LocalDateTime.now());
         updatePlanStatus(dockPlan);
@@ -2255,15 +2252,17 @@ public class DockPlanServiceImpl implements IDockPlanService {
         dockPlan.setUpdateTime(LocalDateTime.now());
         updatePlanStatus(dockPlan);
         updateBerthStatus(dockPlan);
-//        if("4".equals(dockPlan.getStatus())){
-//            dockPlan.setUnloadStatus("1");
-//        }
         if(subMaterials.size()>0){
             dockPlan.setRemark02(String.valueOf(subMaterials.size()));
         }else{
             dockPlan.setRemark02(null);
         }
         refreshWindowPeriodLog(dockPlan);
+        DockBerth dockBerth = dockBerthMapper.getOneByCode(dockPlan.getHbName());
+        if(dockBerth == null){
+            throw new RuntimeException("泊位信息不存在，请联系管理员");
+        }
+        dockPlan.setDeptId(dockBerth.getDeptId());
         Integer i = dockPlanMapper.updateDockPlan(dockPlan);
         Boolean allowUpdatePlanAssistant = (Boolean) dockPlan.getParams().get(allowSubMaterial);
         if(allowUpdatePlanAssistant){
@@ -2303,7 +2302,7 @@ public class DockPlanServiceImpl implements IDockPlanService {
             dpuwul.setOldUnloadWeight(dockPlan.getUnloadWeight()!=null?new BigDecimal(dockPlan.getUnloadWeight()):BigDecimal.ZERO);
             dpuwul.setUsageUnit(dockPlan.getUsageUnit());
             dpuwul.setMaterialName(dockPlan.getMaterialName());
-            dpuwul.setPackageNum(dockPlan.getPackageNum()==null?1:dockPlan.getPackageNum().intValue());
+            dpuwul.setRemark01(dockPlan.getRemark03());
             DockPlan dockplan=new DockPlan();
             dockplan.setId(dpa.getPlanId());
             dockplan.setUnloadWeight(String.valueOf(dpa.getUnloadWeight()));
@@ -2313,11 +2312,18 @@ public class DockPlanServiceImpl implements IDockPlanService {
             dpuwul.setOldUnloadWeight(dockPlanAssistant.getUnloadWeight()!=null?dockPlanAssistant.getUnloadWeight():BigDecimal.ZERO);
             dpuwul.setUsageUnit(dockPlanAssistant.getUsageUnit());
             dpuwul.setMaterialName(dockPlanAssistant.getMaterialName());
-            dpuwul.setPackageNum(dockPlanAssistant.getPackageNum());
+            dpuwul.setRemark01(dockPlanAssistant.getRemark02());
             dockPlanAssistantMapper.submitUnloadWorkForPlanAssistant(dpa);
         }
         dpuwulm.inertItem(dpuwul);
     }
+
+    @Override
+    public Integer reflushPlanByMaterialName(DockMaterial dm) {
+        dockPlanAssistantMapper.reflushPlanByMaterialName(dm);
+        return dockPlanMapper.reflushPlanByMaterialName(dm);
+    }
+
     //新版--计算收费
     private BigDecimal calculateCollectFee(Long planId,LocalDateTime dockingTime,LocalDateTime outBerthTime,BigDecimal contractFee){
         LocalDateTime now = LocalDateTime.now();

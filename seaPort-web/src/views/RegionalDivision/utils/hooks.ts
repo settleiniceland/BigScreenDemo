@@ -41,6 +41,10 @@ export const useAreaManagement = () => {
       label: transformI18n("imip.page1.obj37"),
       slot: "remark"
     },
+    {
+      label: transformI18n("排序"),
+      prop: "remark01"
+    },
     { label: transformI18n("imip.page1.obj38"), fixed: "right", slot: "operation", minWidth: 130 }
   ];
 
@@ -55,7 +59,6 @@ export const useAreaManagement = () => {
 
       // 处理树结构
       treeData.value = rows.map(node => processNode(node));
-      
       // 保持原来已展开的节点状态
       if (currentExpandedKeys.length > 0) {
         expandedKeys.value = currentExpandedKeys;
@@ -65,6 +68,7 @@ export const useAreaManagement = () => {
       ElMessage.error("获取码头列表失败");
     } finally {
       loading.value = false;
+      console.log("最终的值是",treeData.value)
     }
   };
 

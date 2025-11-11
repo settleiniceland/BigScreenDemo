@@ -86,11 +86,6 @@ public class DockUnloadWorkController extends BaseController {
     @PostMapping
     public AjaxResult add(@RequestBody DockUnloadWork dockUnloadWork) {
         int i = dockUnloadWorkService.insertDockUnloadWork(dockUnloadWork);
-//        try {
-//            webSocketProcess.updatePushAll();
-//        }catch (Exception e){
-//            System.out.println("websocket推送异常："+e.getMessage());
-//        }
         return toAjax(i);
     }
 
@@ -166,11 +161,6 @@ public class DockUnloadWorkController extends BaseController {
     public AjaxResult jobOver(@RequestBody DockUnloadVo dockUnloadVo) {
         dockUnloadVo.setOperateBy(SecurityUtils.getUsername());
         int i = dockUnloadWorkService.jobOver(dockUnloadVo);
-//        try {
-//            webSocketProcess.updatePushAll();
-//        }catch (Exception e){
-//            System.out.println("websocket推送异常："+e.getMessage());
-//        }
         return toAjax(i);
     }
 
@@ -192,11 +182,6 @@ public class DockUnloadWorkController extends BaseController {
     @RepeatSubmit
     public AjaxResult appUpdateUnload(@RequestBody DockUnloadVo dockUnloadVo) {
         int i = dockUnloadWorkService.appUpdateUnload(dockUnloadVo);
-//        try {
-//            webSocketProcess.updatePushAll();
-//        }catch (Exception e){
-//            System.out.println("websocket推送异常："+e.getMessage());
-//        }
         return toAjax(i);
     }
 

@@ -1,11 +1,11 @@
 {
 	"pages": [
-		{
-			"path": "pages/home/index",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
+		// {
+		// 	"path": "pages/home/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "首页"
+		// 	}
+		// },
 		{
 			"path": "pages/shipPlan/index",
 			"style": {
@@ -146,11 +146,12 @@
 		"selectedColor": "#007aff",
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
-		"list": [{
-				"index": 0,
-				"pagePath": "pages/home/index",
-				"text": "首页"
-			},
+		"list": [
+			// {
+			// 	"index": 0,
+			// 	"pagePath": "pages/home/index",
+			// 	"text": "首页"
+			// },
 			{
 				"index": 1,
 				"pagePath": "pages/shipPlan/index",

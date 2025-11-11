@@ -57,11 +57,11 @@
             <div class="sub-box-title">本月累计吞吐量</div>
           </div>
            <!-- 饼图 -->
-          <div class="chart-box">
+          <!-- <div class="chart-box">
             <div ref="chartRef" style="width: 100%; height: 100%;"></div>
-          </div>
+          </div>-->
           <!-- 右侧说明 -->
-          <div class="legend-box">
+          <!-- <div class="legend-box">
             <div
               v-for="(item, index) in chartData"
               :key="item.name"
@@ -72,7 +72,7 @@
               ></div>
               <span>{{ item.name }}：{{ item.value }}</span>
             </div>
-          </div>
+          </div>-->
         </div>
         <div class="bg bg2" :style="{ backgroundImage: `url(${data2Bg})` }">
           <div class="btn-group-bg2">
@@ -84,7 +84,11 @@
               <span class="btn-label-bg2">{{ item.value }}<span v-if="plan1Chose===item.key" style="color: aqua;">&nbsp;{{ plan1ChoseData.length }}</span> </span>
             </div>
           </div>
-          <div class="content-wrapper">
+          <div class="content-wrapper"
+            ref="tableContainer2"
+            @mouseenter="pauseScroll2"
+            @mouseleave="resumeScroll2"
+          >
             <div
               v-for="obj in plan1ChoseData"
               :key="obj.id"
@@ -95,7 +99,7 @@
             </div>
           </div>
         </div>
-        <div class="bg bg3" :style="{ backgroundImage: `url(${data3Bg})` }">
+        <div v-if="false" class="bg bg3" :style="{ backgroundImage: `url(${data3Bg})` }">
           <div class="content-box"
               ref="tableContainer3" 
               @mouseenter="pauseScroll3"
@@ -106,18 +110,20 @@
                   <th>泊位</th>
                   <th>船名</th>
                   <th>滞期费</th>
+                  <th>粗略效率</th>
                   <th>物料</th>
+                  <th>装卸</th>
                   <th>客户</th>
                   <th>作业量</th>
                   <th>进度</th>
                   <th>效率</th>
-                  <th>空窗期日志&更改日志</th>
-                  <th>装卸货单</th>
+                  <th>日志</th>
+                  <th>装卸单</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(row, index) in plan3DataRightMiddle" :key="index">
-                  <td v-if="row.rowspan > 0" :rowspan="row.rowspan">
+                  <td v-if="row.rowspan > 0" :rowspan="row.rowspan" style="max-width: 5.5vh;">
                     <span :title="row.hbName">{{ row.hbName }}</span>
                   </td>
                   <td v-if="row.rowspan > 0" :rowspan="row.rowspan" class="ship-cell">
@@ -126,8 +132,12 @@
                   <td v-if="row.rowspan > 0" :rowspan="row.rowspan">
                     <span :title="row.collectFee">{{ row.collectFee }}</span>
                   </td>
+                  <td v-if="row.rowspan > 0" :rowspan="row.rowspan">
+                    <span :title="row.roughEfficiency">{{ row.roughEfficiency }}</span>
+                  </td>
                   <td><span :title="row.materialName">{{ row.materialName }}</span></td>
-                  <td><span :title="row.usageUnit">{{ row.usageUnit }}</span></td>
+                  <td class="ship-cell-mini"><span :title="row.loadType">{{ row.loadType }}</span></td>
+                  <td class="ship-cell"><span :title="row.usageUnit">{{ row.usageUnit }}</span></td>
                   <td><span :title="row.progressDetail">{{ row.progressDetail }}</span></td>
                   <td class="progress-cell">
                     <div class="progress-bar">
@@ -137,17 +147,17 @@
                   </td>
                   <td><span :title="row.efficiency">{{ row.efficiency }}</span></td>
                   <td v-if="row.rowspan > 0" :rowspan="row.rowspan">
-                    <button class="link-btn" @click="handleWindowUpdateLogDetail(row.windowPeriodList,row.updateLogs,row.hbName,row.shipName,row.materialName,row.usageUnit)">查看详情</button>
+                    <button class="link-btn" @click="handleWindowUpdateLogDetail(row.windowPeriodList,row.updateLogs,row.hbName,row.shipName,row.materialName,row.usageUnit)">查看</button>
                   </td>
                   <td>
-                    <button class="link-btn" @click="handleLoadingDetail(row.unloadWorkList,row.hbName,row.shipName,row.materialName,row.usageUnit)">查看详情</button>
+                    <button class="link-btn" @click="handleLoadingDetail(row.unloadWorkList,row.hbName,row.shipName,row.materialName,row.usageUnit,row.loadType)">查看</button>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="bg bg4" :style="{ backgroundImage: `url(${data4Bg})` }">
+        <div v-if="false" class="bg bg4" :style="{ backgroundImage: `url(${data4Bg})` }">
           <div class="table-container"
               ref="tableContainer4" 
               @mouseenter="pauseScroll4"
@@ -191,6 +201,12 @@
     <popWinUpdLedger ref="popWinUpdRef"/>
     <popStopSlowLedger ref="popStopSlowRef"/>
     <popShowMoreLedger ref="popShowMoreRef"/>
+    <halfPopWorkingPlan ref="halfPopWorkingPlanRef" 
+      :data="plan3DataRightMiddle"
+      :handleWindowUpdateLogDetail="handleWindowUpdateLogDetail"
+      :handleLoadingDetail="handleLoadingDetail"/>
+    <halfPopWaitingPlan ref="halfPopWaitingPlanRef"
+      :data="plan2"/>
   </div>
 </template>
 <script setup>
@@ -212,6 +228,8 @@ import popLoadingLedger from "./popLoadingLedger.vue"
 import popWinUpdLedger from "./popWinUpdLedger.vue"
 import popStopSlowLedger from "./popStopSlowLedger.vue"
 import popShowMoreLedger from "./popShowMoreLedger.vue"
+import halfPopWorkingPlan from "./halfPopWorkingPlan.vue"
+import halfPopWaitingPlan from "./halfPopWaitingPlan.vue"
 import {allDept,getBerchs,getPopData,getStatistics,getArriveLeavingPlan,
   getPlan2ByDeptId,getOldPlan3} from "@/api/newScreen/index.ts"
 import {ref,onMounted,computed,watchEffect,onUnmounted,nextTick} from "vue"
@@ -225,6 +243,8 @@ const popLoadRef = ref(undefined);
 const popWinUpdRef = ref(undefined);
 const popStopSlowRef = ref(undefined);
 const popShowMoreRef = ref(undefined);
+const halfPopWorkingPlanRef = ref(undefined);
+const halfPopWaitingPlanRef = ref(undefined);
 const deptButton = ref([])
 const selectBut = ref()//选中部门
 const selectBerth = ref()//选中泊位
@@ -232,11 +252,12 @@ const berths = ref([])//所有泊位
 const berthCoordinate = ref(undefined)//泊位坐标map
 const statisticsData = ref(undefined)//吞吐量统计
 const plan1 = ref([])//计划1，所有今日到船，明日到船，今日离泊，明日离泊的数据
-const plan1Chose = ref(1)//选中的计划1类型
+const plan1Chose = ref()//选中的计划1类型
 const plan1ChoseData = ref([])//选中的计划1数据
 const plan2 = ref([])//计划2，所有等泊的计划
 const plan3=ref([])//计划3（就是老计划3，超大对象）
 const chartRef = ref(null);
+const rightTopShow = ref(true)
 let chart = null;
 let timer = null;
 //3 4 数据栏自动滑动
@@ -246,6 +267,9 @@ let isPaused3 = false
 const tableContainer4 = ref(null)
 let scrollTimer4 = null
 let isPaused4 = false
+const tableContainer2 = ref(null)
+let scrollTimer2 = null
+let isPaused2 = false
 const startAutoScroll3 = () => {// 自动滚动
   if (!tableContainer3.value) return
   const el = tableContainer3.value
@@ -294,11 +318,35 @@ const pauseScroll4 = () => {// 暂停/恢复
 const resumeScroll4 = () => {
   isPaused4 = false
 }
+const startAutoScroll2 = () => {// 自动滚动
+  if (!tableContainer2.value) return
+  const el = tableContainer2.value
+  scrollTimer2 = setInterval(() => {
+    if (isPaused2) return   // 如果暂停，就不滚动
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight) {// 如果到达底部
+      clearInterval(scrollTimer2)
+      setTimeout(() => {
+        el.scrollTop = 0   // 回到顶部
+        setTimeout(()=>{
+          startAutoScroll2()// 继续滚动
+        },1000)
+      }, 1000) // 停 1 秒
+    } else {
+      el.scrollTop += 1   // 每次下滑 1px
+    }
+  }, 130) // 调整滚动速度（越小越快）
+}
+const pauseScroll2 = () => {// 暂停/恢复
+  isPaused2 = true
+}
+const resumeScroll2 = () => {
+  isPaused2 = false
+}
 onMounted(async()=>{
-  console.log("screen主DOM重新加载")
+  console.info("screen主DOM重新加载")
   await getAllDept();
   await realTimeExecuteMethod();
-  chart = echarts.init(chartRef.value);
+  //chart = echarts.init(chartRef.value);
   //定时任务刷新
   timer = setInterval(realTimeExecuteMethod,cycleRefulshSecond*1000);
   //全屏绑定F11
@@ -307,29 +355,40 @@ onMounted(async()=>{
   //自动下滑
   startAutoScroll3();
   startAutoScroll4();
+  startAutoScroll2();
    // 用 watchEffect 自动更新
   watchEffect(() => {
     if (!chart) {
       return;
     }
-    chart.setOption({
-      tooltip: { trigger: "item" },
-      series: [
-        {
-          type: "pie",
-          radius: "100%",
-          data: chartData.value.map((d, i) => ({
-            ...d,
-            itemStyle: { color: colors[i % colors.length] }
-          })),
-          label: { show: false }
-        }
-      ]
-    })
+    // chart.setOption({
+    //   tooltip: { trigger: "item" },
+    //   series: [
+    //     {
+    //       type: "pie",
+    //       radius: "100%",
+    //       data: chartData.value.map((d, i) => ({
+    //         ...d,
+    //         itemStyle: { color: colors[i % colors.length] }
+    //       })),
+    //       label: { show: false }
+    //     }
+    //   ]
+    // })
+  });
+  halfPopWorkingPlanRef.value.open({
+    x: 0.4894242068155112,
+    y: 0.21367598491274295,
+    title: "装卸泊位空泊位及待离港泊位(可拖动✥)"
+  })
+  halfPopWaitingPlanRef.value.open({
+    x: 0.4888366627497062,
+    y: 0.6086878056703543,
+    title: "等泊泊位(可拖动✥)"
   })
 })
 onUnmounted(() => {// 离开页面时销毁定时器
-  console.log("screen主DOM卸载")
+  console.info("screen主DOM卸载")
   window.removeEventListener("keydown", handleF11);
   document.removeEventListener("fullscreenchange", fullscreenChangeHandler);
   clearInterval(scrollTimer3)
@@ -387,18 +446,86 @@ const chartData = computed(() => {
 const plan3DataRightMiddle = computed(()=>{
   let rows = [];
   plan3.value.forEach(item=>{
+    if(item.cardCount==="2"){
+      rows.push({
+        hbName: item.hbName,
+        shipName: item.batchNumber,
+        rowspan: 1,
+        progress: 1,
+        cardCount: "2",
+      })
+    }else if(item.cardCount==="1"){
+      let rowsNum = 1;
+      if(item.params.assistantList!==undefined && item.params.assistantList.length>0){
+        rowsNum+=item.params.assistantList.length;
+      }
+      rows.push({
+        hbName: item.hbName,
+        shipName: item.shipName,
+        materialName: item.materialName,
+        loadType: item.remark01,
+        usageUnit: item.usageUnit,
+        progressDetail: item.batchNumber,
+        rowspan: rowsNum,
+        progress: 1,
+        cardCount: "1",
+      })
+      if(rowsNum>1){
+        item.params.assistantList.forEach(ass => {
+          rows.push({
+            hbName: item.hbName,
+            shipName: item.shipName,
+            materialName: ass.materialName,
+            loadType: ass.remark01,
+            usageUnit: ass.usageUnit,
+            progressDetail: item.batchNumber,
+            rowspan: 0,
+            progress: 1,
+            cardCount: "1",
+          })
+        });
+      }
+    }else{
     let rowsNum = 1;
-    if(item.params.assistantList!==undefined && item.params.assistantList.length>0){
-      rowsNum+=item.params.assistantList.length
+    let roughUnloadWeight = 0;
+    let assName = "";
+    if(item.status!=="4" && (item.cardCount == null || item.cardCount == undefined || item.cardCount == "")){
+      assName = "<br>完成";
     }
+    if(item.unloadWeight!==null && item.unloadWeight!==undefined){
+      roughUnloadWeight = Number(item.unloadWeight);
+    }
+    if(item.params.assistantList!==undefined && item.params.assistantList.length>0){
+      rowsNum+=item.params.assistantList.length;
+      item.params.assistantList.forEach(ass => {
+        if(ass.unloadWeight!==undefined && ass.unloadWeight!==null){
+          roughUnloadWeight+=Number(ass.unloadWeight);
+        }
+        if(ass.params.updateLogs!==undefined && ass.params.updateLogs!==null){
+          item.params.updateLogs.push(...ass.params.updateLogs);
+        }
+      })
+    }
+    const start = new Date(item.operationTime.replace(" ", "T")).getTime();
+    let end;
+    if(item.endTime!==undefined&&item.endTime!==null&&item.endTime!==""){
+      end = new Date(item.endTime.replace(" ", "T")).getTime();
+    }else{
+      end = Date.now();
+    }
+    const result = Math.round(((end - start) / 3600000) * 100) / 100;
+    const roughEfficiency = Math.round(roughUnloadWeight/result*100)/100;
     rows.push({
-      hbName: item.hbName,
+      hbName: item.hbName+assName,
       shipName: item.shipName,
+      status: item.status,
       collectFee: item.params.collectFee,
+      roughEfficiency: roughEfficiency,
       materialName: item.materialName,
+      loadType: item.remark01,
       usageUnit: item.usageUnit,
       efficiency: item.params.efficiency,
-      progressDetail: "已作业"+((item.unloadWeight===undefined||item.unloadWeight===null)?0:item.unloadWeight)+"，共"+item.tonnage,
+      progressDetail: "作业"+((item.unloadWeight===undefined||item.unloadWeight===null)?0:item.unloadWeight)+"<br>共"+item.tonnage,
       progress: Math.round(safeDivide(item.unloadWeight,item.tonnage)),
       rowspan: rowsNum,
       id: item.id,
@@ -410,13 +537,16 @@ const plan3DataRightMiddle = computed(()=>{
     if(rowsNum>1){
       item.params.assistantList.forEach(ass => {
         rows.push({
-          hbName: item.hbName,
+          hbName: item.hbName+assName,
           shipName: item.shipName,
+          status: item.status,
           collectFee: item.params.collectFee,
+          roughEfficiency: roughEfficiency,
           materialName: ass.materialName,
+          loadType: ass.remark01,
           usageUnit: ass.usageUnit,
           efficiency: ass.params.efficiency,
-          progressDetail: "已作业"+ass.unloadWeight+"，共"+ass.tonnage,
+          progressDetail: "作业"+((ass.unloadWeight===undefined||ass.unloadWeight===null)?0:ass.unloadWeight)+"<br>共"+ass.tonnage,
           progress: Math.round(ass.unloadWeight/ass.tonnage*100),
           rowspan: 0,
           id: item.id,
@@ -426,6 +556,7 @@ const plan3DataRightMiddle = computed(()=>{
           unloadWorkList: ass.params.unloadWorkList,
         })
       });
+    }
     }
   });
   return rows;
@@ -455,7 +586,7 @@ const choseDept =async (id)=>{
   selectBut.value = id;
   if(id===103){
     berthCoordinate.value = berth2Coordinate
-  }else if(id===221){
+  }else if(id===102){
     berthCoordinate.value = berth1Coordinate
   }else if(id===222){
     berthCoordinate.value = berth3Coordinate
@@ -465,10 +596,10 @@ const choseDept =async (id)=>{
   await colseAllPop();
   await nextTick();
   await realTimeExecuteMethod();
-  if(chartRef.value){
-    echarts.dispose(chartRef.value);
-  }
-  chart = echarts.init(chartRef.value);
+  // if(chartRef.value){
+  //   echarts.dispose(chartRef.value);
+  // }
+  // chart = echarts.init(chartRef.value);
 }
 const bigReset =async ()=>{//疑难杂症，只能病急乱投医
   selectBut.value = 999999;
@@ -476,14 +607,22 @@ const bigReset =async ()=>{//疑难杂症，只能病急乱投医
   await colseAllPop();
   await nextTick();
   await realTimeExecuteMethod();
-  if(chartRef.value){
-    echarts.dispose(chartRef.value);
-  }
-  chart = echarts.init(chartRef.value);
+  // if(chartRef.value){
+  //   echarts.dispose(chartRef.value);
+  // }
+  // chart = echarts.init(chartRef.value);
   await new Promise(resolve => setTimeout(resolve, 200));
 }
-const chosePlan1 = (id)=>{
-  plan1Chose.value = id;
+const chosePlan1 = (originId)=>{
+  let id;
+  if(rightTopShow.value){//之前是True表示展示，现在不展示，值反转
+    plan1Chose.value = 5;
+    id = 5;
+  }else{//之前是false表示不展示，现在展示，值反转
+    plan1Chose.value = originId;
+    id = originId;
+  }
+  rightTopShow.value=!(rightTopShow.value)
   switch(id){
     case 1://今日到船
       plan1ChoseData.value = []
@@ -509,13 +648,8 @@ const chosePlan1 = (id)=>{
         }
       })
       break;
-    case 4://明日离泊
+    default:
       plan1ChoseData.value = []
-      plan1.value.forEach((item)=>{
-        if(item.outBerthTime!==null && checkArrivalDate(item.outBerthTime)===2){
-          plan1ChoseData.value.push(item);
-        }
-      })
   }
 }
 const checkArrivalDate=(arrivalTime)=>{// 1 今天； 2 明天
@@ -558,8 +692,8 @@ const getTimeDiffColor = (planDockingTime)=>{
 }
 const interiorHandleStopSlowDetail = (dataStop,dataSlow,title) => {
   popStopSlowRef.value.open({
-    x:0.23207990599294948,
-    y:0.48510223601811914,
+    x:0.12220916568742655,
+    y:0.48279222537041383,
     dataStop,
     dataSlow,
     title
@@ -576,14 +710,15 @@ const handleWindowUpdateLogDetail =async (dataWin,dataUpd,hbName,shipName,materi
     title
   })
 }
-const handleLoadingDetail =async (data,hbName,shipName,materialName,usageUnit)=>{
-  const title = hbName+">>"+shipName+">>"+materialName+">>"+usageUnit;
+const handleLoadingDetail =async (data,hbName,shipName,materialName,usageUnit,loadType)=>{
+  const title = hbName+">>"+shipName+">>"+materialName+">>"+(loadType ? (loadType.match(/[\u4e00-\u9fa5]{1,2}/)?.[0] || "") : "")+">>"+usageUnit;
   await closeRepetitionPops();
   popLoadRef.value.open({
     x: 0.02529601722282024,
     y: 0.7184133114363574,
     data,
-    title
+    title,
+    materialName,
   })
 }
 const interiorHandleShowMoreDetail =async (data,title)=>{
@@ -673,7 +808,7 @@ const closeRepetitionPops=()=>{
 }
 .ding-label {
   margin-top: 0.35vh;
-  color: #fff;
+  color: #ffe600;
   font-size: 16px;
   font-weight: bold;
   z-index: 2;
@@ -718,7 +853,7 @@ const closeRepetitionPops=()=>{
   .right {
     flex: 1;
     display: grid;
-    grid-template-rows: 7% 25% 35% 33%;/* 高度比例*/
+    grid-template-rows: 7% 13% 40% 40%;/* 高度比例*/
     grid-template-columns: 1fr 1fr;   /* 上面两块平分 */
     gap: 7px;                        /* 每块之间的间距 */
     .bg {
@@ -739,18 +874,18 @@ const closeRepetitionPops=()=>{
       .sub-box {
         background-size: 100% 100%;
         background-repeat: no-repeat;
-        margin-top: 3vh;
+        margin-top: 4.5vh;
         margin-left: 1vh;
         margin-right: 2vh;
         height: 5vh;
         z-index: 3;
-        color: #f0f0ed;
+        color: #b3ff00;
         .sub-box-data {
-          font-size: 2vh;
+          font-size: 1.9vh;
           margin-left: 0.5vh;
         }
         .sub-box-title {
-          font-size: 1vh;
+          font-size: 1.5vh;
           margin-left: 0.5vh;
           margin-top: 0.5vh;
         }
@@ -795,7 +930,7 @@ const closeRepetitionPops=()=>{
         z-index: 1;
       }
       .btn-label-bg2 {
-        color: #fff;
+        color: #73ff00;
         font-size: 1.3vh;
         font-weight: bold;
         z-index: 2; /* 保证文字在最上层 */
@@ -825,8 +960,8 @@ const closeRepetitionPops=()=>{
         display: flex;
         flex-direction: row;
         align-items: center;
-        color: white;
-        font-size: 1.2vh;
+        color: rgb(166, 255, 0);
+        font-size: 1.7vh;
         cursor: pointer;
         z-index: 2;
         .card-text {
@@ -852,7 +987,7 @@ const closeRepetitionPops=()=>{
 }
 .table-container {
   margin-top: 4vh;
-  max-height: 19vh; /* 限制高度，表头固定时才会有滚动 */
+  max-height: 30vh; /* 限制高度，表头固定时才会有滚动 */
   overflow-y: auto;
   scrollbar-width: none; /* 火狐隐藏滚动条 */
   width: 96%;
@@ -865,7 +1000,8 @@ const closeRepetitionPops=()=>{
 .custom-table {
   width: 100%;
   border-collapse: collapse;
-  color: white; /* 字体白色 */
+  color: rgb(115, 255, 0); /* 字体白色 */
+  font-size: 1.88vh;
 }
 
 .custom-table th,
@@ -880,23 +1016,30 @@ const closeRepetitionPops=()=>{
   top: 0;
   background: rgba(17, 137, 167, 0.83); /* 表头固定时加点背景 */
   z-index: 2;
+  font-size: 1.1vh;
 }
 .content-box {
   margin-top: 4vh;
-  max-height: 27vh; /* 限制高度，表头固定时才会有滚动 */
+  max-height: 35vh; /* 限制高度，表头固定时才会有滚动 */
   overflow-y: auto;
   scrollbar-width: none; /* 火狐隐藏滚动条 */
   width: 96%;
   font-size: 1.2vh;
 }
 .ship-cell {
-  max-width: 12vh;       /* 限制宽度 */
-  overflow: hidden;     /* 超出隐藏 */
+  max-width: 6vh;       /* 限制宽度 */
+  overflow: hidden;   /*   超出隐藏 */
+  white-space: nowrap;  /* 不换行 */
+  text-overflow: ellipsis; /* 超出用...显示 */
+}
+.ship-cell-mini {
+  max-width: 8vh;       /* 限制宽度 */
+  overflow: hidden;   /*   超出隐藏 */
   white-space: nowrap;  /* 不换行 */
   text-overflow: ellipsis; /* 超出用...显示 */
 }
 .progress-cell {
-  width: 12vh;       /* 固定单元格宽度 */
+  min-width: 12vh;       /* 固定单元格宽度 */
 }
 .progress-bar {
   position: relative;
@@ -909,8 +1052,8 @@ const closeRepetitionPops=()=>{
 
 .progress-fill {
   height: 100%;
-  background: #b8ff14;
-  border-radius: 7px;
+  background: #e5ff00;
+  border-radius: 1vh;
 }
 .progress-text {
   position: absolute;
@@ -922,17 +1065,17 @@ const closeRepetitionPops=()=>{
   font-weight: bold;
 }
 .link-btn {
-  width: 5vh;
+  width: 2vh;
   background: none;       /* 去掉背景 */
   border: none;           /* 去掉边框 */
-  color: rgb(5, 148, 148);            /* 文字颜色 */
+  color: rgb(255, 251, 0);            /* 文字颜色 */
   cursor: pointer;        /* 鼠标悬停变小手 */
   text-decoration: underline; /* 下划线，像链接 */
   padding: 0;             /* 去掉默认内边距 */
   font-size: inherit;     /* 跟随表格字体大小 */
 }
 .link-btn:hover {
-  color: #00ffff;         /* 悬停时颜色更亮 */
+  color: #00f7ff;         /* 悬停时颜色更亮 */
 }
 .fullscreen-btn {
   position: absolute;

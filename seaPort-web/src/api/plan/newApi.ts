@@ -7,7 +7,9 @@ export const addNewPlan = (data?: any) => {
 export const getPlan = (id:string)=>{
   return http.request<Result>("get",`/harbor/plan/getById/${id}`);
 }
-
 export const updateNewPlan = (data?: any) => {
   return http.request<Result>("post","/harbor/plan/update",{data});
+}
+export const reflushPlanByMaterialName = (data?: any) => {
+  return http.request<Result>("post","/harbor/plan/reflushByMaterialName",{data});
 }
