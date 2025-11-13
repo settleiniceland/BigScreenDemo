@@ -68,26 +68,19 @@ const onLogin = async (formEl: FormInstance | undefined) => {
   await formEl.validate(valid => {
     if (valid) {
       loading.value = true;
-      useUserStoreHook()
-        .loginByUsername({
-          username: ruleForm.username,
-          password: ruleForm.password
-        })
+      useUserStoreHook().loginByUsername({username: ruleForm.username,password: ruleForm.password})
         .then(res => {
           if (res) {
             // 获取后端路由
             if (res) {
               // 获取后端路由
               initRouter().then(() => {
-                // const redirect = to.query.redirect as string;
-                // 获取当前路由redirect
-                // const redirect = router.currentRoute.value.query?.redirect as string;
-                // router.replace(redirect ? redirect : getTopMenu(true).path);
-                router.replace(getTopMenu(true).path);
+                const redirect = router.currentRoute.value.query?.redirect as string;
+                router.replace(redirect ? redirect : getTopMenu(true).path);           
                 message(t("login.pureLoginSuccess"), { type: "success" });
-                setTimeout(() => {
-                  window.location.reload();
-                }, 10);
+                // setTimeout(() => {
+                //   window.location.reload();
+                // }, 10);
               });
             }
           } else {

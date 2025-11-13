@@ -60,6 +60,16 @@ const routes = [
       title: "新港口大屏",
       rank: 9,
     }
+  },
+  {
+    path: "/phoneScreen",
+    name: "PhoneScreen",
+    component: ()=>import("@/views/phoneScreen/index.vue"),
+    hidden:true,
+    meta: {
+      title: "手机端指挥屏",
+      rank:1
+    }
   }
 ];
 
@@ -124,17 +134,10 @@ const whiteList = ["/login"];
 const { VITE_HIDE_HOME } = import.meta.env;
 
 router.beforeEach((to: ToRouteType, _from, next) => {
-  if (
-    (_from.path == "/checkPlan" || _from.path == "/unload") &&
-    to.path !== "/archivePlan"
-  ) {
+  if ((_from.path == "/checkPlan" || _from.path == "/unload")&&to.path !== "/archivePlan"){
     sessionStorage.removeItem(`hasSearch/archivePlan`);
   }
-
-  if (
-    (_from.path == "/editPlan" || _from.path == "/unload") &&
-    to.path !== "/shipPlan"
-  ) {
+  if ((_from.path == "/editPlan" || _from.path == "/unload")&&to.path !== "/shipPlan"){
     sessionStorage.removeItem(`hasSearch/shipPlan`);
   }
   if (to.meta?.keepAlive) {
@@ -172,7 +175,8 @@ router.beforeEach((to: ToRouteType, _from, next) => {
         next();
       }
     } else {
-      whiteList.includes(to.fullPath) ? next(_from.fullPath) : next();
+      // whiteList.includes(to.fullPath) ? next(_from.fullPath) : next();
+      next()
     }
   }
   if (Cookies.get(multipleTabsKey)) {
@@ -237,30 +241,13 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       toCorrectRoute();
     }
   } else {
-    /**
-     *  判断是否是去/workflow/writeWorkForm页面
-     *  是的话：就判断是否有之前去过/workflow/writeWorkForm页面的url参数，有的话并且当前跳转进去没有query参数的话，就要补充历史参数进去;
-     * if (["/workflow/writeWorkForm"].includes(to.path)) {
-     const historyQuery = storageLocal().getItem("historyQuery");
-     if (historyQuery && historyQuery[to.path]) {
-     if (to.query && Object.keys(to.query).length === 0) {
-     next({ path: to.path, query: historyQuery[to.path] });
-     } else {
-     next();
-     }
-     } else {
-     next();
-     }
-     } else
-     * */
-
     if (to.path !== "/login") {
       if (whiteList.indexOf(to.path) !== -1) {
         next();
       } else {
         removeToken();
-        next({ path: "/login" });
-        // next(`/login?redirect=${to.fullPath}`);
+        // next({ path: "/login" });
+        next(`/login?redirect=${to.fullPath}`);
       }
     } else {
       next();

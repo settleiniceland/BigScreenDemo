@@ -178,7 +178,7 @@ defineOptions({
 
     <!-- Footer -->
     <div class="footer">
-      <p>技术支持：纬达贝信息技术部</p>
+      <p>技术支持：信息部-物流系统科</p>
     </div>
   </div>
 </template>
